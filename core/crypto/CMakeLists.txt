@@ -3,6 +3,7 @@ add_library(crypto STATIC
         hash.h
         keypair.h
         crypto.cc
+        crypto.h
         )
 
 target_link_libraries(crypto PUBLIC

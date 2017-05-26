@@ -15,6 +15,11 @@
  * limitations under the License.
  */
 
-#include "crypto.h"
+#pragma once
+
+#include "base64.h"
+#include "keypair.h"
+#include "ed25519.h"
+#include "hash.h"
 
 

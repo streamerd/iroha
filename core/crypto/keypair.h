@@ -18,7 +18,6 @@
 #ifndef IROHA_KEYPAIR_H
 #define IROHA_KEYPAIR_H
 
-#include "base64.h"
 #include "ed25519.h"
 #include <array>
 #include <cstdint>
@@ -42,17 +41,31 @@ static inline std::string digest_to_hexdigest(const uint8_t *digest,
   return res;
 }
 
-template <size_t PUBLEN, size_t PRIVLEN, size_t SIGNATURELEN> class Keypair {
+enum ed25519 { SIGNATURELEN = 44, PUBLEN = 32, PRIVLEN = 64 };
+
+class Keypair {
 public:
   using signature_t = std::array<uint8_t, SIGNATURELEN>;
   using pubkey_t = std::array<uint8_t, PUBLEN>;
   using privkey_t = std::array<uint8_t, PRIVLEN>;
 
   explicit Keypair(const pubkey_t &pub, const privkey_t &priv)
-      : pubkey(std::move(pub)), privkey(std::move(priv)) {}
+      : pubkey(std::move(pub)), privkey(std::move(priv)), has_private(true) {}
 
-  signature_t sign(const std::vector<uint8_t> &message);
-  bool verify(const std::vector<uint8_t> &msg, const signature_t &sig);
+  explicit Keypair(const pubkey_t &pub)
+      : pubkey(std::move(pub)), has_private(false) {}
+
+  signature_t sign(const std::vector<uint8_t> &message) {
+    signature_t sig;
+    ed25519_sign(sig.data(), message.data(), message.size(), pubkey.data(),
+                 privkey.data());
+    return sig;
+  }
+
+  bool verify(const std::vector<uint8_t> &msg, const signature_t &sig) {
+    return 1 ==
+           ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data());
+  }
 
   pubkey_t pub_digest() { return pubkey; }
   privkey_t priv_digest() { return privkey; }
@@ -62,40 +75,20 @@ public:
   }
 
   std::string priv_hexdigest() {
-    return digest_to_hexdigest(privkey.data(), PRIVLEN);
+    return has_private ? digest_to_hexdigest(privkey.data(), PRIVLEN) : "";
   }
 
   std::string pub_base64() { return base64_encode(pubkey.data(), PUBLEN); }
-  std::string priv_base64() { return base64_encode(privkey.data(), PRIVLEN); }
+  std::string priv_base64() {
+    return has_private ? base64_encode(privkey.data(), PRIVLEN) : "";
+  }
 
 private:
   pubkey_t pubkey;
   privkey_t privkey;
+
+  bool has_private;
 };
-
-/// SPECIALIZATION
-
-// for ed25519
-constexpr static int ed25519_publen = 32;
-constexpr static int ed25519_privlen = 64;
-constexpr static int ed25519_siglen = 44;
-
-template <> class Keypair<ed25519_publen, ed25519_privlen, ed25519_siglen>;
-
-template <>
-signature_t Keypair::sign<ed25519_publen, ed25519_privlen, ed25519_siglen>(
-    const std::vector<uint8_t> &message) {
-  signature_t sig;
-  ed25519_sign(sig.data(), message.data(), message.size(), pubkey.data(),
-               privkey.data());
-  return sig;
-}
-
-template <>
-bool Keypair::verify<ed25519_publen, ed25519_privlen, ed25519_siglen>(
-    const std::vector<uint8_t> &msg, const signature_t &sig) {
-  return ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data()) == 1;
-}
 }
 
 #endif // IROHA_KEYPAIR_H
