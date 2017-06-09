@@ -15,20 +15,8 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_PEER_H
-#define IROHA_PEER_H
+#include "torii.h"
 
-struct Peer{
+namespace iroha {
 
-};
-
-enum peer_state {
-  leader,
-  set_a,
-  proxy_tail,
-  set_b,
-  orphan,
-
-};
-
-#endif  // IROHA_PEER_H
+}

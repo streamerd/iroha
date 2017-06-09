@@ -33,3 +33,5 @@
 
 external
 build
+interface.pb.cc
+interface.pb.h

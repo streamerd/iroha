@@ -19,6 +19,21 @@ endif()
 
 
 
+#########################
+#         grpc          #
+#########################
+find_package(grpc REQUIRED)
+if (grpc_FOUND)
+    message(STATUS "grpc found")
+    include_directories(${grpcpp_INCLUDE_DIR})
+    link_directories(${grpcpp_LIB})
+    link_directories(${gpr_LIB})
+else()
+    message(FATAL_ERROR "No grpc found")
+endif()
+
+
+
 #######################
 #         uv          #
 #######################

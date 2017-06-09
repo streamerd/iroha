@@ -26,6 +26,8 @@
 
 namespace iroha {
 
+enum ed25519 { SIGNATURELEN = 44, PUBLEN = 32, PRIVLEN = 64 };
+
 static inline std::string digest_to_hexdigest(const uint8_t *digest,
                                               size_t size) {
   char code[] = {'0', '1', '2', '3', '4', '5', '6', '7',
@@ -41,8 +43,9 @@ static inline std::string digest_to_hexdigest(const uint8_t *digest,
   return res;
 }
 
-enum ed25519 { SIGNATURELEN = 44, PUBLEN = 32, PRIVLEN = 64 };
-
+/**
+ * Represents a keypair: public and private key.
+ */
 class Keypair {
 public:
   using signature_t = std::array<uint8_t, SIGNATURELEN>;

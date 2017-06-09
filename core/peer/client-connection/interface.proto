@@ -1,0 +1,17 @@
+syntax = "proto3";
+package api;
+
+message Ping {
+    string message = 1;
+}
+
+message Pong {
+    string message = 1;
+    float delay = 2;
+}
+
+service Torii {
+    rpc SendPing(Ping) returns (Pong) {}
+    // rpc SendTransaction(Transaction) returns (Status) {}
+}
+
