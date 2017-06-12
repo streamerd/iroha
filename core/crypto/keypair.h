@@ -18,76 +18,104 @@
 #ifndef IROHA_KEYPAIR_H
 #define IROHA_KEYPAIR_H
 
-#include "ed25519.h"
 #include <array>
 #include <cstdint>
+#include <nonstd/any.hpp>
+#include <nonstd/optional.hpp>
 #include <string>
 #include <vector>
-#include <option.hpp>
+#include "common.h"
+#include "ed25519.h"
+
 
 namespace iroha {
-
-enum ed25519 { SIGNATURELEN = 44, PUBLEN = 32, PRIVLEN = 64 };
-
-static inline std::string digest_to_hexdigest(const uint8_t *digest,
-                                              size_t size) {
-  char code[] = {'0', '1', '2', '3', '4', '5', '6', '7',
-                 '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
-  std::string res = "";
-  uint8_t front, back;
-  for (uint32_t i = 0; i < size; i++) {
-    front = (uint8_t)(digest[i] & 0xF0) >> 4;
-    back = (uint8_t)(digest[i] & 0xF);
-    res += code[front];
-    res += code[back];
-  }
-  return res;
-}
 
 /**
  * Represents a keypair: public and private key.
  */
 class Keypair {
-public:
+ public:
   using signature_t = std::array<uint8_t, SIGNATURELEN>;
   using pubkey_t = std::array<uint8_t, PUBLEN>;
   using privkey_t = std::array<uint8_t, PRIVLEN>;
 
+  /**
+   * Build a keypair with public and private key in binary format
+   * @param pub
+   * @param priv
+   */
   explicit Keypair(const pubkey_t &pub, const privkey_t &priv)
       : pubkey(std::move(pub)), privkey(std::move(priv)), has_private(true) {}
 
+  /**
+   * Build a keypair with only public key in binary format
+   * Useful for signature verification.
+   * @param pub
+   */
   explicit Keypair(const pubkey_t &pub)
       : pubkey(std::move(pub)), has_private(false) {}
 
-  signature_t sign(const std::vector<uint8_t> &message) {
+
+  /**
+   * Sign the message
+   * @param message - arbitrary blob
+   * @return nonstd::nullopt if current keypair has no private key,
+   * otherwise returns signature
+   */
+  nonstd::optional<signature_t> sign(const std::vector<uint8_t> &message) {
+    // if keypair has no private key, it is not possible to sign
+    if (!has_private) return nonstd::nullopt;
+
     signature_t sig;
     ed25519_sign(sig.data(), message.data(), message.size(), pubkey.data(),
                  privkey.data());
-    return sig;
+    return nonstd::optional<signature_t>(sig);
   }
 
+  /**
+   * Verify the signature against given message.
+   * @param msg
+   * @param sig
+   * @return true if signature is ok, false otherwise
+   */
   bool verify(const std::vector<uint8_t> &msg, const signature_t &sig) {
     return 1 ==
            ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data());
   }
 
+  /**
+   * Getters for public and private keys in "digest" (binary) format
+   * @return
+   */
   pubkey_t pub_digest() { return pubkey; }
-  privkey_t priv_digest() { return privkey; }
+  nonstd::optional<privkey_t> priv_digest() {
+    return has_private ? nonstd::optional<privkey_t>(privkey) : nonstd::nullopt;
+  }
 
+  /**
+   * Getters for public and private keys in "hexdigest" (hex string) format
+   * @return
+   */
   std::string pub_hexdigest() {
     return digest_to_hexdigest(pubkey.data(), PUBLEN);
   }
-
-  std::string priv_hexdigest() {
-    return has_private ? digest_to_hexdigest(privkey.data(), PRIVLEN) : "";
+  nonstd::optional<std::string> priv_hexdigest() {
+    auto r = digest_to_hexdigest(privkey.data(), PRIVLEN);
+    return has_private ? nonstd::optional<std::string>(r) : nonstd::nullopt;
   }
 
+  /**
+   * Getters for public and private keys in "base64" (string) format
+   * @return
+   */
   std::string pub_base64() { return base64_encode(pubkey.data(), PUBLEN); }
-  std::string priv_base64() {
-    return has_private ? base64_encode(privkey.data(), PRIVLEN) : "";
+  nonstd::optional<std::string> priv_base64() {
+    auto r = base64_encode(privkey.data(), PRIVLEN);
+    return has_private ? nonstd::optional<std::string>(r) : nonstd::nullopt;
   }
 
-private:
+
+ private:
   pubkey_t pubkey;
   privkey_t privkey;
 
@@ -95,4 +123,4 @@ private:
 };
 }
 
-#endif // IROHA_KEYPAIR_H
+#endif  // IROHA_KEYPAIR_H

@@ -10,6 +10,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 SET(BINARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
 include(cmake/dependencies.cmake)
+include(cmake/functions.cmake)
 include_directories(core)
 add_subdirectory(core)
 

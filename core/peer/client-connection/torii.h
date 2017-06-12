@@ -19,7 +19,6 @@
 #define IROHA_TORII_H
 
 #include <interface.grpc.pb.h>
-#include <interface.pb.h>
 #include <grpc++/grpc++.h>
 
 namespace iroha {

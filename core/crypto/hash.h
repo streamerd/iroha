@@ -22,27 +22,66 @@ extern "C" {
 #include <SimpleFIPS202.h>
 };
 
+#include <nonstd/optional.hpp>
+#include <vector>
+
 namespace iroha {
 
-inline int sha3_224(unsigned char *input, unsigned char *output,
-                    size_t out_size) {
-  return SHA3_224(input, output, out_size);
+inline int sha3_224(unsigned char *output, unsigned char *input,
+                    size_t in_size) {
+  return SHA3_224(output, input, in_size);
 }
 
-inline int sha3_256(unsigned char *input, unsigned char *output,
-                    size_t out_size) {
-  return SHA3_256(input, output, out_size);
+inline int sha3_256(unsigned char *output, unsigned char *input,
+                    size_t in_size) {
+  return SHA3_256(output, input, in_size);
 }
 
-inline int sha3_384(unsigned char *input, unsigned char *output,
-                    size_t out_size) {
-  return SHA3_384(input, output, out_size);
+inline int sha3_384(unsigned char *output, unsigned char *input,
+                    size_t in_size) {
+  return SHA3_384(output, input, in_size);
 }
 
-inline int sha3_512(unsigned char *input, unsigned char *output,
-                    size_t out_size) {
-  return SHA3_512(input, output, out_size);
-}
+inline int sha3_512(unsigned char *output, unsigned char *input,
+                    size_t in_size) {
+  return SHA3_512(output, input, in_size);
 }
 
-#endif // IROHA_HASH_H
+
+/*
+ * Does not compile. Redefinition of sha3_224. Why?
+nonstd::optional<std::vector<uint8_t>> sha3_224(uint8_t *input,
+                                                size_t in_size) {
+  std::vector<uint8_t> out(224 / 8);
+  int res = SHA3_224(out.data(), input, in_size);
+  return !res ? nonstd::optional<std::vector<uint8_t>>(out) : nonstd::nullopt;
+}
+
+
+nonstd::optional<std::vector<uint8_t>> sha3_256(uint8_t *input,
+                                                size_t in_size) {
+  std::vector<uint8_t> out(256 / 8);
+  int res = SHA3_256(out.data(), input, in_size);
+  return !res ? nonstd::optional<std::vector<uint8_t>>(out) : nonstd::nullopt;
+}
+
+
+nonstd::optional<std::vector<uint8_t>> sha3_384(uint8_t *input,
+                                                size_t in_size) {
+  std::vector<uint8_t> out(384 / 8);
+  int res = SHA3_384(out.data(), input, in_size);
+  return !res ? nonstd::optional<std::vector<uint8_t>>(out) : nonstd::nullopt;
+}
+
+
+nonstd::optional<std::vector<uint8_t>> sha3_512(uint8_t *input,
+                                                size_t in_size) {
+  std::vector<uint8_t> out(512 / 8);
+  int res = SHA3_512(out.data(), input, in_size);
+  return !res ? nonstd::optional<std::vector<uint8_t>>(out) : nonstd::nullopt;
+}
+ */
+
+}  // namespace iroha
+
+#endif  // IROHA_HASH_H

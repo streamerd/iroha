@@ -18,8 +18,7 @@
 #pragma once
 
 #include "base64.h"
-#include "keypair.h"
+#include "common.h"
 #include "ed25519.h"
 #include "hash.h"
-
-
+#include "keypair.h"

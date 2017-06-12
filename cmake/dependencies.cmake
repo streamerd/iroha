@@ -34,16 +34,17 @@ endif()
 
 
 
-#######################
-#         uv          #
-#######################
-find_package(uv REQUIRED)
-if (uv_FOUND)
-    include_directories(${uv_INCLUDE_DIRS})
-    link_directories(${uv_LIBRARIES})
-else()
-    message(FATAL_ERROR "No libuv found")
-endif()
+# right now there is no need in libuv, but might be useful in future
+########################
+##         uv          #
+########################
+#find_package(uv REQUIRED)
+#if (uv_FOUND)
+#    include_directories(${uv_INCLUDE_DIRS})
+#    link_directories(${uv_LIBRARIES})
+#else()
+#    message(FATAL_ERROR "No libuv found")
+#endif()
 
 
 
@@ -178,7 +179,7 @@ ExternalProject_Add(martinmoene_optional
         UPDATE_COMMAND    "" # remove update step
         )
 ExternalProject_Get_Property(martinmoene_optional source_dir)
-set(optional_INCLUDE_DIRS ${source_dir}/include/nonstd)
+set(optional_INCLUDE_DIRS ${source_dir}/include)
 file(MAKE_DIRECTORY ${optional_INCLUDE_DIRS})
 
 add_library(optional INTERFACE IMPORTED)
@@ -187,3 +188,30 @@ set_target_properties(optional PROPERTIES
         )
 
 add_dependencies(optional martinmoene_optional)
+
+
+
+
+########################
+#         any          #
+########################
+ExternalProject_Add(martinmoene_any
+        GIT_REPOSITORY    "https://github.com/martinmoene/any-lite"
+        GIT_TAG           "v0.0.0"
+        CONFIGURE_COMMAND "" # remove configure step
+        BUILD_COMMAND     "" # remove build step
+        INSTALL_COMMAND   "" # remove install step
+        TEST_COMMAND      "" # remove test step
+        UPDATE_COMMAND    "" # remove update step
+        )
+ExternalProject_Get_Property(martinmoene_any source_dir)
+set(any_INCLUDE_DIRS ${source_dir}/include)
+file(MAKE_DIRECTORY ${any_INCLUDE_DIRS})
+
+add_library(any INTERFACE IMPORTED)
+set_target_properties(any PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES ${any_INCLUDE_DIRS}
+        )
+
+add_dependencies(any martinmoene_any)
+
