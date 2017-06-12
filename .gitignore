@@ -1,7 +1,6 @@
 config/__pycahe__
 **/__pycache__/*
 __pycache__/*
-build/*
 *.DS_Store
 *.vscode/
 *.swp
@@ -20,8 +19,12 @@ CMakeLists.txt.user
 cmake-build-debu/*
 docker/build/iroha.tar
 cmake-build-debug/*
-external/*
+cmake-build-debug
 core/infra/protobuf
 docker/tiny/iroha/
 include/generated/*
 .scannerwork/
+external
+external/*
+build
+build/*
