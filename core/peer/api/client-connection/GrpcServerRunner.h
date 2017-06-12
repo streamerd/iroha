@@ -23,11 +23,11 @@
 #include <grpc++/server_builder.h>
 #include <string>
 
-namespace iroha {
+namespace grpc_connection {
 
-class grpcServiceManager {
+class GrpcServerRunner {
 public:
-  grpcServiceManager(std::string ip, int port);
+  GrpcServerRunner(std::string ip, int port);
   void addService(grpc::Service &service);
   void run();
   void waitUntilServerReady();
@@ -42,6 +42,6 @@ private:
   grpc::ServerBuilder builder_;
 };
 
-} // namespace iroha
+} // namespace grpc_connection
 
 #endif // GRPC_SERVICE_MANAGER

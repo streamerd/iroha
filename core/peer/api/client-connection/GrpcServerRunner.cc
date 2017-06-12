@@ -15,22 +15,21 @@
  * limitations under the License.
  */
 
-#include "grpcServiceManager.h"
-#include <mutex>
+#include "GrpcServerRunner.h"
 #include <google/protobuf/stubs/common.h>
 
-namespace iroha {
+namespace grpc_connection {
 
-grpcServiceManager::grpcServiceManager(std::string ip, int port)
+GrpcServerRunner::GrpcServerRunner(std::string ip, int port)
     : ip_(ip), port_(port), serverReady_(false) {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 }
 
-void grpcServiceManager::addService(grpc::Service &service) {
+void GrpcServerRunner::addService(grpc::Service &service) {
   builder_.RegisterService(&service);
 }
 
-void grpcServiceManager::run() {
+void GrpcServerRunner::run() {
   auto address = ip_ + std::to_string(port_);
   {
     std::lock_guard<std::mutex> lk(waitForServer_);
@@ -41,9 +40,9 @@ void grpcServiceManager::run() {
   server_->Wait();
 }
 
-void grpcServiceManager::waitUntilServerReady() {
+void GrpcServerRunner::waitUntilServerReady() {
   std::unique_lock<std::mutex> lk(waitForServer_);
   serverCV_.wait(lk, [this] { return serverReady_; });
 }
 
-} // namespace iroha
+} // namespace grpc_connection
