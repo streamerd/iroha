@@ -26,10 +26,7 @@ include_directories(
 )
 
 include("cmake/dependencies.cmake")
-add_subdirectory(schema)
 add_subdirectory(core)
-add_subdirectory(peer)
-add_subdirectory(tools)
 
 link_directories(${PROJECT_BINARY_DIR}/lib)
 
