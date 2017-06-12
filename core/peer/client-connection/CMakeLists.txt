@@ -9,3 +9,6 @@ target_link_libraries(torii ${PROTOBUF_LIBRARIES} pthread)
 
 get_filename_component(COMPILED_PROTO_INCLUDE_DIR ${PROTO_HDRS} DIRECTORY)
 include_directories(${COMPILED_PROTO_INCLUDE_DIR})
+
+add_library(grpcServiceManager grpcServiceManager.cc)
+target_link_libraries(grpcServiceManager torii grpc grpc++)

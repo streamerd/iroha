@@ -15,16 +15,33 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_TORII_H
-#define IROHA_TORII_H
+#ifndef GRPC_SERVICE_MANAGER
+#define GRPC_SERVICE_MANAGER
 
+#include <condition_variable>
 #include <grpc++/grpc++.h>
-#include <interface.grpc.pb.h>
-#include <interface.pb.h>
+#include <grpc++/server_builder.h>
+#include <string>
 
 namespace iroha {
 
-class Torii : public api::Torii::Service {};
-}
+class grpcServiceManager {
+public:
+  grpcServiceManager(std::string ip, int port);
+  void addService(grpc::Service &service);
+  void run();
+  void waitUntilServerReady();
 
-#endif // IROHA_TORII_H
+private:
+  std::string ip_;
+  int port_;
+  grpc::Server *server_;
+  std::mutex waitForServer_;
+  std::condition_variable serverCV_;
+  bool serverReady_;
+  grpc::ServerBuilder builder_;
+};
+
+} // namespace iroha
+
+#endif // GRPC_SERVICE_MANAGER
