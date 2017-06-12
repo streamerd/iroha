@@ -16,7 +16,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <peer/storage/merkle_tree.h>
+#include <peer/api/storage/merkle_tree.h>
 
 namespace merkle {
 

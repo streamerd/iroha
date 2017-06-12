@@ -34,19 +34,6 @@ endif()
 
 
 
-#######################
-#         uv          #
-#######################
-find_package(uv REQUIRED)
-if (uv_FOUND)
-    include_directories(${uv_INCLUDE_DIRS})
-    link_directories(${uv_LIBRARIES})
-else()
-    message(FATAL_ERROR "No libuv found")
-endif()
-
-
-
 ###########################
 #         keccak          #
 ###########################

@@ -8,7 +8,6 @@ set(SOURCE_FILES
 add_executable(iroha ${SOURCE_FILES})
 
 target_link_libraries(iroha PRIVATE
-        uv
         grpcServerRunner
         )
 
