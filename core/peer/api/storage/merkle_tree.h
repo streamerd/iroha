@@ -27,7 +27,7 @@
 
 namespace merkle {
 
-const size_t HASH_LEN = 32; // for ed25519
+const size_t HASH_LEN = 32; // for sha3-256
 using hash_t = std::array<uint8_t, HASH_LEN>;
 
 /**
