@@ -18,6 +18,7 @@
 #ifndef IROHA_KEYPAIR_H
 #define IROHA_KEYPAIR_H
 
+#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <nonstd/any.hpp>
@@ -46,6 +47,46 @@ class Keypair {
    */
   explicit Keypair(const pubkey_t &pub, const privkey_t &priv)
       : pubkey(std::move(pub)), privkey(std::move(priv)), has_private(true) {}
+
+  /**
+   * Build a keypair with public and private key in binary format
+   * @param pub
+   * @param priv
+   */
+  explicit Keypair(const std::vector<uint8_t> &pub,
+                   const std::vector<uint8_t> &priv)
+      : has_private(true) {
+    std::copy(pub.begin(), pub.end(), pubkey.begin());
+    std::copy(priv.begin(), priv.end(), privkey.begin());
+  }
+
+  /**
+   * Build a keypair with public key in binary format
+   * @param pub
+   */
+  explicit Keypair(const std::vector<uint8_t> &pub) : has_private(false) {
+    std::copy(pub.begin(), pub.end(), pubkey.begin());
+  }
+
+  /**
+   * Build a keypair with public and private key in binary format
+   * @param pub
+   * @param priv
+   */
+  explicit Keypair(const uint8_t *pub, const uint8_t *priv)
+      : has_private(true) {
+    std::copy(pub, pub + PUBLEN, pubkey.begin());
+    std::copy(priv, priv + PUBLEN, privkey.begin());
+  }
+
+  /**
+    * Build a keypair with public key in binary format
+    * @param pub
+    */
+  explicit Keypair(const uint8_t *pub) : has_private(false) {
+    std::copy(pub, pub + PUBLEN, pubkey.begin());
+  }
+
 
   /**
    * Build a keypair with only public key in binary format
@@ -80,7 +121,7 @@ class Keypair {
    */
   bool verify(const std::vector<uint8_t> &msg, const signature_t &sig) {
     return 1 ==
-        ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data());
+           ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data());
   }
 
   /**
