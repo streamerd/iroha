@@ -219,7 +219,7 @@ add_dependencies(any martinmoene_any)
 #############################
 #         protobuf          #
 #############################
-find_package(Protobuf REQUIRED)
+find_package(Protobuf 3.3.0 REQUIRED)
 if(PROTOBUF_FOUND)
     include_directories(${PROTOBUF_INCLUDE_DIRS})
     link_directories(${PROTOBUF_LIBRARIES})
