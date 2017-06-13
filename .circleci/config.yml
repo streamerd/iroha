@@ -4,7 +4,7 @@ jobs:
     # must be IROHA_HOME:
     working_directory: /opt/iroha
     docker:
-      - image: warchantua/iroha-dev
+      - image: lebdron/iroha-dev
         environment:
           IROHA_HOME: /opt/iroha
           IROHA_BUILD: /tmp/build

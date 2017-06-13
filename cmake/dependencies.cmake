@@ -5,17 +5,17 @@ set_directory_properties(PROPERTIES
         )
 
 
-
+# not required yet
 ##############################
 #         rapidjson          #
 ##############################
-find_package(RapidJSON REQUIRED)
-if (RapidJSON_FOUND)
-    include_directories(${RapidJSON_INCLUDE_DIRS})
-    link_directories(${RapidJSON_LIBRARIES})
-else()
-    message(FATAL_ERROR "No rapidjson found")
-endif()
+#find_package(RapidJSON REQUIRED)
+#if (RapidJSON_FOUND)
+#    include_directories(${RapidJSON_INCLUDE_DIRS})
+#    link_directories(${RapidJSON_LIBRARIES})
+#else()
+#    message(FATAL_ERROR "No rapidjson found")
+#endif()
 
 
 
@@ -133,7 +133,7 @@ if(TESTING)
     set_target_properties(gtest
             PROPERTIES
             INTERFACE_INCLUDE_DIRECTORIES ${gtest_SOURCE_DIR}/googletest/include
-            IMPORTED_LINK_INTERFACE_LIBRARIES "pthread;${gtest_BINARY_DIR}/googletest/libgtest_main.a"
+            INTERFACE_LINK_LIBRARIES "pthread;${gtest_BINARY_DIR}/googletest/libgtest_main.a"
             IMPORTED_LOCATION ${gtest_BINARY_DIR}/googletest/libgtest.a
             )
     add_dependencies(gtest google_test)
