@@ -17,6 +17,7 @@
 
 #include "client.h"
 #include <thread>
+#include <crypto/crypto.h>
 
 using namespace iroha;
 

@@ -17,4 +17,6 @@ target_link_libraries(client PUBLIC
         ${PROTOBUF_LIBRARIES}
         grpc++
         gpr
+        optional
+        crypto
 )
