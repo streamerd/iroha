@@ -1,7 +1,7 @@
 syntax = "proto3";
 package iroha.protocol;
-import "asset.proto";
-import "primitive.proto";
+import "_asset.proto";
+import "_primitive.proto";
 
 // AssetCommand
 message Add{

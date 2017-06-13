@@ -215,3 +215,14 @@ set_target_properties(any PROPERTIES
 
 add_dependencies(any martinmoene_any)
 
+
+#############################
+#         protobuf          #
+#############################
+find_package(Protobuf REQUIRED)
+if(PROTOBUF_FOUND)
+    include_directories(${PROTOBUF_INCLUDE_DIRS})
+    link_directories(${PROTOBUF_LIBRARIES})
+else()
+    message(FATAL_ERROR "Install protobuf 3.3.0")
+endif()

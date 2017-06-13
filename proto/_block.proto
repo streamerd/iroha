@@ -1,7 +1,7 @@
 syntax = "proto3";
 package iroha.protocol;
-import "commands.proto";
-import "primitive.proto";
+import "_commands.proto";
+import "_primitive.proto";
 
 message Transaction {
   message Header {

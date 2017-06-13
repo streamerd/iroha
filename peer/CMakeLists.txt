@@ -1,5 +1,12 @@
-cmake_minimum_required(VERSION 3.5)
-project(peer CXX)
+include_directories(.)
+
+# connection with CLIENT -> PEER
+add_subdirectory(api)
+# consensus algorithm
+add_subdirectory(consensus)
+# connection PEER -> STORAGE
+add_subdirectory(storage)
+
 
 set(SOURCE_FILES
         peer.cc
@@ -8,8 +15,7 @@ set(SOURCE_FILES
 add_executable(iroha ${SOURCE_FILES})
 
 target_link_libraries(iroha PRIVATE
-        grpcServerRunner
+        async_server
+
         )
 
-
-add_subdirectory(api)

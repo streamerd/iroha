@@ -1,2 +1,1 @@
-project(consensus CXX)
-
+message(STATUS "Consensus algorithm")
