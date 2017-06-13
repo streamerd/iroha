@@ -15,33 +15,24 @@
  * limitations under the License.
  */
 
-#ifndef GRPC_SERVICE_MANAGER
-#define GRPC_SERVICE_MANAGER
+#ifndef TORII_IMPL_H
+#define TORII_IMPL_H
 
-#include <condition_variable>
-#include <grpc++/grpc++.h>
-#include <grpc++/server_builder.h>
-#include <string>
+#include <grpc++/server_context.h>
+#include "interface.pb.h"
+#include "interface.grpc.pb.h"
 
 namespace grpc_connection {
 
-class GrpcServerRunner {
-public:
-  GrpcServerRunner(std::string ip, int port);
-  void addService(grpc::Service &service);
-  void run();
-  void waitUntilServerReady();
+using grpc::Status;
+using grpc::ServerContext;
+using api::Ping;
+using api::Pong;
 
-private:
-  std::string ip_;
-  int port_;
-  grpc::Server *server_;
-  std::mutex waitForServer_;
-  std::condition_variable serverCV_;
-  bool serverReady_;
-  grpc::ServerBuilder builder_;
+class ToriiImpl final : public api::Torii::Service {
+  Status SendPing(ServerContext *context, Ping *ping, Pong *pong);
 };
 
 } // namespace grpc_connection
 
-#endif // GRPC_SERVICE_MANAGER
+#endif // TORII_IMPL_H

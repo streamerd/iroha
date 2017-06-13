@@ -15,14 +15,15 @@
  * limitations under the License.
  */
 
-#include "GrpcServerRunner.h"
-#include <google/protobuf/stubs/common.h>
+#include "grpcServerRunner.h"
+#include "toriiImpl.h"
 
 namespace grpc_connection {
 
 GrpcServerRunner::GrpcServerRunner(std::string ip, int port)
     : ip_(ip), port_(port), serverReady_(false) {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
+  builder_.AddListeningPort(ip_ + ":" + std::to_string(port_), grpc::InsecureServerCredentials());
 }
 
 void GrpcServerRunner::addService(grpc::Service &service) {
@@ -30,7 +31,8 @@ void GrpcServerRunner::addService(grpc::Service &service) {
 }
 
 void GrpcServerRunner::run() {
-  auto address = ip_ + std::to_string(port_);
+  grpc_connection::ToriiImpl toriiService;
+  addService(toriiService);
   {
     std::lock_guard<std::mutex> lk(waitForServer_);
     server_ = builder_.BuildAndStart().release();
