@@ -16,7 +16,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <peer/storage/merkle_tree.h>
+#include <peer/api/storage/merkle_tree.h>
 
 namespace merkle {
 
@@ -51,103 +51,103 @@ std::vector<hash_t> roots = {
         "f13ec23c48a494d98b10cd5144dd0e3d8e2619222921e72aa403a0cead44a296")};
 
 TEST(NaiveMerkle, Tree4_1block) {
-  // should with size 4
-  merkle::MerkleTree tree(4);
-  for (size_t i = 0; i < 8; i++) {
-    tree.push(h);
-    auto root = tree.root();
-    ASSERT_EQ(root, roots[i]);
-  }
+// should with size 4
+merkle::MerkleTree tree(4);
+for (size_t i = 0; i < 8; i++) {
+tree.push(h);
+auto root = tree.root();
+ASSERT_EQ(root, roots[i]);
+}
 }
 
 TEST(NaiveMerkle, Tree4_2blocks) {
-  // tree with size 4, which stores 2 blocks
-  merkle::MerkleTree tree(4, 2);
-  for (size_t i = 0; i < 8; i++) {
-    tree.push(h);
-    auto root = tree.root();
-    ASSERT_EQ(root, roots[i]) << "Expected root is different.";
-  }
+// tree with size 4, which stores 2 blocks
+merkle::MerkleTree tree(4, 2);
+for (size_t i = 0; i < 8; i++) {
+tree.push(h);
+auto root = tree.root();
+ASSERT_EQ(root, roots[i]) << "Expected root is different.";
+}
 }
 
 TEST(NaiveMerkle, Tree128_1_step_rollback) {
-  size_t iterations = 10000;
+size_t iterations = 10000;
 
-  std::list<hash_t> history;
+std::list<hash_t> history;
 
-  merkle::MerkleTree tree(128);
-  for (size_t i = 0; i < iterations; i++) {
-    uint8_t *ptr = reinterpret_cast<uint8_t *>(&i);
-    tree.push(tree.hash(ptr, sizeof(i)));
-    history.push_back(tree.root());
-    /* // for debug
-    printf("%ld: ", i);
-    tree.dump();
-     */
-  }
+merkle::MerkleTree tree(128);
+for (size_t i = 0; i < iterations; i++) {
+uint8_t *ptr = reinterpret_cast<uint8_t *>(&i);
+tree.push(tree.hash(ptr, sizeof(i)));
+history.push_back(tree.root());
+/* // for debug
+printf("%ld: ", i);
+tree.dump();
+ */
+}
 
-  auto rbegin = history.rbegin();
-  auto rend = history.rend();
+auto rbegin = history.rbegin();
+auto rend = history.rend();
 
-  // iterate in reverse direction
-  size_t steps = 0;
-  for (auto it = rbegin; it != rend; ++it) {
-    const hash_t &expected_root = *it;
-    const hash_t &actual_root = tree.root();
+// iterate in reverse direction
+size_t steps = 0;
+for (auto it = rbegin; it != rend; ++it) {
+const hash_t &expected_root = *it;
+const hash_t &actual_root = tree.root();
 
-    size_t max_rollback = tree.max_rollback();
+size_t max_rollback = tree.max_rollback();
 
-    /* // for debug
-    printf("[%ld] ", max_rollback);
-    printf("%ld: ", iterations - 1 - steps);
-    tree.dump();
-    */
+/* // for debug
+printf("[%ld] ", max_rollback);
+printf("%ld: ", iterations - 1 - steps);
+tree.dump();
+*/
 
-    ASSERT_EQ(expected_root, actual_root) << "Roots are different after "
-                                          << steps << " rollbacks.";
+ASSERT_EQ(expected_root, actual_root) << "Roots are different after "
+<< steps << " rollbacks.";
 
-    steps++;
+steps++;
 
-    // rollback on single step
-    if (max_rollback == 0) {
-      // correct behavior: tree throws std::bad_exception if max_rollback is 0
-      ASSERT_THROW(tree.rollback(1), std::bad_exception)
-          << "tree should have thrown an exception!";
-      SUCCEED();
-      break; // end this loop
-    } else {
-      ASSERT_NO_THROW(tree.rollback(1));
-    }
-  }
+// rollback on single step
+if (max_rollback == 0) {
+// correct behavior: tree throws std::bad_exception if max_rollback is 0
+ASSERT_THROW(tree.rollback(1), std::bad_exception)
+<< "tree should have thrown an exception!";
+SUCCEED();
+break; // end this loop
+} else {
+ASSERT_NO_THROW(tree.rollback(1));
+}
+}
 }
 
 TEST(NaiveMerkle, Tree128_single_max_rollback) {
-  size_t iterations = 10000;
+size_t iterations = 10000;
 
-  std::list<hash_t> history;
+std::list<hash_t> history;
 
-  merkle::MerkleTree tree(128, 10);
-  for (size_t i = 0; i < iterations; i++) {
-    uint8_t *ptr = reinterpret_cast<uint8_t *>(&i);
-    tree.push(tree.hash(ptr, sizeof(i)));
-    history.push_back(tree.root());
-  }
+merkle::MerkleTree tree(128, 10);
+for (size_t i = 0; i < iterations; i++) {
+uint8_t *ptr = reinterpret_cast<uint8_t *>(&i);
+tree.push(tree.hash(ptr, sizeof(i)));
+history.push_back(tree.root());
+}
 
-  size_t max_ = tree.max_rollback();
-  auto ptr = history.rend();
-  for (size_t i = 0; i <= max_; i++)
-    ++ptr;
+size_t max_ = tree.max_rollback();
+auto ptr = history.rend();
+for (size_t i = 0; i <= max_; i++)
+++ptr;
 
-  tree.rollback(max_);
-  ASSERT_EQ(tree.root(), *ptr);
+tree.rollback(max_);
+ASSERT_EQ(tree.root(), *ptr);
 }
 
 TEST(NaiveMerkle, Tree128_100k_pushes) {
-  merkle::MerkleTree tree(128);
-  for (size_t i = 0; i < 100000; i++) {
-    tree.push(roots[i % 8]);
-  }
-  SUCCEED();
+merkle::MerkleTree tree(128);
+for (size_t i = 0; i < 100000; i++) {
+tree.push(roots[i % 8]);
+}
+SUCCEED();
 }
 
 // TODO(@warchant): add more tests, which use different combinations of block

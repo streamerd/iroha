@@ -8,9 +8,8 @@ set(SOURCE_FILES
 add_executable(iroha ${SOURCE_FILES})
 
 target_link_libraries(iroha PRIVATE
-        uv
+        grpcServerRunner
         )
 
 
-add_subdirectory(storage)
-add_subdirectory(client-connection)
+add_subdirectory(api)

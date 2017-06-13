@@ -80,7 +80,7 @@ class Keypair {
    */
   bool verify(const std::vector<uint8_t> &msg, const signature_t &sig) {
     return 1 ==
-           ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data());
+        ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data());
   }
 
   /**

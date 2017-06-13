@@ -19,3 +19,10 @@ include_directories(
         ${COMPILED_PROTO_INCLUDE_DIR}
         ${COMPILED_PROTO_GRPC_INCLUDE_DIR}
 )
+
+
+add_library(grpcServerRunner grpcServerRunner.cc)
+target_link_libraries(grpcServerRunner torii grpc grpc++)
+
+add_library(toriiImpl toriiImpl.cc)
+target_link_libraries(toriiImpl torii)
