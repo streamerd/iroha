@@ -21,7 +21,6 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
-#include <nonstd/any.hpp>
 #include <nonstd/optional.hpp>
 #include <string>
 #include <vector>
@@ -40,6 +39,10 @@ class Keypair {
   using pubkey_t = std::array<uint8_t, PUBLEN>;
   using privkey_t = std::array<uint8_t, PRIVLEN>;
 
+  //  using signature_t = std::basic_string<uint8_t>;
+  //  using pubkey_t = std::basic_string<uint8_t>;
+  //  using privkey_t = std::basic_string<uint8_t>;
+
   /**
    * Build a keypair with public and private key in binary format
    * @param pub
@@ -56,8 +59,8 @@ class Keypair {
   explicit Keypair(const std::vector<uint8_t> &pub,
                    const std::vector<uint8_t> &priv)
       : has_private(true) {
-    std::copy(pub.begin(), pub.end(), pubkey.begin());
-    std::copy(priv.begin(), priv.end(), privkey.begin());
+    std::copy(&pub[0], &pub[PUBLEN], &pubkey[0]);
+    std::copy(&pub[0], &pub[PUBLEN], &privkey[0]);
   }
 
   /**
@@ -65,7 +68,7 @@ class Keypair {
    * @param pub
    */
   explicit Keypair(const std::vector<uint8_t> &pub) : has_private(false) {
-    std::copy(pub.begin(), pub.end(), pubkey.begin());
+    std::copy(&pub[0], &pub[PUBLEN], &pubkey[0]);
   }
 
   /**
@@ -75,8 +78,8 @@ class Keypair {
    */
   explicit Keypair(const uint8_t *pub, const uint8_t *priv)
       : has_private(true) {
-    std::copy(pub, pub + PUBLEN, pubkey.begin());
-    std::copy(priv, priv + PUBLEN, privkey.begin());
+    std::copy(pub, pub + PUBLEN, &pubkey[0]);
+    std::copy(priv, priv + PUBLEN, &privkey[0]);
   }
 
   /**
@@ -84,7 +87,26 @@ class Keypair {
     * @param pub
     */
   explicit Keypair(const uint8_t *pub) : has_private(false) {
-    std::copy(pub, pub + PUBLEN, pubkey.begin());
+    std::copy(pub, pub + PUBLEN, &pubkey[0]);
+  }
+
+  /**
+ * Build a keypair with public and private key in binary format (string)
+ * @param pub
+ * @param priv
+ */
+  explicit Keypair(const std::string &pub, const std::string &priv)
+      : has_private(true) {
+    std::copy(&pub[0], &pub[PUBLEN], &pubkey[0]);
+    std::copy(&priv[0], &priv[PUBLEN], &privkey[0]);
+  }
+
+  /**
+    * Build a keypair with public key in binary format
+    * @param pub
+    */
+  explicit Keypair(const std::string &pub) : has_private(false) {
+    std::copy(&pub[0], &pub[PUBLEN], &pubkey[0]);
   }
 
 
@@ -108,8 +130,23 @@ class Keypair {
     if (!has_private) return nonstd::nullopt;
 
     signature_t sig;
-    ed25519_sign(sig.data(), message.data(), message.size(), pubkey.data(),
-                 privkey.data());
+    ed25519_sign(&sig[0], message.data(), message.size(), &pubkey[0],
+                 &privkey[0]);
+    return nonstd::optional<signature_t>(sig);
+  }
+
+  /**
+   * Sign the message
+   * @param message - arbitrary blob
+   * @return nonstd::nullopt if current keypair has no private key,
+   * otherwise returns signature
+   */
+  nonstd::optional<signature_t> sign(const uint8_t *message, size_t len) {
+    // if keypair has no private key, it is not possible to sign
+    if (!has_private) return nonstd::nullopt;
+
+    signature_t sig;
+    ed25519_sign(&sig[0], message, len, &pubkey[0], &privkey[0]);
     return nonstd::optional<signature_t>(sig);
   }
 
@@ -120,8 +157,7 @@ class Keypair {
    * @return true if signature is ok, false otherwise
    */
   bool verify(const std::vector<uint8_t> &msg, const signature_t &sig) {
-    return 1 ==
-           ed25519_verify(sig.data(), msg.data(), msg.size(), pubkey.data());
+    return 1 == ed25519_verify(&sig[0], msg.data(), msg.size(), &pubkey[0]);
   }
 
   /**
@@ -138,10 +174,10 @@ class Keypair {
    * @return
    */
   std::string pub_hexdigest() {
-    return digest_to_hexdigest(pubkey.data(), PUBLEN);
+    return digest_to_hexdigest(&pubkey[0], PUBLEN);
   }
   nonstd::optional<std::string> priv_hexdigest() {
-    auto r = digest_to_hexdigest(privkey.data(), PRIVLEN);
+    auto r = digest_to_hexdigest(&privkey[0], PRIVLEN);
     return has_private ? nonstd::optional<std::string>(r) : nonstd::nullopt;
   }
 
@@ -149,10 +185,21 @@ class Keypair {
    * Getters for public and private keys in "base64" (string) format
    * @return
    */
-  std::string pub_base64() { return base64_encode(pubkey.data(), PUBLEN); }
+  std::string pub_base64() { return base64_encode(&pubkey[0], PUBLEN); }
   nonstd::optional<std::string> priv_base64() {
-    auto r = base64_encode(privkey.data(), PRIVLEN);
+    auto r = base64_encode(&privkey[0], PRIVLEN);
     return has_private ? nonstd::optional<std::string>(r) : nonstd::nullopt;
+  }
+
+  /**
+   * Getters for public and private keys in "str" format
+   * @return
+   */
+  std::string pub_str() { return std::string{pubkey.begin(), pubkey.end()}; }
+  nonstd::optional<std::string> priv_str() {
+    return has_private ? nonstd::optional<std::string>(
+                             std::string{pubkey.begin(), pubkey.end()})
+                       : nonstd::nullopt;
   }
 
 
