@@ -1,13 +1,18 @@
 FROM ubuntu:16.04
 
 RUN apt-get update && apt-get -y upgrade && \
-    apt-get -y install libssl-dev libc-ares-dev xsltproc \
-        g++ gcc make git wget cmake file
+    apt-get -y install build-essential \
+        # dev dependencies
+        libssl-dev libc-ares-dev xsltproc \
+        # CircleCI dependencies
+        git ssh tar gzip ca-certificates \
+        # other
+        wget cmake file && apt-get -y clean
 
 # install protobuf 3.3.0
 RUN cd /tmp; \
     wget https://github.com/google/protobuf/releases/download/v3.3.0/protobuf-cpp-3.3.0.tar.gz; \
-    tar xf protobuf-cpp-3.3.0.tar.gz; \
+    tar xfo protobuf-cpp-3.3.0.tar.gz; \
     cd protobuf-3.3.0; \
     ./configure && make -j$(nproc) && make install && ldconfig; \
     rm /tmp/protobuf-cpp-3.3.0.tar.gz
@@ -15,7 +20,7 @@ RUN cd /tmp; \
 # install grpc 1.3.2
 RUN cd /tmp; \
     wget https://github.com/grpc/grpc/archive/v1.3.2.tar.gz; \
-    tar xf v1.3.2.tar.gz; \
+    tar xfo v1.3.2.tar.gz; \
     cd grpc-1.3.2; \
     rmdir third_party/protobuf; \
     ln -s /tmp/protobuf-3.3.0 third_party/protobuf; \
