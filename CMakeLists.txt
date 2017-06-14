@@ -20,7 +20,7 @@ include_directories(libs)
 
 # components
 add_subdirectory(libs)
-add_subdirectory(peer)
+add_subdirectory(irohad)
 add_subdirectory(examples)
 
 if(TESTING)
