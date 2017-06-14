@@ -18,7 +18,6 @@
 #ifndef IROHA_GENERATOR_H
 #define IROHA_GENERATOR_H
 
-#include <api.pb.h>
 #include <crypto/common.h>
 #include <crypto/hash.h>
 #include <algorithm>
@@ -63,29 +62,7 @@ std::vector<uint8_t> random_blob(size_t length) {
   return v;
 }
 
-iroha::api::Transaction random_transaction() {
-  iroha::api::Transaction transaction;
 
-  transaction.set_meta(random_string((size_t)random_number(10, 20)));
-
-  transaction.set_body(random_string((size_t)random_number(100, 200)));
-
-  auto header = transaction.mutable_header();
-  // Set created timestamp
-  header->set_created_ts((uint64_t)random_number(0, INT64_MAX));
-  // Set signature
-  auto signature = header->add_sigs();
-  signature->set_pubkey(random_string(ed25519::PUBLEN));
-  signature->set_signature(random_string(ed25519::SIGNATURELEN));
-  // Set hash
-  std::string hash(32, '\0');
-  sha3_256((unsigned char *)&hash[0],
-           (unsigned char *)(transaction.meta() + transaction.body()).c_str(),
-           transaction.meta().size() + transaction.body().size());
-  header->set_hash(hash);
-
-  return transaction;
-}
 }
 
 #endif  // IROHA_GENERATOR_H
