@@ -9,8 +9,8 @@ message Signature {
 
 // may be reused in transaction or block
 message Header{
-    uint64             created_ts = 1;
-    repeated Signature sigs       = 2;
+    uint32             created_ts = 1;
+    repeated Signature sig        = 2;
     bytes              hash       = 3;
 };
 

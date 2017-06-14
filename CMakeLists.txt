@@ -21,6 +21,7 @@ include(cmake/functions.cmake)
 include_directories(libs)
 
 # components
+add_subdirectory(proto)
 add_subdirectory(libs)
 add_subdirectory(irohad)
 add_subdirectory(examples)

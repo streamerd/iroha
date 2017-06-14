@@ -1,7 +1,5 @@
-COMPILE_PROTO     (S1 H1 ${PROTO_DIR}/api.proto)
-COMPILE_PROTO     (S2 H2 ${PROTO_DIR}/api_service.proto)
-COMPILE_GRPC_PROTO(S3 H3 ${PROTO_DIR}/api_service.proto)
+compile_proto_to_cpp     (api.proto)
+compile_proto_to_grpc_cpp(api_service.proto)
 
-get_filename_component(PROTO_COMPILED_DIR ${H1} DIRECTORY)
-include_directories(${PROTO_COMPILED_DIR})
-
+include_directories(${CMAKE_SOURCE_DIR}/proto)
+link_directories(${CMAKE_SOURCE_DIR}/proto)

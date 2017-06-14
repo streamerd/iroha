@@ -22,9 +22,9 @@
 #include <crypto/hash.h>
 #include <algorithm>
 #include <cassert>
-#include <cstdint>
 #include <functional>
 #include <string>
+#include <vector>
 
 namespace iroha {
 
