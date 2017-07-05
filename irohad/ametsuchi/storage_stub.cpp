@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#include <ametsuchi/ametsuchi_stub.hpp>
+#include <ametsuchi/storage_stub.hpp>
 #include <ametsuchi/mutable_storage_stub.hpp>
 #include <ametsuchi/temporary_wsv_stub.hpp>
 

@@ -28,7 +28,7 @@ limitations under the License.
 #include <validation/stateless/validator_stub.hpp>
 
 #include <dao/dao.hpp>
-#include <ametsuchi/ametsuchi_stub.hpp>
+#include <ametsuchi/storage_stub.hpp>
 #include <dao/dao_crypto_provider_stub.hpp>
 
 #include "server_runner.hpp"

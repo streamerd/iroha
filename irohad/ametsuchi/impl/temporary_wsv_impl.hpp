@@ -15,29 +15,27 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_WSVQUERY_HPP
-#define IROHA_WSVQUERY_HPP
+#ifndef IROHA_TEMPORARY_WSV_IMPL_HPP
+#define IROHA_TEMPORARY_WSV_IMPL_HPP
 
-#include <common/types.hpp>
-#include <dao/dao.hpp>
-#include <string>
-#include <vector>
+#include <ametsuchi/temporary_wsv.hpp>
+#include <ametsuchi/impl/storage_impl.hpp>
+#include <ametsuchi/impl/command_executor_impl.hpp>
 
 namespace iroha {
-
   namespace ametsuchi {
-
-    /**
-     *  Public interface for world state view queries
-     */
-    class WsvQuery {
+    class TemporaryWsvImpl : public TemporaryWsv {
      public:
-      virtual ~WsvQuery() = default;
-
+      TemporaryWsvImpl(StorageImpl &storage);
+      bool apply(const dao::Transaction &transaction,
+                 std::function<bool(const dao::Transaction &,
+                                    CommandExecutor &,
+                                    WsvQuery &)> function) override;
+     private:
+      StorageImpl &storage_;
+      CommandExecutorImpl executor_;
     };
+  }//namespace ametsuchi
+}//namespace iroha
 
-  }  // namespace ametsuchi
-
-}  // namespace iroha
-
-#endif  // IROHA_WSVQUERY_HPP
+#endif //IROHA_TEMPORARY_WSV_IMPL_HPP

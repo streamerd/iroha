@@ -19,7 +19,7 @@
 #define IROHA_APPLICATION_HPP
 
 #include <network/network_api.h>
-#include <ametsuchi/ametsuchi.hpp>
+#include <ametsuchi/storage.hpp>
 #include <dao/dao.hpp>
 
 namespace iroha {

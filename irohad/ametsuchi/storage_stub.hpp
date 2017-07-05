@@ -18,13 +18,13 @@
 #ifndef IROHA_AMETSUCHI_STUB_HPP
 #define IROHA_AMETSUCHI_STUB_HPP
 
-#include <ametsuchi/ametsuchi.hpp>
+#include <ametsuchi/storage.hpp>
 #include <memory>
 
 namespace iroha {
   namespace ametsuchi {
 
-    class AmetsuchiStub : public Ametsuchi {
+    class AmetsuchiStub : public Storage {
      public:
       dao::Peer get_peer(
           iroha::ed25519::pubkey_t pub_key) override;

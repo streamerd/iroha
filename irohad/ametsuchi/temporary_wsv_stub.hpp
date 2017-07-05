@@ -18,7 +18,7 @@
 #ifndef IROHA_TEMPORARY_WSV_STUB_HPP
 #define IROHA_TEMPORARY_WSV_STUB_HPP
 
-#include <ametsuchi/ametsuchi_stub.hpp>
+#include <ametsuchi/storage_stub.hpp>
 #include <ametsuchi/command_executor_stub.hpp>
 #include <ametsuchi/temporary_wsv.hpp>
 #include <functional>

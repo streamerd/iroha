@@ -34,6 +34,7 @@ namespace iroha {
      */
     class TemporaryWsv : public WsvQuery {
      public:
+      virtual ~TemporaryWsv() = default;
       /**
        * Applies a transaction to current state
        * using logic specified in function
@@ -47,7 +48,6 @@ namespace iroha {
        * Function returns true if the transaction is successfully applied, false
        * otherwise.
        * @return True if transaction was successfully applied, false otherwise
-       *
        */
       virtual bool apply(const dao::Transaction &transaction,
                          std::function<bool(const dao::Transaction &,

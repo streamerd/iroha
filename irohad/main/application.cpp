@@ -17,7 +17,7 @@
 
 #include "application.hpp"
 
-#include <ametsuchi/ametsuchi_stub.hpp>
+#include <ametsuchi/storage_stub.hpp>
 #include "dao/dao_crypto_provider_stub.hpp"
 #include "dao/dao_hash_provider_impl.hpp"
 

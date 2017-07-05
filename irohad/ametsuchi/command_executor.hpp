@@ -28,6 +28,7 @@ namespace iroha {
      */
     class CommandExecutor {
      public:
+      virtual ~CommandExecutor() = default;
       /**
        * Executes a command in a temporary state
        * @see TemporaryWsv, MutableStorage

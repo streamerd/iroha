@@ -18,7 +18,7 @@
 #ifndef IROHA_MUTABLE_STORAGE_STUB_HPP
 #define IROHA_MUTABLE_STORAGE_STUB_HPP
 
-#include <ametsuchi/ametsuchi_stub.hpp>
+#include <ametsuchi/storage_stub.hpp>
 #include <ametsuchi/command_executor_stub.hpp>
 #include <ametsuchi/mutable_storage.hpp>
 
