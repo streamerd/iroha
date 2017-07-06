@@ -21,7 +21,7 @@ namespace iroha {
   namespace validation {
 
     CommandValidatorStub::CommandValidatorStub(
-        ametsuchi::TemporaryWsv &wsv) : wsv(wsv) {
+        ametsuchi::WsvQuery &wsv) : wsv(wsv) {
       this->handler.insert<dao::AddPeer>(std::bind(&CommandValidatorStub::validateAddPeer,
                                                    this,
                                                    std::placeholders::_1));

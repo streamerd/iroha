@@ -15,29 +15,23 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_WSV_QUERY_HPP
-#define IROHA_WSV_QUERY_HPP
+#ifndef IROHA_POSTGRES_COMMAND_EXECUTOR_HPP
+#define IROHA_POSTGRES_COMMAND_EXECUTOR_HPP
 
-#include <common/types.hpp>
-#include <dao/dao.hpp>
-#include <string>
-#include <vector>
+#include <ametsuchi/command_executor.hpp>
+#include <pqxx/nontransaction>
 
 namespace iroha {
-
   namespace ametsuchi {
-
-    /**
-     *  Public interface for world state view queries
-     */
-    class WsvQuery {
+    class PostgresCommandExecutor : public CommandExecutor {
      public:
-      virtual ~WsvQuery() = default;
-
+      PostgresCommandExecutor(std::shared_ptr<pqxx::nontransaction> transaction);
+      bool execute(const dao::Command &command) override;
+     private:
+      std::shared_ptr<pqxx::nontransaction> transaction_;
     };
 
-  }  // namespace ametsuchi
+  }// namespace ametsuchi
+}// namespace iroha
 
-}  // namespace iroha
-
-#endif  // IROHA_WSV_QUERY_HPP
+#endif //IROHA_POSTGRES_COMMAND_EXECUTOR_HPP

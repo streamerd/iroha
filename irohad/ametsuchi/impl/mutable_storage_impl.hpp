@@ -24,13 +24,17 @@ namespace iroha {
   namespace ametsuchi {
     class MutableStorageImpl : public MutableStorage {
      public:
+      MutableStorageImpl();
       bool apply(const dao::Block &block,
-                 std::function<bool(const dao::Block &,
-                                    CommandExecutor &,
-                                    WsvQuery &,
-                                    const dao::Block &)> function) override;
-    };
-  }//namespace ametsuchi
-}//namespace iroha
+                 std::function<bool(const dao::Block &, CommandExecutor &,
+                                    WsvQuery &, const dao::Block &)>
+                     function) override;
 
-#endif //IROHA_MUTABLE_STORAGE_IMPL_HPP
+     private:
+
+      friend class StorageImpl;
+    };
+  }  // namespace ametsuchi
+}  // namespace iroha
+
+#endif  // IROHA_MUTABLE_STORAGE_IMPL_HPP

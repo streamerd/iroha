@@ -32,7 +32,7 @@ namespace iroha {
 
     std::unique_ptr<StorageImpl> StorageImpl::create(
         std::string block_store_dir, std::string redis_host,
-        std::size_t redis_port, std::string postgres_connection) {
+        std::size_t redis_port, std::string postgres_options) {
       auto block_store = FlatFile::create(block_store_dir);
       if (!block_store) {
         // TODO log error
@@ -47,27 +47,28 @@ namespace iroha {
         return nullptr;
       }
 
-      auto wsv = std::make_unique<pqxx::lazyconnection>();
+      auto postgres_connection =
+          std::make_unique<pqxx::lazyconnection>(postgres_options);
       try {
-        wsv->activate();
-      } catch (const pqxx::broken_connection &e){
+        postgres_connection->activate();
+      } catch (const pqxx::broken_connection &e) {
         // TODO log error
         return nullptr;
       }
+      auto transaction = std::make_shared<pqxx::nontransaction>(
+          postgres_connection, "storage");
 
-      return std::unique_ptr<StorageImpl>(
-          new StorageImpl(block_store, index, wsv));
+      return std::unique_ptr<StorageImpl>(new StorageImpl());
     }
 
     StorageImpl::StorageImpl(std::unique_ptr<FlatFile> block_store,
-                             std::unique_ptr<cpp_redis::redis_client> index,
-                             std::unique_ptr<pqxx::lazyconnection> wsv)
-        : block_store_(std::move(block_store)),
-          index_(std::move(index)),
-          wsv_(std::move(wsv)) {}
+                             std::unique_ptr<cpp_redis::redis_client> index)
+        : block_store_(std::move(block_store)), index_(std::move(index)) {
+      transaction_->exec();
+    }
 
     void StorageImpl::commit(std::unique_ptr<MutableStorage> mutableStorage) {
-      auto storage = std::move(mutableStorage); // get ownership of storage
+      auto storage = std::move(mutableStorage);  // get ownership of storage
       std::unique_lock<std::shared_timed_mutex> write(rw_lock_);
     }
 

@@ -15,29 +15,21 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_WSV_QUERY_HPP
-#define IROHA_WSV_QUERY_HPP
+#ifndef IROHA_POSTGRES_WSV_QUERY_HPP
+#define IROHA_POSTGRES_WSV_QUERY_HPP
 
-#include <common/types.hpp>
-#include <dao/dao.hpp>
-#include <string>
-#include <vector>
+#include <ametsuchi/wsv_query.hpp>
+#include <pqxx/nontransaction>
 
 namespace iroha {
-
   namespace ametsuchi {
-
-    /**
-     *  Public interface for world state view queries
-     */
-    class WsvQuery {
+    class PostgresWsvQuery : public WsvQuery {
      public:
-      virtual ~WsvQuery() = default;
-
+      PostgresWsvQuery(std::shared_ptr<pqxx::nontransaction> transaction);
+     private:
+      std::shared_ptr<pqxx::nontransaction> transaction_;
     };
+  }//namespace ametsuchi
+}//namespace iroha
 
-  }  // namespace ametsuchi
-
-}  // namespace iroha
-
-#endif  // IROHA_WSV_QUERY_HPP
+#endif //IROHA_POSTGRES_WSV_QUERY_HPP

@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_COMMANDEXECUTOR_HPP
-#define IROHA_COMMANDEXECUTOR_HPP
+#ifndef IROHA_COMMAND_EXECUTOR_HPP
+#define IROHA_COMMAND_EXECUTOR_HPP
 
 #include <dao/command.hpp>
 
@@ -42,4 +42,4 @@ namespace iroha {
 
 }// namespace iroha
 
-#endif //IROHA_COMMANDEXECUTOR_HPP
+#endif //IROHA_COMMAND_EXECUTOR_HPP

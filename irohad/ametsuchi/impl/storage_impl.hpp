@@ -38,13 +38,14 @@ namespace iroha {
 
      private:
       StorageImpl(std::unique_ptr<FlatFile> block_store,
-                  std::unique_ptr<cpp_redis::redis_client> index,
-                  std::unique_ptr<pqxx::lazyconnection> wsv);
+                  std::unique_ptr<cpp_redis::redis_client> index, );
       std::unique_ptr<FlatFile> block_store_;
       std::unique_ptr<cpp_redis::redis_client> index_;
-      std::unique_ptr<pqxx::lazyconnection> wsv_;
+      std::unique_ptr<WsvQuery> wsv_;
       // Allows multiple readers and a single writer
       std::shared_timed_mutex rw_lock_;
+      // Connection info
+      std::string postgres_options_;
     };
   }  // namespace ametsuchi
 }  // namespace iroha

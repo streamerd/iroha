@@ -29,8 +29,7 @@ namespace iroha {
     dao::Proposal StatefulValidatorStub::validate(const dao::Proposal &proposal,
                                           ametsuchi::TemporaryWsv &wsv) {
       auto command_validator = CommandValidatorStub(wsv);
-      auto
-          checking_transaction =
+      auto checking_transaction =
           [&command_validator](auto &tx, auto &executor, auto &query) {
             // TODO: Check permissions of tx to execute commands 
             for (auto command : tx.commands) {
@@ -43,8 +42,7 @@ namespace iroha {
           };
 
       auto filter = [&wsv, checking_transaction](auto &acc, const auto &tx) {
-        auto answer = wsv.apply(tx, checking_transaction
-        );
+        auto answer = wsv.apply(tx, checking_transaction);
         if (answer) {
           acc.push_back(tx);
         }
