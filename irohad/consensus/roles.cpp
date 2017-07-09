@@ -15,23 +15,20 @@
  * limitations under the License.
  */
 
-#include <consensus/consensus_service_stub.hpp>
+#include "roles.hpp"
 
-namespace iroha {
-  namespace consensus {
-
-    using model::Transaction;
-    using model::Proposal;
-    using model::Block;
-
-    rxcpp::observable<rxcpp::observable<model::Block>>
-    ConsensusServiceStub::on_commit() {
-      return commits_.get_observable();
+namespace consensus {
+  namespace roles {
+    Leader::Leader(const std::vector<Peer> &p) {
+      for (const auto &x: p) {
+        peers.push_back({x, 0});
+      }
     }
 
-    void ConsensusServiceStub::vote_block(model::Block &block) {
-      commits_.get_subscriber().on_next(rxcpp::observable<>::from(block));
+    Proxy::Proxy(const std::vector<Peer> &p) {
+      for (const auto &x: p) {
+        unconfirmed.push_back({x, 0});
+      }
     }
-
-  }  // namespace consensus
-}  // namespace iroha
+  }
+}

@@ -27,9 +27,9 @@ target_link_libraries(sumeragi
   rxcpp
   )
 
-add_library(consensus_service
-    consensus_service_stub.cpp
-    )
-target_link_libraries(consensus_service
-    rxcpp
-    )
+# add_library(consensus_service
+#     consensus_service_stub.cpp
+#     )
+# target_link_libraries(consensus_service
+#     rxcpp
+#     )
