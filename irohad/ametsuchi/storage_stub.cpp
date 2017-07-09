@@ -22,82 +22,19 @@
 namespace iroha {
   namespace ametsuchi {
 
-    std::unique_ptr<TemporaryWsv> AmetsuchiStub::createTemporaryWsv() {
+    std::unique_ptr<TemporaryWsv> StorageStub::createTemporaryWsv() {
       return std::make_unique<TemporaryWsvStub>(*this);
     }
 
-    std::unique_ptr<MutableStorage> AmetsuchiStub::createMutableStorage() {
+    std::unique_ptr<MutableStorage> StorageStub::createMutableStorage() {
       return std::make_unique<MutableStorageStub>(*this);
     }
 
-    void AmetsuchiStub::commit(MutableStorage &mutableStorage) { return; }
-
-    rxcpp::observable<dao::Transaction> AmetsuchiStub::get_account_transactions(
-        ed25519::pubkey_t pub_key) {
-      return rxcpp::observable<>::create<dao::Transaction>(
-          [](rxcpp::subscriber<dao::Transaction> s) {
-            s.on_next(dao::Transaction{});
-            s.on_completed();
-          });
+    StorageStub::~StorageStub() {
     }
 
-    rxcpp::observable<dao::Transaction> AmetsuchiStub::get_asset_transactions(
-        std::string asset_full_name) {
-      return rxcpp::observable<>::create<dao::Transaction>(
-          [](rxcpp::subscriber<dao::Transaction> s) {
-            s.on_next(dao::Transaction{});
-            s.on_completed();
-          });
-    }
+    void StorageStub::commit(std::unique_ptr<MutableStorage> mutableStorage) {
 
-    rxcpp::observable<dao::Transaction> AmetsuchiStub::get_wallet_transactions(
-        std::string wallet_id) {
-      return rxcpp::observable<>::create<dao::Transaction>(
-          [](rxcpp::subscriber<dao::Transaction> s) {
-            s.on_next(dao::Transaction{});
-            s.on_completed();
-          });
-    }
-    rxcpp::observable<dao::Block> AmetsuchiStub::get_blocks_in_range(
-        uint32_t from, uint32_t to) {
-      return rxcpp::observable<>::create<dao::Block>(
-          [](rxcpp::subscriber<dao::Block> s) {
-            s.on_next(dao::Block{});
-            s.on_completed();
-          });
-    }
-    dao::Account AmetsuchiStub::get_account(ed25519::pubkey_t pub_key) {
-      return dao::Account{};
-    }
-
-    dao::Asset AmetsuchiStub::get_asset(std::string asset_full_name) {
-      return dao::Asset{};
-    }
-
-    dao::Domain AmetsuchiStub::get_domain(std::string domain_full_name) {
-      return dao::Domain{};
-    }
-
-    dao::Wallet AmetsuchiStub::get_wallet(std::string wallet_id) {
-      return dao::Wallet{};
-    }
-
-    std::vector<dao::Wallet> AmetsuchiStub::get_account_wallets(
-        ed25519::pubkey_t pub_key) {
-      return std::vector<dao::Wallet>{dao::Wallet{}};
-    }
-
-    std::vector<dao::Asset> AmetsuchiStub::get_domain_assets(
-        std::string domain_full_name) {
-      return std::vector<dao::Asset>{dao::Asset{}};
-    }
-
-    dao::Peer AmetsuchiStub::get_peer(
-        iroha::ed25519::pubkey_t pub_key) {
-      return dao::Peer{};
-    }
-
-    AmetsuchiStub::~AmetsuchiStub() {
     }
 
   }  // namespace ametsuchi

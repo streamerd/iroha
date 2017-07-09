@@ -35,7 +35,7 @@ namespace iroha {
   std::shared_ptr<dao::DaoCryptoProvider> Irohad::initialize_crypto_provider() {
     return std::make_shared<dao::DaoCryptoProviderStub>();
   }
-  std::shared_ptr<ametsuchi::Ametsuchi> Irohad::initialize_ametsuchi() {
-    return std::make_shared<ametsuchi::AmetsuchiStub>();
+  std::shared_ptr<ametsuchi::Storage> Irohad::initialize_ametsuchi() {
+    return std::make_shared<ametsuchi::StorageStub>();
   }
 }

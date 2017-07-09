@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
     });
   */
 //  iroha::Irohad irohad;
-  iroha::ametsuchi::AmetsuchiStub ametsuchi;
+  iroha::ametsuchi::StorageStub storage;
   iroha::dao::DaoCryptoProviderStub crypto_provider;
   iroha::validation::StatelessValidatorStub stateless_validator;
   iroha::validation::StatefulValidatorStub stateful_validator;
@@ -56,12 +56,12 @@ int main(int argc, char *argv[]) {
   iroha::ordering::OrderingServiceStub ordering_service;
   iroha::consensus::ConsensusServiceStub consensus_service;
   iroha::network::PeerCommunicationServiceStub peer_communication_service(
-      ametsuchi, stateful_validator, chain_validator, ordering_service,
+      storage, stateful_validator, chain_validator, ordering_service,
       consensus_service, crypto_provider);
   iroha::torii::TransactionProcessorStub tp(stateless_validator,
                                             peer_communication_service,
                                             crypto_provider);
-  iroha::torii::QueryProcessorStub qp(ametsuchi, ametsuchi);
+  iroha::torii::QueryProcessorStub qp(storage, storage);
 
   iroha::torii::ToriiStub torii(tp, qp);
   // shows required order of execution, since callbacks are called synchronously

@@ -32,7 +32,7 @@ namespace iroha {
    public:
     Irohad();
 
-    ametsuchi::Ametsuchi &ametsuchi;
+    ametsuchi::Storage &ametsuchi;
 
     dao::DaoCryptoProvider &cryptoProvider;
 
@@ -43,7 +43,7 @@ namespace iroha {
 
     static std::shared_ptr<dao::DaoCryptoProvider> initialize_crypto_provider();
 
-    static std::shared_ptr<ametsuchi::Ametsuchi> initialize_ametsuchi();
+    static std::shared_ptr<ametsuchi::Storage> initialize_ametsuchi();
   };
 }  // namespace iroha
 #endif  // IROHA_APPLICATION_HPP

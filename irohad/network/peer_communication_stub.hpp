@@ -31,7 +31,7 @@ namespace iroha {
     class PeerCommunicationServiceStub : public PeerCommunicationService {
      public:
       PeerCommunicationServiceStub(
-          ametsuchi::Ametsuchi &storage,
+          ametsuchi::Storage &storage,
           validation::StatefulValidator &stateful_validator,
           validation::ChainValidator &chain_validator,
           ordering::OrderingService &orderer,
@@ -47,7 +47,7 @@ namespace iroha {
       void subscribe_on_proposal();
 
      private:
-      ametsuchi::Ametsuchi &storage_;
+      ametsuchi::Storage &storage_;
       validation::StatefulValidator &stateful_validator_;
       validation::ChainValidator &chain_validator_;
       ordering::OrderingService &orderer_;

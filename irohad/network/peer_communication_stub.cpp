@@ -20,7 +20,7 @@
 namespace iroha {
   namespace network {
 
-    using ametsuchi::Ametsuchi;
+    using ametsuchi::Storage;
     using validation::StatefulValidator;
     using validation::ChainValidator;
     using ordering::OrderingService;
@@ -34,7 +34,7 @@ namespace iroha {
         auto storage = storage_.createMutableStorage();
         auto result = chain_validator_.validate(commit, *storage);
         if (result) {
-          storage_.commit(*storage);
+          storage_.commit(std::move(storage));
         }
         return result;
       });
@@ -51,7 +51,7 @@ namespace iroha {
     }
 
     PeerCommunicationServiceStub::PeerCommunicationServiceStub(
-        Ametsuchi &storage, StatefulValidator &stateful_validator,
+        Storage &storage, StatefulValidator &stateful_validator,
         ChainValidator &chain_validator, OrderingService &orderer,
         ConsensusService &consensus, dao::DaoCryptoProvider &crypto_provider)
         : storage_(storage),
