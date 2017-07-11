@@ -38,7 +38,7 @@ class Network : public ::testing::Test {
 
     for (auto i = 0u; i < NPEERS; i++) {
       auto host = std::string("127.0.0.1");
-      auto port = 10000u + i;
+      uint16_t port = (uint16_t) (10000u + i);
       auto loop = uvw::Loop::create();
       auto peer_service = PeerService();
 
@@ -46,7 +46,7 @@ class Network : public ::testing::Test {
         auto nn = NetworkNode();
         nn.ip = host;
         nn.port = (uint16_t)port;
-        nn.pubkey = keypairs[i].pubkey;
+        nn.pubkey = keypairs[j].pubkey;
 
         peer_service.peers.push_back(std::move(nn));
       }

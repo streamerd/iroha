@@ -58,15 +58,15 @@ namespace iroha {
       state_.network = ps;
 
       // callback on any error event
-      server_->on<uvw::ErrorEvent>([console_{console_}](const uvw::ErrorEvent &e,
-                                                 uvw::UDPHandle &u) {
+      server_->on<uvw::ErrorEvent>([console_{console_}](
+          const uvw::ErrorEvent &e, uvw::UDPHandle &u) {
         console_->error("{}", e.what());
         throw std::system_error();
       });
 
       // event is fired when we receive something on our socket
-      server_->on<uvw::UDPDataEvent>([console_{console_}](const uvw::UDPDataEvent &e,
-                                                   uvw::UDPHandle &u) {
+      server_->on<uvw::UDPDataEvent>([console_{console_}](
+          const uvw::UDPDataEvent &e, uvw::UDPHandle &u) {
 
         // receive data here!!
         std::string s{e.data.get(), e.data.get() + e.length};
@@ -82,7 +82,15 @@ namespace iroha {
     /**
      * Run event loop. Blocking operation.
      */
-    void run() { loop_->run(); }
+    void run() {
+      state_.network.run();
+
+      console_->info("Current order: {}", state_.network.orderToString());
+
+      loop_->run();
+    }
+
+
 
    private:
     std::shared_ptr<spdlog::logger> console_;

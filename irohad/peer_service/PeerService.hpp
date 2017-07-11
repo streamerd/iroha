@@ -18,8 +18,8 @@
 #ifndef IROHA_PEERSERVICE_HPP
 #define IROHA_PEERSERVICE_HPP
 
-#include <uvw/emitter.hpp>
 #include <common/types.hpp>
+#include <uvw/emitter.hpp>
 
 namespace iroha {
   struct NetworkNode {
@@ -31,9 +31,35 @@ namespace iroha {
   struct PeerService {
     std::vector<NetworkNode> peers;
 
+    /**
+     * Dummy function for "PeerService" run
+     */
+    void run() {
+      // now order is static: lexicographical sort of public keys for peers
+      makeOrder();
+    }
 
+    void makeOrder() {
+      std::sort(peers.begin(), peers.end(), [](const NetworkNode &a,
+                                               const NetworkNode &b) {
+        return std::lexicographical_compare(a.pubkey.begin(), a.pubkey.end(),
+                                            b.pubkey.begin(), b.pubkey.end());
+      });
+    }
+
+    // debug function
+    std::string orderToString() {
+      std::string s = "[\n";
+      auto size = peers.size();
+      for (auto i = 0u; i < size; i++) {
+        s += "  ";
+        s += peers[i].pubkey.to_hexstring();
+        if (i != size - 1) s += ",\n";
+      }
+      s += "\n]\n";
+      return s;
+    }
   };
-
 }
 
-#endif //IROHA_PEERSERVICE_HPP
+#endif  // IROHA_PEERSERVICE_HPP
