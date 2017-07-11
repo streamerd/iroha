@@ -17,16 +17,17 @@
 
 #include <chrono>
 #include <model/model_crypto_provider_impl.hpp>
-#include <validation/stateless/validator_impl.hpp>
+#include <validation/stateless/stateless_validator.hpp>
 
 namespace iroha {
   namespace validation {
+    using model::Transaction;
 
-    StatelessValidatorImpl::StatelessValidatorImpl(
+    StatelessValidator::StatelessValidator(
         model::ModelCryptoProvider& crypto_provider)
         : crypto_provider_(crypto_provider) {}
 
-    bool StatelessValidatorImpl::validate(
+    bool StatelessValidator::validate(
         const model::Transaction& transaction) const {
       // signatures are correct
       {
