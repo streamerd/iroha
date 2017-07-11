@@ -15,23 +15,29 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_MODEL_CRYPTO_PROVIDER_STUB_HPP
-#define IROHA_MODEL_CRYPTO_PROVIDER_STUB_HPP
+#ifndef IROHA_SET_PERMISSIONS_HPP
+#define IROHA_SET_PERMISSIONS_HPP
 
-#include <model/model_crypto_provider.hpp>
-#include <model/transaction.hpp>
+#include <model/model.hpp>
+#include <string>
 
 namespace iroha {
   namespace model {
+    /**
+     * Set permissions for account
+     */
+    struct SetPermissions : public Command {
 
-    class ModelCryptoProviderStub : public ModelCryptoProvider {
-     public:
+      /**
+       * Identifier of account
+       */
+      std::string account_uuid;
 
-      bool verify(const Transaction &tx) override;
-
-      Transaction &sign(Transaction &tx) override;
+      /**
+       * New permissions of account
+       */
+      Account::Permissions new_permissions;
     };
-  }
-}
-
-#endif  // IROHA_MODEL_CRYPTO_PROVIDER_STUB_HPP
+  } // namespace model
+} // namespace iroha
+#endif //IROHA_SET_PERMISSIONS_HPP

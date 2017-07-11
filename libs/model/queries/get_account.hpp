@@ -15,14 +15,25 @@
  * limitations under the License.
  */
 
-#include <validation/stateless/transaction_validator_stub.hpp>
+#ifndef IROHA_GET_ACCOUNT_HPP
+#define IROHA_GET_ACCOUNT_HPP
+
+#include <model/model.hpp>
+#include <string>
 
 namespace iroha {
-  namespace validation {
+  namespace model {
 
-    bool TransactionValidatorStub::validate(
-        const model::Transaction &transaction) const {
-      return true;
-    }
-  }  // namespace validation
-}  // namespace iroha
+    /**
+     * Query for getting account's metadata
+     */
+    struct GetAccount : Query {
+
+      /**
+       * Account identity
+       */
+      ed25519::pubkey_t account_pub;
+    };
+  } // namespace model
+} // namespace iroha
+#endif //IROHA_GET_ACCOUNT_HPP

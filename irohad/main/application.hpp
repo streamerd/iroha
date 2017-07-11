@@ -14,36 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #ifndef IROHA_APPLICATION_HPP
 #define IROHA_APPLICATION_HPP
 
+#include <main/context.hpp>
 #include <network/network_api.h>
-#include <ametsuchi/ametsuchi.hpp>
+#include <consensus/connection/service.hpp>
+#include <consensus/consensus_service_stub.hpp>
+#include <network/peer_communication_stub.hpp>
+#include <ordering/ordering_service_stub.hpp>
+#include <torii/processor/query_processor_stub.hpp>
+#include <torii/processor/transaction_processor_stub.hpp>
+#include <torii/torii_stub.hpp>
+#include <validation/chain/validator_stub.hpp>
+#include <validation/stateful/stub_validator.hpp>
+#include <validation/stateless/validator_impl.hpp>
+
 #include <model/model.hpp>
+#include <model/model_crypto_provider_impl.hpp>
+#include <crypto/crypto.hpp>
+#include <ametsuchi/ametsuchi_stub.hpp>
 
-namespace iroha {
+#include "server_runner.hpp"
 
-  /**
-   * Contains instances of global services and shared providers
-   */
-  using namespace iroha;
-  class Irohad {
-   public:
+
+class Irohad{
+  public:
+    std::shared_ptr<Context> context;
+
     Irohad();
 
-    ametsuchi::Ametsuchi &ametsuchi;
+    void run();
 
-    model::ModelCryptoProvider &cryptoProvider;
+};
 
-    model::HashProvider<32> &hashProvider;
-
-   private:
-    static std::shared_ptr<model::HashProvider<32>> initialize_hash_provider();
-
-    static std::shared_ptr<model::ModelCryptoProvider> initialize_crypto_provider();
-
-    static std::shared_ptr<ametsuchi::Ametsuchi> initialize_ametsuchi();
-  };
-}  // namespace iroha
-#endif  // IROHA_APPLICATION_HPP
+#endif //IROHA_APPLICATION_HPP

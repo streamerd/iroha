@@ -14,32 +14,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef IROHA_REMOVE_SIGNATORY_HPP
+#define IROHA_REMOVE_SIGNATORY_HPP
 
-#ifndef IROHA_TRANSACTION_PROCESSOR_HPP
-#define IROHA_TRANSACTION_PROCESSOR_HPP
-
-#include <model/model.hpp>
-#include <rxcpp/rx.hpp>
+#include <common/types.hpp>
+#include <model/command.hpp>
+#include <string>
 
 namespace iroha {
-  namespace torii {
+  namespace model {
 
     /**
-     * Transaction processor is interface with start point
-     * for processing transaction in the system
+     * Attach signatory for account
      */
-    class TransactionProcessor {
-     public:
+    struct RemoveSignatory : public Command {
+      /**
+       * Destination account to remove from
+       */
+      std::string dst_account;
 
       /**
-       * Add transaction to the system for processing
-       * @param client - transaction owner
-       * @param transaction - transaction for processing
+       * Public key of signatory to remove.
+       * Note: This public key must be attach to account.
+       * There must be at least two signatories to perform this operation.
        */
-      virtual void transaction_handle(model::Client client,
-                                      model::Transaction &transaction) = 0;
-
+      ed25519::pubkey_t pubkey;
     };
-  }  // namespace torii
+  }  // namespace model
 }  // namespace iroha
-#endif  // IROHA_TRANSACTION_PROCESSOR_HPP
+
+#endif  // IROHA_REMOVE_SIGNATORY_HPP

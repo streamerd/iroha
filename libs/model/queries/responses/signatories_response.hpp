@@ -15,31 +15,25 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_TRANSACTION_PROCESSOR_HPP
-#define IROHA_TRANSACTION_PROCESSOR_HPP
+#ifndef IROHA_SIGNATURES_RESPONSE_HPP
+#define IROHA_SIGNATURES_RESPONSE_HPP
 
-#include <model/model.hpp>
-#include <rxcpp/rx.hpp>
+#include <common/types.hpp>
+#include <model/query_response.hpp>
+#include <vector>
 
 namespace iroha {
-  namespace torii {
+  namespace model {
 
     /**
-     * Transaction processor is interface with start point
-     * for processing transaction in the system
+     * Provide response with signatories attached to the account
      */
-    class TransactionProcessor {
-     public:
-
+    struct SignatoriesResponse : public QueryResponse {
       /**
-       * Add transaction to the system for processing
-       * @param client - transaction owner
-       * @param transaction - transaction for processing
+       * Vector with all public keys attached to account
        */
-      virtual void transaction_handle(model::Client client,
-                                      model::Transaction &transaction) = 0;
-
+      std::vector<ed25519::pubkey_t> keys;
     };
-  }  // namespace torii
+  }  // namespace model
 }  // namespace iroha
-#endif  // IROHA_TRANSACTION_PROCESSOR_HPP
+#endif  // IROHA_SIGNATURES_RESPONSE_HPP

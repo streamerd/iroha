@@ -15,26 +15,6 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_GET_BLOCKS_RESPONSE_HPP
-#define IROHA_GET_BLOCKS_RESPONSE_HPP
+struct Context{
 
-#include <model/query.hpp>
-#include <rxcpp/rx-observable.hpp>
-
-namespace iroha {
-  namespace model {
-
-    /**
-     * Provide answer of user's block request
-     */
-    struct GetBlocksResponse : public QueryResponse {
-
-      /**
-       * Observable contains all request blocks
-       */
-      rxcpp::observable<Block> blocks;
-
-    };
-  }  // namespace model
-}  // namespace iroha
-#endif //IROHA_GET_BLOCKS_RESPONSE_HPP
+};

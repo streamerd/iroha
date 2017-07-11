@@ -15,31 +15,29 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_TRANSACTION_PROCESSOR_HPP
-#define IROHA_TRANSACTION_PROCESSOR_HPP
+#ifndef IROHA_SET_QUORUM_HPP
+#define IROHA_SET_QUORUM_HPP
 
 #include <model/model.hpp>
-#include <rxcpp/rx.hpp>
+#include <string>
 
 namespace iroha {
-  namespace torii {
-
+  namespace model {
     /**
-     * Transaction processor is interface with start point
-     * for processing transaction in the system
+     * Change quorum for account
      */
-    class TransactionProcessor {
-     public:
+    struct SetQuorum : public Command {
 
       /**
-       * Add transaction to the system for processing
-       * @param client - transaction owner
-       * @param transaction - transaction for processing
+       * Changed account
        */
-      virtual void transaction_handle(model::Client client,
-                                      model::Transaction &transaction) = 0;
+      std::string account_uuid;
 
+      /**
+       * new value of quorum
+       */
+      uint32_t new_quorum;
     };
-  }  // namespace torii
-}  // namespace iroha
-#endif  // IROHA_TRANSACTION_PROCESSOR_HPP
+  } // namespace model
+} // namespace iroha
+#endif //IROHA_SET_QUORUM_HPP

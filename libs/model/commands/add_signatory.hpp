@@ -15,18 +15,30 @@
  * limitations under the License.
  */
 
-#include <validation/stateless/validator_stub.hpp>
-#include <validation/stateless/transaction_validator_stub.hpp>
+#ifndef IROHA_ADD_SIGNATURE_HPP
+#define IROHA_ADD_SIGNATURE_HPP
+
+#include <common/types.hpp>
+#include <model/command.hpp>
+#include <string>
 
 namespace iroha {
-  namespace validation {
+  namespace model {
 
-    bool StatelessValidatorStub::validate(
-        const model::Transaction &transaction) const {
-      TransactionValidatorStub validator;
-      return validator.validate(transaction);
-    }
+    /**
+     * Attach signatory for account
+     */
+    struct AddSignatory : public Command {
+      /**
+       * Destination account to add new signatory
+       */
+      std::string dst_account;
 
-    StatelessValidatorStub::StatelessValidatorStub(){}
-  }  // namespace validation
+      /**
+       * New signatory is identified with public key
+       */
+      ed25519::pubkey_t pubkey;
+    };
+  }  // namespace model
 }  // namespace iroha
+#endif  // IROHA_ADD_SIGNATURE_HPP

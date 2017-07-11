@@ -15,31 +15,24 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_TRANSACTION_PROCESSOR_HPP
-#define IROHA_TRANSACTION_PROCESSOR_HPP
+#ifndef IROHA_CREATE_ACCOUNT_HPP
+#define IROHA_CREATE_ACCOUNT_HPP
 
 #include <model/model.hpp>
-#include <rxcpp/rx.hpp>
 
 namespace iroha {
-  namespace torii {
+  namespace model {
 
     /**
-     * Transaction processor is interface with start point
-     * for processing transaction in the system
+     * Command for creation of a new account in the system
      */
-    class TransactionProcessor {
-     public:
+    struct CreateAccount : public Command {
 
       /**
-       * Add transaction to the system for processing
-       * @param client - transaction owner
-       * @param transaction - transaction for processing
+       * Account's identifier
        */
-      virtual void transaction_handle(model::Client client,
-                                      model::Transaction &transaction) = 0;
-
+      ed25519::pubkey_t pubkey;
     };
-  }  // namespace torii
-}  // namespace iroha
-#endif  // IROHA_TRANSACTION_PROCESSOR_HPP
+  } // namespace model
+} // namespace iroha
+#endif //IROHA_CREATE_ACCOUNT_HPP

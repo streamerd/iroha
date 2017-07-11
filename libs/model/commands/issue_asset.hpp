@@ -15,21 +15,31 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_TRANSACTION_VALIDATOR_HPP
-#define IROHA_TRANSACTION_VALIDATOR_HPP
+#ifndef IROHA_ISSUE_ASSET_HPP
+#define IROHA_ISSUE_ASSET_HPP
 
-#include <model/transaction.hpp>
+#include <model/model.hpp>
+#include <string>
 
 namespace iroha {
-  namespace validation {
-    /**
-     * Interface for performing validation of a transaction
-     */
-    class TransactionValidator {
-     public:
-      virtual bool validate(const model::Transaction &transaction) const = 0;
-    };
-  }  // namespace validation
-}  // namespace iroha
+  namespace model {
 
-#endif  // IROHA_TRANSACTION_VALIDATOR_HPP
+    /**
+     * Add amount of asset to an account
+     */
+    struct IssueAsset : public Command {
+
+      /**
+       * Wallet for adding assets
+       * Note: wallet must belong to transaction's creator
+       */
+      std::string wallet_uuid;
+
+      /**
+       * Amount to add to wallet
+       */
+      std::string amount;
+    };
+  } // namespace model
+} // namespace iroha
+#endif //IROHA_ISSUE_ASSET_HPP

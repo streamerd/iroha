@@ -15,16 +15,24 @@
  * limitations under the License.
  */
 
-#include <model/model_crypto_provider_stub.hpp>
+#ifndef IROHA_ACCOUNT_RESPONSE_HPP
+#define IROHA_ACCOUNT_RESPONSE_HPP
+
+#include <model/model.hpp>
 
 namespace iroha {
   namespace model {
-    bool ModelCryptoProviderStub::verify(const Transaction &tx) {
-      return true;
-    }
 
-    Transaction &ModelCryptoProviderStub::sign(Transaction &tx) {
-      return tx;
-    }
-  }// namespace model
-}// namespace iroha
+    /**
+     * Provide response with account
+     */
+    struct AccountResponse : public QueryResponse {
+
+      /**
+       * Attached account
+       */
+      Account account;
+    };
+  }  // namespace model
+}  // namespace iroha
+#endif //IROHA_ACCOUNT_RESPONSE_HPP

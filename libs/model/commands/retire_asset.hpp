@@ -14,25 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+#ifndef IROHA_RETIRE_ASSET_HPP
+#define IROHA_RETIRE_ASSET_HPP
 
-#include <torii/torii_stub.hpp>
-#include <iostream>
+// TODO: not in mvp
+// Retire assets from the system. Only issuer can do this
 
-namespace iroha {
-  namespace torii {
-    ToriiStub::ToriiStub(TransactionProcessor &transaction_processor,
-                         QueryProcessor &query_processor) :
-        transaction_processor_(transaction_processor),
-        query_processor_(query_processor) {
-
-    }
-
-    void ToriiStub::get_query(model::Client client, model::Query &query) {
-      query_processor_.query_handle(client, query);
-    }
-
-    void ToriiStub::get_transaction(model::Client client, model::Transaction &tx) {
-      transaction_processor_.transaction_handle(client, tx);
-    }
-  } // namespace torii
-} // namespace iroha
+#endif //IROHA_RETIRE_ASSET_HPP

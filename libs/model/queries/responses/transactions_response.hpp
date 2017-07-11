@@ -15,21 +15,25 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_STATELESS_VALIDATOR_STUB_HPP
-#define IROHA_STATELESS_VALIDATOR_STUB_HPP
+#ifndef IROHA_TRANSACTION_RESPONSE_HPP
+#define IROHA_TRANSACTION_RESPONSE_HPP
 
-#include <validation/stateless/transaction_validator.hpp>
-#include <validation/stateless/validator.hpp>
+#include <model/model.hpp>
+#include <rxcpp/rx-observable.hpp>
 
 namespace iroha {
-  namespace validation {
-    class StatelessValidatorStub : public StatelessValidator {
-     public:
-      StatelessValidatorStub();
-      bool validate(const model::Transaction &transaction) const override;
+  namespace model {
+
+    /**
+     * Provide responded transactions
+     */
+    struct TransactionsResponse : public QueryResponse {
+
+      /**
+       * Observable contains transactions
+       */
+      rxcpp::observable <Transaction> transactions;
     };
-
-  }  // namespace validation
+  }  // namespace model
 }  // namespace iroha
-
-#endif  // IROHA_STATELESS_VALIDATOR_STUB_HPP
+#endif //IROHA_TRANSACTION_RESPONSE_HPP

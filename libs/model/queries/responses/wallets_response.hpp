@@ -15,31 +15,25 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_TRANSACTION_PROCESSOR_HPP
-#define IROHA_TRANSACTION_PROCESSOR_HPP
+#ifndef IROHA_WALLET_RESPONSE_HPP
+#define IROHA_WALLET_RESPONSE_HPP
 
 #include <model/model.hpp>
-#include <rxcpp/rx.hpp>
+#include <vector>
 
 namespace iroha {
-  namespace torii {
+  namespace model {
 
     /**
-     * Transaction processor is interface with start point
-     * for processing transaction in the system
+     * Provide responded wallets
      */
-    class TransactionProcessor {
-     public:
+    struct WalletsResponse : public QueryResponse {
 
       /**
-       * Add transaction to the system for processing
-       * @param client - transaction owner
-       * @param transaction - transaction for processing
+       * List with all attached wallets
        */
-      virtual void transaction_handle(model::Client client,
-                                      model::Transaction &transaction) = 0;
-
+      std::vector <Wallet> wallets;
     };
-  }  // namespace torii
+  }  // namespace model
 }  // namespace iroha
-#endif  // IROHA_TRANSACTION_PROCESSOR_HPP
+#endif //IROHA_WALLET_RESPONSE_HPP
