@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Consensus Connection Test
+# Peer Connection Test
 add_executable(consensus_connection_test
   consensus_connection_test.cpp
 )

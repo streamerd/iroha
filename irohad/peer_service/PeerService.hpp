@@ -15,6 +15,25 @@
  * limitations under the License.
  */
 
-struct Context{
+#ifndef IROHA_PEERSERVICE_HPP
+#define IROHA_PEERSERVICE_HPP
 
-};
+#include <uvw/emitter.hpp>
+#include <common/types.hpp>
+
+namespace iroha {
+  struct NetworkNode {
+    std::string ip;
+    uint16_t port;
+    ed25519::pubkey_t pubkey;
+  };
+
+  struct PeerService {
+    std::vector<NetworkNode> peers;
+
+
+  };
+
+}
+
+#endif //IROHA_PEERSERVICE_HPP

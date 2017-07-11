@@ -14,41 +14,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//
-// Created by bogdan on 20.06.17.
-//
 
-#ifndef IROHA_CONTEXT_H
-#define IROHA_CONTEXT_H
-
-#include <string>
-
-namespace iroha{
-
-// forward declarations
-struct PostgresConnection;
-struct Connection;
-struct Context;
-
-
-struct Context{
-  PostgresConnection wsv;
-  Connection index;
-  Connection ordering;
-};
-
-
-struct Connection {
-  std::string host;
-  uint16_t port;
-};
-
-
-struct PostgresConnection: public Connection {
-  std::string user;
-  std::string password;
-};
-
-}
-
-#endif //IROHA_CONTEXT_H
+#include "PeerService.hpp"

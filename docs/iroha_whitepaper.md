@@ -92,11 +92,11 @@ Additionally, the following two transaction types take as input (i.e., "wrap") o
 * Multisignature
 * Interledger (i.e., cross-chain)
 
-#### 2.6.1 Consensus events and processing order
+#### 2.6.1 Peer events and processing order
 
 When broadcast, transactions are wrapped as consensus events.
 
-Consensus events, when received from the event queue, are processed in the following priority order:
+Peer events, when received from the event queue, are processed in the following priority order:
 
  1. Commit events having 2*f*+1 signatures
  2. Events ordered by the leader
@@ -110,7 +110,7 @@ Transactions are stored in a Merkle tree with each transaction being a leaf of t
 
 ![alt tag](iroha_merkle_tree.png)
 
-### 2.8. Consensus
+### 2.8. Peer
 
 Byzantine fault tolerant systems are engineered to tolerate *f* numbers of Byzantine faulty nodes in a network. Iroha introduces a Byzantine Fault Tolerant consensus algorithm called Sumeragi. It is heavily inspired by the B-Chain algorithm:
 
@@ -134,7 +134,7 @@ The case of a failure in the proxy tail is shown the following figure:
 
 ![alt tag](sumeragi_tx_flow_tail_failure.png)
 
-Consensus in Sumeragi is performed on individual transactions and on the global state resulting from the application of the transaction. When a validating peer receives a transaction over the network, it performs the following steps in order:
+Peer in Sumeragi is performed on individual transactions and on the global state resulting from the application of the transaction. When a validating peer receives a transaction over the network, it performs the following steps in order:
 
 * validate the signature (or signatures, in the case of multisignature transactions) of the transaction
 * validate the contents of the transaction, where applicable (e.g., for transfer transactions, is the balance non-negative)

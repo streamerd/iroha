@@ -1,3 +1,5 @@
+add_subdirectory(consensus)
+
 add_library(model
     model_crypto_provider_impl.cpp
     model_hash_provider_impl.cpp

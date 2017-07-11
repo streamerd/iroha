@@ -14,12 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <main/application.hpp>
+#include <uvw.hpp>
+#include <string>
 
 int main(int argc, char *argv[]) {
+  auto loop = uvw::Loop::getDefault();
 
-  auto irohad = Irohad();
-  irohad.run();
+
+  loop->run();
 
   return 0;
 }
