@@ -19,7 +19,7 @@
 #include <crypto/crypto.hpp>
 #include <model/model_crypto_provider_impl.hpp>
 #include <model/model_hash_provider_impl.hpp>
-#include <validation/stateless/validator.hpp>
+#include <validation/stateless_validator.hpp>
 #include <chrono>
 
 using namespace iroha::model;
@@ -58,7 +58,7 @@ TEST(stateless_validation, stateless_validation_when_valid) {
 
   iroha::model::ModelCryptoProviderImpl crypto_provider(keypair.privkey,
                                                         keypair.pubkey);
-  iroha::validation::StatelessValidatorImpl transaction_validator(
+  iroha::validation::StatelessValidator transaction_validator(
       crypto_provider);
 
   auto tx = create_transaction();
@@ -73,7 +73,7 @@ TEST(stateless_validation, stateless_validation_when_invalid_wrong_signature) {
 
   iroha::model::ModelCryptoProviderImpl crypto_provider(keypair.privkey,
                                                         keypair.pubkey);
-  iroha::validation::StatelessValidatorImpl transaction_validator(
+  iroha::validation::StatelessValidator transaction_validator(
       crypto_provider);
 
   auto tx = create_transaction();
@@ -91,7 +91,7 @@ TEST(stateless_validation,
 
   iroha::model::ModelCryptoProviderImpl crypto_provider(keypair.privkey,
                                                         keypair.pubkey);
-  iroha::validation::StatelessValidatorImpl transaction_validator(
+  iroha::validation::StatelessValidator transaction_validator(
       crypto_provider);
 
   auto tx = create_transaction();
@@ -113,7 +113,7 @@ TEST(stateless_validation,
 
   iroha::model::ModelCryptoProviderImpl crypto_provider(keypair.privkey,
                                                         keypair.pubkey);
-  iroha::validation::StatelessValidatorImpl transaction_validator(
+  iroha::validation::StatelessValidator transaction_validator(
       crypto_provider);
 
   auto tx = create_transaction();

@@ -24,7 +24,7 @@ limitations under the License.
 #include <torii/torii_stub.hpp>
 #include <validation/chain/validator_stub.hpp>
 #include <validation/stateful/stub_validator.hpp>
-#include <validation/stateless/validator_impl.hpp>
+#include <validation/stateless_validator.hpp>
 
 #include <model/model.hpp>
 #include <model/model_crypto_provider_impl.hpp>
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
   auto keypair = iroha::create_keypair(seed);
   iroha::model::ModelCryptoProviderImpl crypto_provider(keypair.privkey, keypair.pubkey);
 
-  iroha::validation::StatelessValidatorImpl stateless_validator(crypto_provider);
+  iroha::validation::StatelessValidator stateless_validator(crypto_provider);
   iroha::validation::StatefulValidatorStub stateful_validator;
   iroha::validation::ChainValidatorStub chain_validator;
   iroha::ordering::OrderingServiceStub ordering_service;

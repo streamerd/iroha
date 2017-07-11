@@ -17,7 +17,7 @@
 
 #include <chrono>
 #include <model/model_crypto_provider_impl.hpp>
-#include <validation/stateless/stateless_validator.hpp>
+#include <validation/stateless_validator.hpp>
 
 namespace iroha {
   namespace validation {
