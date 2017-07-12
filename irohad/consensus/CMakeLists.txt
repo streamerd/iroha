@@ -12,6 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+add_library(consensus_service
+        consensus_service.cpp
+        consensus_service.hpp
+        )
+target_link_libraries(consensus_service
+        consensus_grpc
+        uvw
+)
+
+
 add_library(consensus
         peer.cpp
         peer.hpp
@@ -20,7 +30,9 @@ add_library(consensus
 
 target_link_libraries(consensus
         uvw
-        consensus_messages
         spdlog
         sml
+        consensus_grpc
         )
+
+

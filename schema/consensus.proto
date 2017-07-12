@@ -45,6 +45,7 @@ message Ack {
         PROPOSAL_RECEIVED = 1;
         VOTE_RECEIVED = 2;
         COMMIT_RECEIVED = 3;
+        ABORT_RECEIVED = 4;
     }
 
     Type type = 1;
@@ -55,7 +56,7 @@ message Abort {
     enum Type {
         UNDEFINED = 0;
         SYSTEM_FAIL = 1; // when number of failed nodes > f
-        COMMIT_NOT_ENOUGH_SIGNATURES = 2; // when proxy tail reached timeout for voting phase
+        COMMIT_NOT_ENOUGH_SIGNATURES = 2; // when proxy tail can not collect 2f+1 votes for the same state
     }
 
     Type type = 1;
@@ -63,3 +64,9 @@ message Abort {
 
 ///////////////////////////////////////////
 
+service Sumeragi {
+    rpc SendProposal(Proposal) returns (Ack) {}
+    rpc SendVote(Vote) returns (Ack) {}
+    rpc SendCommit(Commit) returns (Ack) {}
+    rpc SendAbort(Abort) returns (Ack) {}
+}

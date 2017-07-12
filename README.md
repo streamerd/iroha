@@ -21,7 +21,7 @@ Please include a developer certificate with pull requests: https://www.clahub.co
  - [Architecture](./docs/architecture.md)
  - [Build iroha in local environment](./docs/how_to_build.rst)
  - [Using docker to build iroha container](./docker/README.md)
- - [Deploying a network of N nodes](./docs/iroha_network.md)
+ - [Deploying a peerService of N nodes](./docs/iroha_network.md)
 
 # Authors
 
