@@ -20,7 +20,7 @@
 namespace network {
 
   using iroha::protocol::Block;
-  using iroha::protocol::ApiBlock;
+  using iroha::protocol::PublishedBlock;
   using iroha::protocol::ApiResponse;
 
   iroha::protocol::ApiResponse BlockPublisherClient::sendBlock(
@@ -28,17 +28,17 @@ namespace network {
     const std::string &targetIp
   ) {
     ApiClient client(targetIp, 50051); // TODO: Get port from config
-    ApiBlock apiBlock;
-    return client.receiveBlock(apiBlock);
+    PublishedBlock publishedBlock;
+    return client.receiveBlock(publishedBlock);
   }
 
   ApiClient::ApiClient(const std::string& ip, int port) {
     // TODO(motxx): call validation of ip format and port.
     auto channel = grpc::CreateChannel(ip + ":" + std::to_string(port), grpc::InsecureChannelCredentials());
-    stub_ = iroha::protocol::ApiService::NewStub(channel);
+    stub_ = iroha::protocol::SubscriberService::NewStub(channel);
   }
 
-  ApiResponse ApiClient::receiveBlock(const ApiBlock& block) {
+  ApiResponse ApiClient::receiveBlock(const PublishedBlock& block) {
     ApiResponse response;
     auto status = stub_->receiveBlock(&context_, block, &response);
 

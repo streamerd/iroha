@@ -41,10 +41,10 @@ namespace network {
   class ApiClient {
     public:
       ApiClient(const std::string& targetIp, int port);
-      iroha::protocol::ApiResponse receiveBlock(const iroha::protocol::ApiBlock&);
+      iroha::protocol::ApiResponse receiveBlock(const iroha::protocol::PublishedBlock&);
     private:
       grpc::ClientContext context_;
-      std::unique_ptr<iroha::protocol::ApiService::Stub> stub_;
+      std::unique_ptr<iroha::protocol::SubscriberService::Stub> stub_;
   };
 }  // namespace consensus
 
