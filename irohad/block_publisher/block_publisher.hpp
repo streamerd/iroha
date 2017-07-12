@@ -23,7 +23,7 @@
 namespace block_publisher {
   using iroha::model::Block;
 
-  class BlockPublisher{
+  class BlockPublisher {
     public:
       void publish(const Block&);
   };
