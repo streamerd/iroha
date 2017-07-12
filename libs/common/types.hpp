@@ -50,7 +50,7 @@ namespace iroha {
     /**
      * In compile-time returns size of current blob.
      */
-    constexpr static size_t size() const noexcept { return size_; }
+    constexpr static size_t size() { return size_; }
 
     /**
      * Converts current blob to std::string

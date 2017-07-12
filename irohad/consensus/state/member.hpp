@@ -22,6 +22,7 @@
 #include <common/types.hpp>
 #include <consensus/messages.hpp>
 #include <peer_service/PeerService.hpp>
+#include <grpc++/grpc++.h>
 
 namespace iroha {
 
@@ -50,7 +51,6 @@ namespace iroha {
     uint64_t height;
     std::vector<int> ledger;
 
-    static auto console = spdlog::stdout_color_st("member");
   };
 }
 #endif  // IROHA_FOLLOWER_HPP

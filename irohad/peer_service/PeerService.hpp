@@ -80,10 +80,10 @@ namespace iroha {
     }
 
     void makeOrder() {
-      std::sort(peers.begin(), peers.end(), [](const NetworkNode &a,
-                                               const NetworkNode &b) {
-        return std::lexicographical_compare(a.pubkey.begin(), a.pubkey.end(),
-                                            b.pubkey.begin(), b.pubkey.end());
+      std::sort(peers.begin(), peers.end(), [](std::shared_ptr<NetworkNode> a,
+                                               std::shared_ptr<NetworkNode> b) {
+        return std::lexicographical_compare(a->pubkey.begin(), a->pubkey.end(),
+                                            b->pubkey.begin(), b->pubkey.end());
       });
     }
 
@@ -93,7 +93,7 @@ namespace iroha {
       auto size = peers.size();
       for (auto i = 0u; i < size; i++) {
         s += "  ";
-        s += peers[i].pubkey.to_hexstring();
+        s += peers[i]->pubkey.to_hexstring();
         if (i != size - 1) s += ",\n";
       }
       s += "\n]\n";

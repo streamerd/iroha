@@ -21,6 +21,7 @@
 #include "validator.hpp"
 namespace iroha {
 
+
   class ProxyTail final: public Validator {
    public:
 
@@ -34,7 +35,6 @@ namespace iroha {
     // this component should add vote for O(1), get winner for O(1)
     // simple std::map is O(n) solution
     std::map<ed25519::pubkey_t, Vote*> votes;
-    static auto console = spdlog::stdout_color_st("proxy tail");
   };
 }
 

@@ -17,6 +17,8 @@
 
 #include "proxy_tail.hpp"
 
+static auto console = spdlog::stdout_color_st("proxy tail");
+
 namespace iroha {
   void ProxyTail::on_vote(Vote *vote) { console->debug("Vote handled"); }
 

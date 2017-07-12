@@ -12,4 +12,6 @@ add_library(peer_state
 target_link_libraries(peer_state
         spdlog
         consensus_grpc
+        peer_service
+        uvw
         )

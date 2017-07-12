@@ -17,6 +17,8 @@
 
 #include "member.hpp"
 
+static auto console = spdlog::stdout_color_st("member");
+
 namespace iroha {
 
   Role Member::self() { return Role::MEMBER; }

@@ -22,11 +22,8 @@
 
 namespace iroha {
 
-  static enum class State : uint8_t {
-    UNDEFINED = 0,
-    IDLE = 1, // waiting for a proposal
-    VOTED = 2 // waiting for a commit
-  };
+
+
 
   class Validator : public Member{
    public:
@@ -37,9 +34,14 @@ namespace iroha {
 
     virtual void on_proposal(Proposal* proposal) override;
 
-    static auto console = spdlog::stdout_color_st("validator");
    private:
     State state;
+
+    enum class State : uint8_t {
+      UNDEFINED = 0,
+      IDLE = 1, // waiting for a proposal
+      VOTED = 2 // waiting for a commit
+    };
   };
 }
 

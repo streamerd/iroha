@@ -17,6 +17,8 @@
 
 #include "leader.hpp"
 
+static auto console = spdlog::stdout_color_st("leader");
+
 namespace iroha {
   void Leader::on_proposal(Proposal *proposal) {
     console->debug("Proposal handled");

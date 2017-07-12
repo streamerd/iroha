@@ -36,16 +36,3 @@ target_link_libraries(consensus_client
         )
 
 
-add_library(peer
-        messages.hpp
-        peer.cpp
-        peer.hpp
-        )
-
-target_link_libraries(peer
-        uvw
-        spdlog
-        sml
-        consensus_grpc
-        )
-

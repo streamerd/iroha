@@ -29,7 +29,6 @@ namespace iroha {
 
     void on_proposal(Proposal* proposal) override;
 
-    static auto console = spdlog::stdout_color_st("leader");
   };
 }
 

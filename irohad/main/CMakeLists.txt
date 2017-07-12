@@ -41,3 +41,18 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 add_executable(irohad
         iroha-main.cpp
         )
+
+
+add_library(peer
+        peer.cpp
+        peer.hpp
+        )
+
+target_link_libraries(peer
+        uvw
+        spdlog
+        sml
+        consensus_grpc
+        peer_state
+        )
+

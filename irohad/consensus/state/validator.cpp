@@ -17,6 +17,8 @@
 
 #include "validator.hpp"
 
+static auto console = spdlog::stdout_color_st("validator");
+
 namespace iroha {
 
   void Validator::on_proposal(Proposal *proposal) {

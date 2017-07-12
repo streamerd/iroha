@@ -23,8 +23,8 @@
 #include <common/types.hpp>
 #include <consensus/state/member.hpp>
 #include <peer_service/PeerService.hpp>
-#include "consensus_service.hpp"
-#include "messages.hpp"
+#include "consensus/consensus_service.hpp"
+#include <consensus/messages.hpp>
 #include <uvw.hpp>
 
 // Note (@warchant) LOOK AT test_network in test/scenario
@@ -40,7 +40,7 @@ namespace iroha {
       // set debug logging level
       console_->set_level(spdlog::level::debug);
 
-      state_ = std::make_shared(new Member());
+      state_ = std::make_shared<Member>();
       state_->keypair = std::move(keypair);
       state_->peerService = std::move(ps);
 
@@ -69,6 +69,7 @@ namespace iroha {
 
    private:
     void bind_callbacks() {
+      /* // temp solution
       server_.on<uvw::ErrorEvent>([c{console_}](const uvw::ErrorEvent& e,
                                                 auto& s) {
         c->error("{}", e.what());
@@ -86,13 +87,14 @@ namespace iroha {
 
       server_.on<Vote*>([c{console_}, state{state}](const Vote* v, auto& s) {
         c->debug("Vote received");
-        state=>on_vote(v);
+        state->on_vote(v);
       });
 
       server_.on<Commit*>([c{console_}, state{state}](const Commit* c, auto& s) {
         c->debug("Commit received");
         state->on_commit(c);
       });
+       */
     }
 
     std::string listen_on;
