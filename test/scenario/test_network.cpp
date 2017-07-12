@@ -41,16 +41,14 @@ class Network : public ::testing::Test {
     for (auto i = 0u; i < NPEERS; i++) {
       auto host = std::string("127.0.0.1");
       uint16_t port = (uint16_t)(10000u + i);
-      auto peer_service = PeerService();
+      auto peer_service = std::make_shared<PeerService>();
 
       // for each peer add the same set of public keys as initial peerService
       for (auto j = 0u; j < NPEERS; j++) {
-        auto nn = NetworkNode();
-        nn.ip = host;
-        nn.port = (uint16_t)port;
-        nn.pubkey = keypairs[j].pubkey;
+        auto pk = keypairs[j].pubkey;
+        auto nn = std::make_shared<NetworkNode>(host, port, pk);
 
-        peer_service.peers.push_back(std::move(nn));
+        peer_service->peers->push_back(std::move(nn));
       }
 
       std::shared_ptr<Peer> peer(
@@ -70,27 +68,9 @@ class Network : public ::testing::Test {
   std::vector<std::thread> threads;
 };
 
-TEST(One, Init) {
-  auto host = std::string("127.0.0.1");
-  auto port = 9999;
-  auto kp = create_keypair(create_seed());
-
-  NetworkNode nn;
-  nn.pubkey = kp.pubkey;
-  nn.ip = host;
-  nn.port = port;
-
-  PeerService ps;
-  ps.peers.push_back(std::move(nn));
-
-  Peer peer(kp, host, port, ps);
-
-  SUCCEED();
-}
-
 TEST_F(Network, Init) {
   // client thread
   while (1) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   }
 }

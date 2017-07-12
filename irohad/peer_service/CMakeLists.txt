@@ -33,4 +33,5 @@ add_library(peer_service
         )
 target_link_libraries(peer_service
         uvw
+        consensus_client
         )

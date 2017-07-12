@@ -19,17 +19,57 @@
 #define IROHA_PEERSERVICE_HPP
 
 #include <common/types.hpp>
+#include <consensus/consensus_client.hpp>
 #include <uvw/emitter.hpp>
+#include <uvw/timer.hpp>
 
 namespace iroha {
-  struct NetworkNode {
+  struct NetworkNode : public ConsensusClient {
+    NetworkNode(std::string ip_, uint16_t port_, ed25519::pubkey_t pub_)
+        : ConsensusClient(ip_, port_),
+          ip(std::move(ip_)),
+          port(std::move(port_)),
+          pubkey(std::move(pub_)) {}
+
     std::string ip;
     uint16_t port;
     ed25519::pubkey_t pubkey;
+
+    bool online{false};
+    // used to ping node with some certain timer
+    std::shared_ptr<uvw::TimerHandle> timer;
   };
 
-  struct PeerService {
-    std::vector<NetworkNode> peers;
+  class PeerService : public uvw::Emitter<PeerService> {
+   public:
+    std::vector<std::shared_ptr<NetworkNode>> peers;
+
+    std::shared_ptr<NetworkNode> leader() {
+      // TODO
+      return peers[0];
+    }
+
+    std::shared_ptr<NetworkNode> proxy_tail() {
+      // TODO
+      size_t n = peers.size();
+      size_t f = (n - 1) / 3;
+      return peers[2 * f + 1];
+    }
+
+    size_t position(ed25519::pubkey_t pub) {
+      size_t p = 0;
+      for (auto &&peer : peers) {
+        if (peer->pubkey == pub) {
+          return p;
+        }
+
+        p++;
+      }
+
+      // temp
+      // TODO: pubkey can not be found among peers
+      throw std::system_error();
+    }
 
     /**
      * Dummy function for "PeerService" run

@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+add_subdirectory(state)
+
+
 add_library(consensus_service
         consensus_service.cpp
         consensus_service.hpp
@@ -22,17 +26,26 @@ target_link_libraries(consensus_service
 )
 
 
-add_library(consensus
-        peer.cpp
-        peer.hpp
-        smlogger.hpp
+add_library(consensus_client
+        consensus_client.cpp
+        consensus_client.hpp
+        )
+target_link_libraries(consensus_client
+        consensus_grpc
+        spdlog
         )
 
-target_link_libraries(consensus
+
+add_library(peer
+        messages.hpp
+        peer.cpp
+        peer.hpp
+        )
+
+target_link_libraries(peer
         uvw
         spdlog
         sml
         consensus_grpc
         )
-
 

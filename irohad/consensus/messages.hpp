@@ -15,20 +15,18 @@
  * limitations under the License.
  */
 
-#include "roles.hpp"
+#ifndef IROHA_MESSAGES_HPP
+#define IROHA_MESSAGES_HPP
 
-namespace consensus {
-  namespace roles {
-    Leader::Leader(const std::vector<Peer> &p) {
-      for (const auto &x: p) {
-        peers.push_back({x, 0});
-      }
-    }
+#include <consensus.pb.h>
 
-    Proxy::Proxy(const std::vector<Peer> &p) {
-      for (const auto &x: p) {
-        unconfirmed.push_back({x, 0});
-      }
-    }
-  }
+namespace iroha {
+  using Ack = consensus::Ack;
+  using Abort = consensus::Abort;
+  using Vote = consensus::Vote;
+  using Commit = consensus::Commit;
+  using Proposal = consensus::Proposal;
+  using Signature = consensus::Signature;
 }
+
+#endif //IROHA_MESSAGES_HPP

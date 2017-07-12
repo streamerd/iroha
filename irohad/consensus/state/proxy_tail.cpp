@@ -15,20 +15,10 @@
  * limitations under the License.
  */
 
-#include "sumeragi.hpp"
+#include "proxy_tail.hpp"
 
+namespace iroha {
+  void ProxyTail::on_vote(Vote *vote) { console->debug("Vote handled"); }
 
-namespace consensus {
-  namespace sumeragi {
-    Sumeragi::Sumeragi(std::shared_ptr<Comminicator> comm, Peer self) :
-      comm(comm), self(self), state(IDLE) {}
-
-    void Sumeragi::onMessage(std::pair<Peer, data_t>) {
-      // todo
-    }
-
-    void Sumeragi::propose(model::Block&) {
-      // todo
-    }
-  }
+  Role ProxyTail::self() { return Role::PROXY_TAIL; }
 }
