@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package iroha.protocol;
+
+import "google/protobuf/timestamp.proto";
+import "block.proto";
+import "endpoint.proto";
+
+message ApiResponse {
+    ResponseCode code = 1;
+}
+
+message ApiBlock {
+    Block block = 1;
+    google.protobuf.Timestamp confirmedAt = 2;
+}
+
+service ApiService {
+    rpc receiveBlock (ApiBlock) returns (ApiResponse);
+}
