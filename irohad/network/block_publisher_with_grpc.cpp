@@ -26,12 +26,11 @@ namespace network {
     iroha::protocol::ApiResponse BlockPublisherClient::sendBlock(
       const iroha::protocol::Block &block,
       const std::string &targetIp
-    ){
+    ) {
       ApiClient client(targetIp, 50051); // TODO: Get port from config
       ApiBlock apiBlock;
       return client.receiveBlock(apiBlock);
     }
-
 
     ApiClient::ApiClient(const std::string& ip, int port) {
       // TODO(motxx): call validation of ip format and port.
