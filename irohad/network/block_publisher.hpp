@@ -19,8 +19,8 @@
 
 #include <memory>
 #include <block.pb.h>
-#include <outside_endpoint.pb.h>
-#include <outside_endpoint.grpc.pb.h>
+#include <endpoint.pb.h>
+#include <endpoint.grpc.pb.h>
 
 namespace network {
 
