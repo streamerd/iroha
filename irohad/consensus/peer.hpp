@@ -86,19 +86,17 @@ namespace iroha {
         throw std::system_error();
       });
 
-      /*
-      server_.on<Proposal*>([c{console_}](const Proposal& p, auto& s) {
+      server_.on<Proposal*>([c{console_}](const Proposal* p, auto& s) {
         c->debug("Proposal received");
       });
 
-      server_.on<Vote*>([c{console_}](const Vote& v, auto& s) {
+      server_.on<Vote*>([c{console_}](const Vote* v, auto& s) {
         c->debug("Vote received");
       });
 
-      server_.on<Commit>*([c{console_}](const Commit& c, auto& s) {
+      server_.on<Commit*>([c{console_}](const Commit* c, auto& s) {
         c->debug("Commit received");
       });
-       */
     }
 
     std::string listen_on;
