@@ -14,13 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef IROHA_BLOCK_PUBLISHER_HPP
-#define IROHA_BLOCK_PUBLISHER_HPP
+#ifndef IROHA_BLOCK_PUBLISHER_WITH_GRPC_HPP
+#define IROHA_BLOCK_PUBLISHER_WITH_GRPC_HPP
 
-#include <memory>
-#include <block.pb.h>
-#include <outside_endpoint.pb.h>
-#include <outside_endpoint.grpc.pb.h>
+#include <network/block_publisher.hpp>
+
+#include <grpc/grpc.h>
+#include <grpc++/channel.h>
+#include <grpc++/client_context.h>
+#include <grpc++/create_channel.h>
+#include <grpc++/security/credentials.h>
 
 namespace network {
 
@@ -28,16 +31,24 @@ namespace network {
      * Send confirmed block to other server without Iroha,
      * This is only interface
      */
-    class BlockPublisherClient{
+    class BlockPublisherClientWithGrpc: BlockPublisherClient{
 
-        virtual iroha::protocol::ApiResponse sendBlock(
+        iroha::protocol::ApiResponse sendBlock(
           const iroha::protocol::Block& block,
           const std::string& targetIp
-        ) = 0;
+        );
 
+    };
+
+    class ApiClient {
+    public:
+        ApiClient(const std::string& targetIp, int port);
+        iroha::protocol::ApiResponse receiveBlock(const iroha::protocol::ApiBlock&);
+    private:
+        grpc::ClientContext context_;
+        std::unique_ptr<iroha::protocol::ApiService::Stub> stub_;
     };
 
 }  // namespace consensus
 
-
-#endif //IROHA_BLOCK_PUBLISHER_HPP
+#endif //IROHA_BLOCK_PUBLISHER_WITH_GRPC_HPP
