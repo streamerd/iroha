@@ -20,14 +20,13 @@
 
 #include <model/block.hpp>
 
-namespace block_publisher{
+namespace block_publisher {
   using iroha::model::Block;
 
-  class BlockPublisher{
+  class BlockPublisher {
     public:
       void publish(const Block&);
   };
-
 };
 
 #endif //IROHA_BLOCK_PUBLISHER_HPP_HPP
