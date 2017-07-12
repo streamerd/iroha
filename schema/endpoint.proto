@@ -3,10 +3,20 @@ syntax = "proto3";
 package iroha.protocol;
 
 import "block.proto";
+import "google/protobuf/timestamp.proto";
 
 enum ResponseCode {
   FAIL = 0; // default value
   OK = 1;
+}
+
+message ApiResponse {
+  ResponseCode code = 1;
+}
+
+message PublishedBlock {
+  Block block = 1;
+  google.protobuf.Timestamp confirmedAt = 2;
 }
 
 message ToriiResponse {
@@ -40,4 +50,9 @@ service SumeragiService {
 
 service OrderingService {
   rpc QueueTransaction (Transaction) returns (QueueTransactionResponse);
+}
+
+
+service SubscriberService {
+  rpc receiveBlock (ApiBlock) returns (ApiResponse);
 }
