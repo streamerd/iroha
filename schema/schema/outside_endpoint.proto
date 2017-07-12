@@ -7,14 +7,14 @@ import "block.proto";
 import "endpoint.proto";
 
 message ApiResponse {
-    ResponseCode code = 1;
+  ResponseCode code = 1;
 }
 
 message ApiBlock {
-    Block block = 1;
-    google.protobuf.Timestamp confirmedAt = 2;
+  Block block = 1;
+  google.protobuf.Timestamp confirmedAt = 2;
 }
 
 service ApiService {
-    rpc receiveBlock (ApiBlock) returns (ApiResponse);
+  rpc receiveBlock (ApiBlock) returns (ApiResponse);
 }
