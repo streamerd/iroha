@@ -19,6 +19,6 @@
 namespace block_publisher {
 
   void BlockPublisher::publish(const Block &block) {
-
+    // TODO: implement
   }
 }
