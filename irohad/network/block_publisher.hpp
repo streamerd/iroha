@@ -28,16 +28,13 @@ namespace network {
      * Send confirmed block to other server without Iroha,
      * This is only interface
      */
-    class BlockPublisherClient{
-
+    class BlockPublisherClient {
         virtual iroha::protocol::ApiResponse sendBlock(
           const iroha::protocol::Block& block,
           const std::string& targetIp
         ) = 0;
-
     };
 
 }  // namespace consensus
-
 
 #endif //IROHA_BLOCK_PUBLISHER_HPP
