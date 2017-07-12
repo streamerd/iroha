@@ -1,4 +1,3 @@
-
 # ToDo use macro
 #execute_process(COMMAND "protoc -I. --cpp_out=. --proto_path=commands.proto block.proto")
 #execute_process(COMMAND "protoc -I. --cpp_out=. --proto_path=commands.proto asset.proto")
@@ -7,24 +6,26 @@
 #execute_process(COMMAND "protoc -I. --cpp_out=. --proto_path=commands.proto outside_endpoint.proto")
 #execute_process(COMMAND "protoc --proto_path=. --grpc_out=. --cpp_out=. --plugin=protoc-gen-grpc=/usr/local/bin/grpc_cpp_plugin endpoint.proto")
 ADD_LIBRARY(schema STATIC
-    asset.pb.cc
-    block.pb.cc
-    commands.pb.cc
-    primitive.pb.cc
-    outside_endpoint.pb.cc
+  asset.pb.cc
+  block.pb.cc
+  commands.pb.cc
+  primitive.pb.cc
+  outside_endpoint.pb.cc
 )
+
 target_link_libraries(schema
-    protobuf
+  protobuf
 )
 
 ADD_LIBRARY(endpoint STATIC
-    endpoint.pb.cc
-    endpoint.grpc.pb.cc
-    outside_endpoint.grpc.pb.cc
+  endpoint.pb.cc
+  endpoint.grpc.pb.cc
+  outside_endpoint.grpc.pb.cc
 )
+
 target_link_libraries(endpoint
-    grpc++
-    grpc++_reflection
-    pthread
-    dl
+  grpc++
+  grpc++_reflection
+  pthread
+  dl
 )
