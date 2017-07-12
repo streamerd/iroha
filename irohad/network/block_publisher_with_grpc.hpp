@@ -27,28 +27,25 @@
 
 namespace network {
 
-    /*
-     * Send confirmed block to other server without Iroha,
-     * This is only interface
-     */
-    class BlockPublisherClientWithGrpc: BlockPublisherClient{
+  /*
+   * Send confirmed block to other server without Iroha,
+   * This is only interface
+   */
+  class BlockPublisherClientWithGrpc: BlockPublisherClient{
+    iroha::protocol::ApiResponse sendBlock(
+      const iroha::protocol::Block& block,
+      const std::string& targetIp
+    );
+  };
 
-        iroha::protocol::ApiResponse sendBlock(
-          const iroha::protocol::Block& block,
-          const std::string& targetIp
-        );
-
-    };
-
-    class ApiClient {
+  class ApiClient {
     public:
-        ApiClient(const std::string& targetIp, int port);
-        iroha::protocol::ApiResponse receiveBlock(const iroha::protocol::ApiBlock&);
+      ApiClient(const std::string& targetIp, int port);
+      iroha::protocol::ApiResponse receiveBlock(const iroha::protocol::ApiBlock&);
     private:
-        grpc::ClientContext context_;
-        std::unique_ptr<iroha::protocol::ApiService::Stub> stub_;
-    };
-
+      grpc::ClientContext context_;
+      std::unique_ptr<iroha::protocol::ApiService::Stub> stub_;
+  };
 }  // namespace consensus
 
 #endif //IROHA_BLOCK_PUBLISHER_WITH_GRPC_HPP
