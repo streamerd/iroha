@@ -18,7 +18,7 @@
 
 namespace block_publisher {
 
-    void BlockPublisher::publish(const Block &block){
+    void BlockPublisher::publish(const Block &block) {
 
     }
 }
