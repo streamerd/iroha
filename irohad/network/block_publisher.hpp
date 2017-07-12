@@ -25,8 +25,8 @@
 namespace network {
 
   /*
-   * Send confirmed block to other server without Iroha,
-   * This is only interface
+   * Send a confirmed block to a client.
+   * Note: This is only an interface.
    */
   class BlockPublisherClient {
     virtual iroha::protocol::ApiResponse sendBlock(
