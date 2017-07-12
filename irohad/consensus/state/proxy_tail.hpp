@@ -24,9 +24,13 @@ namespace iroha {
   class ProxyTail final : public Validator {
    public:
     Role self() override;
-    void on_vote(Vote *vote) override;
+    virtual void on_proposal(Proposal *proposal) override;
+    virtual void on_vote(Vote *vote) override;
 
    private:
+    // true means the vote pull is full and all of them are consistent
+    bool check_votes() const;
+
     // maps voter's pubkey -> Vote
     // we need a component VoteCounter or Teller (literal translation - the one
     // who counts votes)

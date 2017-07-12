@@ -20,7 +20,54 @@
 static auto console = spdlog::stdout_color_st("proxy tail");
 
 namespace iroha {
-  void ProxyTail::on_vote(Vote *vote) { console->debug("Vote handled"); }
+
+  void ProxyTail::on_proposal(Proposal *proposal) {
+    // TODO: add tx to votes
+  }
+
+  void ProxyTail::on_vote(Vote *vote) {
+    console->debug("Vote handled");
+
+    // weird if vote went w/o sig
+    if (!vote->has_sig()) return;
+
+    auto pubkey = vote->sig().pubkey();
+
+    if (votes.find(pubkey) != votes.end()) {
+      // peer already voted, just skip
+      return;
+    }
+
+    // haven't voted yet
+    votes[pubkey] = vote;
+
+    if (!check_votes()) return;
+
+    // start building commit msg
+    auto commit = consensus::Sumeragi::Commit();
+    // dunno how to grub them so todo:
+    // commit.add_transactions
+    for (auto &v : votes) {
+      *commit.add_sigs() = v.sig();
+    }
+
+    auto &v = votes.begin()->second;
+    commit.set_commit_gmroot(v.next_gmroot);
+    commit.set_commit_height(v.next_height);
+  }
+
+  bool ProxyTail::check_votes() const {
+    if (votes.size() < 2 * this->peerService->f() + 1) return false;
+
+    auto next = votes.begin();
+    auto prev = next++;
+    for (auto prev = next++; next != votes.end(); prev++, next++) {
+      if (!(prev->second.next_gmroot() == next->second.next_gmroot()))
+        return false;
+    }
+
+    return true;
+  }
 
   Role ProxyTail::self() { return Role::PROXY_TAIL; }
 }

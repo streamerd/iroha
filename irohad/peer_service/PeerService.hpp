@@ -51,9 +51,11 @@ namespace iroha {
 
     std::shared_ptr<NetworkNode> proxy_tail() {
       // TODO
-      size_t n = peers.size();
-      size_t f = (n - 1) / 3;
-      return peers[2 * f + 1];
+      return peers[2 * f() + 1];
+    }
+
+    size_t f() const {
+      return (peers.size() - 1) / 3;
     }
 
     size_t position(ed25519::pubkey_t pub) {
