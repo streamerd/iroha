@@ -27,4 +27,7 @@ namespace iroha {
     console->debug("Commit handled");
   }
 
+  void Member::on_vote(Vote *vote) { console->debug("Vote handled"); }
+
+  void Member::on_abort(Abort *abort) { console->debug("Abort handled"); }
 }

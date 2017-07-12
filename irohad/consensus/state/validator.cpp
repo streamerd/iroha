@@ -24,48 +24,51 @@ namespace iroha {
   void Validator::on_proposal(Proposal *proposal) {
     // TODO
 
-    // I don't like if-else/switch statements for states, can we do something with this?
+    // I don't like if-else/switch statements for states, can we do something
+    // with this?
     // probably in future we may use map for O(1) state -> handler lookup
     // or we may use simply boost::sml
-    if (state == State::IDLE) {
-      // proposal handling logic
-      console->debug("Proposal handled");
+    switch (state) {
+      case State::IDLE:
+        // proposal handling logic
+        console->debug("Proposal handled");
 
-      // dummy stateful validation
-      Vote vote;
-      {
-        vote.set_next_height(height + 1);
-        vote.set_next_gmroot(std::string(hash256_t::size(), 'a'));
+        // dummy stateful validation
+        Vote vote;
+        {
+          vote.set_next_height(height + 1);
+          vote.set_next_gmroot(std::string(hash256_t::size(), 'a'));
 
-        Signature sig;
-        std::string pub = this->keypair.pubkey.to_string();
-        sig.set_signature(std::string(ed25519::sig_t::size(), 's'));
+          Signature sig;
+          std::string pub = this->keypair.pubkey.to_string();
+          sig.set_signature(std::string(ed25519::sig_t::size(), 's'));
 
-        vote.set_allocated_sig(&sig);
+          vote.set_allocated_sig(&sig);
 
-        // we spend 500 +- 100 ms to validate
-        std::this_thread::sleep_for(
-            std::chrono::milliseconds(400 + rand() % 200));
-      }
+          // we spend 500 +- 100 ms to validate
+          std::this_thread::sleep_for(
+              std::chrono::milliseconds(400 + rand() % 200));
+        }
 
-      auto ack = this->peerService->proxy_tail()->SendVote(&vote);
-      if (ack.VOTE_RECEIVED)
-        state = State::VOTED;
-      else {
-        // TODO
-        console->error(
-            "I sent my vote, but proxy tail did not respond with "
-            "ACK.VOTE_RECEIVED");
-      }
-    }
-    else if (state == State::VOTED){
-      console->info("I already voted");
-    }
+        auto ack = this->peerService->proxy_tail()->SendVote(&vote);
+        if (ack.VOTE_RECEIVED)
+          state = State::VOTED;
+        else {
+          // TODO
+          console->error(
+              "I sent my vote, but proxy tail did not respond with "
+              "ACK.VOTE_RECEIVED");
+        }
+        break;
 
-    else{
-      // I hope we never reach this code block
-      console->critical("My state is neither IDLE nor VOTED");
-      throw std::system_error();
+      case State::VOTED:
+        console->info("I already voted");
+        break;
+
+      default:
+        // I hope we never reach this code block
+        console->critical("My state is neither IDLE nor VOTED");
+        throw std::system_error();
     }
   }
 
