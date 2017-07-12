@@ -52,7 +52,6 @@ service OrderingService {
   rpc QueueTransaction (Transaction) returns (QueueTransactionResponse);
 }
 
-
 service SubscriberService {
-  rpc receiveBlock (ApiBlock) returns (ApiResponse);
+  rpc receiveBlock (PublishedBlock) returns (ApiResponse);
 }
