@@ -22,23 +22,25 @@ static auto console = spdlog::stdout_color_mt("leader");
 
 namespace iroha {
   void Leader::on_proposal(Proposal *proposal) {
-    console->debug("Proposal handled");
+    console->info("Proposal handled");
 
     switch (state_) {
       case State::IDLE: {
         // multicast proposal to first 2f+1 peers
-        for (auto &&peer : peerService->peers) {
+        for (auto &peer : peerService->peers) {
           // no need in thread creation, std::async uses system-wide threads
-          auto future = std::async(std::launch::async, [&console]() {
-            auto ack = peer->SendProposal(proposal);
-            if (ack.type() == ack.PROPOSAL_RECEIVED) {
-              console->info("{} acknowledged", peer->pubkey.to_hexstring());
-            } else {
-              // TODO: view change
-              console->info("{} did not respond, view change",
-                            peer->pubkey.to_hexstring());
-            }
-          });
+          auto future =
+              std::async(std::launch::async, [&console, &peer, &proposal]() {
+
+                auto ack = peer->SendProposal(proposal);
+                if (ack.type() == ack.PROPOSAL_RECEIVED) {
+                  console->info("{} acknowledged", peer->pubkey.to_hexstring());
+                } else {
+                  // TODO: view change
+                  console->info("{} did not respond, view change",
+                                peer->pubkey.to_hexstring());
+                }
+              });
         }
 
         this->state_ = State::SENT_PROPOSAL;
@@ -48,21 +50,16 @@ namespace iroha {
       case State::SENT_PROPOSAL: {
         // wait for commit
         console->info("I am waiting for a commit, but I received a proposal");
+        break;
       }
-      default: { console->error("Leader is at undefined state"); }
+      default: {
+        console->error("Leader is at undefined state");
+        break;
+      }
     }
   }
 
   Role Leader::self() { return Role::LEADER; }
-
-  Leader::Leader() {
-    // subscribe for proposals from ordering service
-    orderingService->on<Proposal>([c{console}](const Proposal &p, auto &os) {
-      c->debug("Leader received proposal from OS, size: {}",
-                     p.transactions_size());
-      this->on_proposal(&p);
-    });
-  }
 
   void Leader::on_commit(Commit *commit) {
     console->info("Commit handled");
@@ -76,8 +73,5 @@ namespace iroha {
     state_ = State::IDLE;
   }
 
-  Leader::~Leader() {
-    // unsubscribe from ordering service
-    orderingService->clear();
-  }
+  Leader::Leader() { this->state_ = State::IDLE; }
 }

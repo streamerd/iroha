@@ -24,7 +24,6 @@ namespace iroha {
   class ProxyTail final : public Validator {
    public:
     Role self() override;
-    virtual void on_proposal(Proposal *proposal) override;
     virtual void on_vote(Vote *vote) override;
 
    private:

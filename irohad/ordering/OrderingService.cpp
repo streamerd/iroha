@@ -18,7 +18,7 @@
 #include "OrderingService.hpp"
 #include <spdlog/spdlog.h>
 
-static auto console = spdlog::stdout_color_st("orderingService");
+auto console = spdlog::stdout_color_st("orderingService");
 
 namespace iroha {
 
@@ -26,8 +26,9 @@ namespace iroha {
     Proposal proposal;
 
     // while not empty AND TODO: the number of transactions inside < BLOCK_SIZE
-    while (!queue_.empty()) {
-      Transaction tx = queue_.front();
+    while (!queue_->empty()) {
+      Transaction tx = queue_->front();
+      queue_->pop();
       proposal.add_transactions(tx.SerializeAsString());
     }
 
@@ -41,37 +42,37 @@ namespace iroha {
           throw "timer is dead";  // TODO
         });
 
-    timer_->on<uvw::TimerEvent>(
-        [&console](const uvw::ErrorEvent &e, uvw::TimerHandle &handle) {
-          // TODO
-          if (!queue_->empty()) {
-            console->info("{} transactions in ordering service", queue_->size());
-            create_proposal();
-          } else {
-            console->info("No transactions in ordering service");
-          }
-        });
+    auto &t = *this;
+    timer_->on<uvw::TimerEvent>([&console, &t](const uvw::TimerEvent &e,
+                                               uvw::TimerHandle &handle) {
+      // TODO
+      if (!t.queue_->empty()) {
+        console->info("{} transactions in ordering service", t.queue_->size());
+        t.create_proposal();
+      } else {
+        console->info("No transactions in ordering service");
+      }
+    });
   }
 
-  void OrderingService::start(uvw::TimerHandle::Time time) {
-    timer_->start(time, uvw::TimerHandle::Time{1});  // repeated timer
+  void OrderingService::run() {
+    console->info("started");
+    timer_->start(uvw::TimerHandle::Time{0},
+                  uvw::TimerHandle::Time{5000});  // repeated timer
   }
 
   void OrderingService::stop() { timer_->stop(); }
 
-  template <typename T>
-  void OrderingService::push(T &&tx) {
-    queue_->push(std::forward<T>(tx));
+  // for debug
+  void OrderingService::simulate_one() {
+    Transaction tx;
+    tx.set_test(std::to_string(rand()));
+    queue_->push(tx);
   }
 
-  void OrderingService::simulate() {
-    std::thread([queue{queue_}]() {
-      while (1) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        Transaction tx;
-        tx.set_test(std::to_string(q++));
-        queue->push(tx);
-      }
-    }).detach();
+  OrderingService::OrderingService(std::shared_ptr<uvw::Loop> loop)
+      : loop_{loop} {
+    queue_ = std::make_shared<std::queue<Transaction>>();
+    bind_timer();
   }
 }

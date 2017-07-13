@@ -54,5 +54,6 @@ target_link_libraries(peer
         sml
         consensus_grpc
         peer_state
+        ordering_service
         )
 

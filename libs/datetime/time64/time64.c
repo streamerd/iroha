@@ -351,7 +351,7 @@ static Year cycle_offset(Year year)
    Also the previous year must match.  When doing Jan 1st you might
    wind up on Dec 31st the previous year when doing a -UTC time zone.
 
-   Finally, the next year must have the same start day of week.  This
+   Finally, the next year must have the same run day of week.  This
    is for Dec 31st with a +UTC time zone.
    It doesn't need the same leap year status since we only care about
    January 1st.

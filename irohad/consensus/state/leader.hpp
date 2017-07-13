@@ -25,7 +25,6 @@ namespace iroha {
   class Leader final: public Validator {
    public:
     Leader();
-    ~Leader();
 
     Role self() override;
 

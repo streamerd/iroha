@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 
-#include <gtest/gtest.h>
 #include <crypto/crypto.hpp>
 #include <main/peer.hpp>
 #include <memory>
@@ -26,7 +25,7 @@ using namespace ed25519;
 
 #define NPEERS 4
 
-class Network : public ::testing::Test {
+class Network {
  public:
   Network() {
     // generate N keypairs
@@ -70,10 +69,12 @@ class Network : public ::testing::Test {
   std::vector<std::thread> threads;
 };
 
-TEST_F(Network, Init) {
-  // client thread
+int main(){  // client thread
+  Network network;
 
   while (1) {
     std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   }
+
+  return 0;
 }

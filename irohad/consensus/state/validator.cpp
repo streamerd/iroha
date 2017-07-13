@@ -31,7 +31,7 @@ namespace iroha {
     switch (state) {
       case State::IDLE: {
         // proposal handling logic
-        console->debug("Proposal handled");
+        console->info("Proposal handled");
 
         // dummy stateful validation
         Vote vote;

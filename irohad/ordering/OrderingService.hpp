@@ -18,31 +18,23 @@
 #ifndef IROHA_ORDERINGSERVICE_HPP
 #define IROHA_ORDERINGSERVICE_HPP
 
-#include <uvw.hpp>
 #include <spdlog/spdlog.h>
-#include <queue>
 #include <consensus/messages.hpp>
+#include <queue>
+#include <uvw.hpp>
 
 namespace iroha {
 
-  class OrderingService : uvw::Emitter<OrderingService> {
+  class OrderingService : public uvw::Emitter<OrderingService> {
    public:
-    OrderingService(std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault())
-        : loop_{loop} {
-      bind_timer();
-    }
+    OrderingService(std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault());
 
-    void start(uvw::TimerHandle::Time time);
+    void run();
     void stop();
 
-    template <typename T>
-    void push(T &&tx);
-
-    void simulate();
+    void simulate_one();
 
    private:
-    static size_t q;
-
     void bind_timer();
 
     void create_proposal();

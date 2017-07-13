@@ -1,4 +1,4 @@
-AddTest(test_network test_network.cpp)
+add_executable(test_network test_network.cpp)
 target_link_libraries(test_network
         uvw
         spdlog

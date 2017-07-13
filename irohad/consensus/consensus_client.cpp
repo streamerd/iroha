@@ -32,7 +32,8 @@ namespace iroha {
     if (status.ok()) {
       return ack;
     } else {
-      console->error("SendProposal RPC failed: {}", status.error_details());
+      console->error("SendProposal RPC failed. details={}, message={}",
+                     status.error_details(), status.error_message());
       throw std::system_error();  // TODO: we need good exception design
     }
   }

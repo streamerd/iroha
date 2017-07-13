@@ -24,15 +24,15 @@ namespace iroha {
   Role Member::self() { return Role::MEMBER; }
 
   void Member::on_commit(iroha::Commit *commit) {
-    console->debug("Commit handled");
+    console->info("Commit handled");
   }
 
-  void Member::on_vote(Vote *vote) { console->debug("Vote handled"); }
+  void Member::on_vote(Vote *vote) { console->info("Vote handled"); }
 
-  void Member::on_abort(Abort *abort) { console->debug("Abort handled"); }
+  void Member::on_abort(Abort *abort) { console->info("Abort handled"); }
 
   void Member::on_proposal(Proposal *proposal) {
-    console->debug("Proposal handled");
+    console->info("Proposal handled");
   }
 
   std::string Member::ledgerToString() {

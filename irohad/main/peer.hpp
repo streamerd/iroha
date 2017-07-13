@@ -25,6 +25,7 @@
 #include <consensus/state/leader.hpp>
 #include <consensus/state/member.hpp>
 #include <consensus/state/proxy_tail.hpp>
+#include <ordering/OrderingService.hpp>
 #include <peer_service/PeerService.hpp>
 #include <uvw.hpp>
 #include "consensus/consensus_service.hpp"
@@ -36,100 +37,25 @@ namespace iroha {
   class Peer {
    public:
     Peer(ed25519::keypair_t keypair, std::string ip, uint16_t port,
-         std::shared_ptr<PeerService> ps) {
-      listen_on = ip + ":" + std::to_string(port);
-      console_ = spdlog::stdout_color_st(listen_on);
-      // set debug logging level
-      console_->set_level(spdlog::level::debug);
-
-      // bad solution: we calculate our position (and role) here at peer
-      // creation
-      auto pos = ps->position(keypair.pubkey);
-      if (pos == 0) {
-        state_ = std::make_shared<Leader>();
-      } else if (pos == 2 * ps->f() + 1) {
-        state_ = std::make_shared<ProxyTail>();
-      } else if (pos > 0 && pos < 2 * ps->f() + 1) {
-        state_ = std::make_shared<Validator>();
-      } else {
-        state_ = std::make_shared<Member>();
-      }
-
-      state_->keypair = std::move(keypair);
-      state_->peerService = std::move(ps);
-
-      bind_callbacks();
-    }
+         std::shared_ptr<PeerService> ps, std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault());
 
     /**
      * Run event loop. Blocking operation.
      */
-    void run() {
-      // run peer service
-      state_->peerService->run();
-      // timeout is 5 seconds
-      state_->orderingService->start(uvw::TimerHandle::Time{5});
-
-      // simulate client
-      // creates separate thread which pushes transaction in queue
-      state_->orderingService->simulate();
-
-      // temp solution
-      grpc::ServerBuilder builder;
-      builder.AddListeningPort(listen_on, grpc::InsecureServerCredentials());
-      builder.RegisterService(&server_);
-      auto server(builder.BuildAndStart());
-      // end
-
-      console_->info("Current order: {}", state_->peerService->orderToString());
-      console_->debug("started");
-
-      server->Wait();
-    }
+    void run();
 
    private:
-    void bind_callbacks() {
-      // temp solution
-      server_.on<uvw::ErrorEvent>([c{console_}](const uvw::ErrorEvent& e,
-                                                auto& s) {
-        c->error("{}", e.what());
-
-        // TODO: we need better exception management
-        throw std::system_error();
-      });
-
-      std::shared_ptr<Member> state{state_};
-
-      server_.on<Proposal*>(
-          [ c{console_}, state{state} ](const Proposal* p, auto& s) {
-            c->debug("Proposal received");
-            state->on_proposal(p);
-          });
-
-      server_.on<Vote*>([ c{console_}, state{state} ](const Vote* v, auto& s) {
-        c->debug("Vote received");
-        state->on_vote(v);
-      });
-
-      server_.on<Commit*>(
-          [ c{console_}, state{state} ](const Commit* c, auto& s) {
-            c->debug("Commit received");
-            state->on_commit(c);
-          });
-
-      server_.on<Abort*>(
-          [ c{console_}, state{state} ](const Abort* c, auto& s) {
-            c->debug("Abort received");
-            state->on_abort(c);
-          });
-    }
+    void bind_callbacks();
 
     std::string listen_on;
 
     ConsensusService server_;
 
+    std::shared_ptr<OrderingService> orderingService;
     std::shared_ptr<Member> state_;
     std::shared_ptr<spdlog::logger> console_;
+
+    std::shared_ptr<uvw::Loop> loop_;
   };
 }
 #endif  // IROHA_CONSENSUS_HPP
