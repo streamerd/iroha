@@ -29,22 +29,26 @@ using namespace iroha::model;
 bool AddAssetQuantity::validate(ametsuchi::WsvQuery &queries,
                                 const Account &creator) {
   // Check if creator has MoneyCreator permission
-  return  creator.permissions.issue_assets &&
-      // Check if account exist
-      !queries.getAccount(account_id).user_name.empty() &&
-      //Asset must exist in the system
-      !queries.getAsset(asset_id).name.empty();
-  //Check if the amount if meaningful
+  return creator.permissions.issue_assets &&
+         // Check if account exist
+         !queries.getAccount(account_id).user_name.empty() &&
+         // Asset must exist in the system
+         !queries.getAsset(asset_id).name.empty();
+  // Check if the amount if meaningful
   // TODO: check if amount is in some scope
 }
 
+/**
+ *
+ * @param queries
+ * @param creator
+ * @return
+ */
 bool AddSignatory::validate(ametsuchi::WsvQuery &queries,
                             const Account &creator) {
   return
+      // Case 1. When command creator wants to add his/her signatory to some
+      // account
+      creator.master_key == pubkey;
+  // TODO: What about other cases ?
 }
-
-
-
-
-
-
