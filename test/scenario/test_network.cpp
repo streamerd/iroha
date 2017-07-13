@@ -16,8 +16,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <main/peer.hpp>
 #include <crypto/crypto.hpp>
+#include <main/peer.hpp>
 #include <memory>
 #include <uvw/loop.hpp>
 
@@ -41,12 +41,14 @@ class Network : public ::testing::Test {
     for (auto i = 0u; i < NPEERS; i++) {
       auto host = std::string("127.0.0.1");
       uint16_t port = (uint16_t)(10000u + i);
-      std::shared_ptr<PeerService> peer_service = std::make_shared<PeerService>();
+      std::shared_ptr<PeerService> peer_service =
+          std::make_shared<PeerService>();
 
       // for each peer add the same set of public keys as initial peerService
       for (auto j = 0u; j < NPEERS; j++) {
         auto pk = keypairs[j].pubkey;
-        auto nn = std::make_shared<NetworkNode>(host, port, pk);
+        std::shared_ptr<NetworkNode> nn =
+            std::make_shared<NetworkNode>(host, port, pk);
 
         peer_service->peers.push_back(std::move(nn));
       }

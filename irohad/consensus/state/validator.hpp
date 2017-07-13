@@ -35,13 +35,14 @@ namespace iroha {
     virtual void on_proposal(Proposal* proposal) override;
 
    private:
-    State state;
-
     enum class State : uint8_t {
       UNDEFINED = 0,
       IDLE = 1, // waiting for a proposal
       VOTED = 2 // waiting for a commit
     };
+
+    State state;
+
   };
 }
 

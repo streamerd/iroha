@@ -17,49 +17,54 @@
 
 #include "PeerService.hpp"
 
-NetworkNode::NetworkNode(std::string ip_, uint16_t port_,
-                         ed25519::pubkey_t pub_)
-    : ConsensusClient(ip_, port_),
-      ip(std::move(ip_)),
-      port(std::move(port_)),
-      pubkey(std::move(pub_)) {}
+namespace iroha {
 
-std::shared_ptr<NetworkNode> PeerService::leader() {
-  // TODO
-  return peers[0];
-}
+  NetworkNode::NetworkNode(std::string ip_, uint16_t port_,
+                           ed25519::pubkey_t pub_)
+      : ConsensusClient(ip_, port_),
+        pubkey(std::move(pub_)),
+        ip{ip_},
+        port{port_} {}
 
-std::shared_ptr<NetworkNode> PeerService::proxy_tail() {
-  // TODO
-  return peers[2 * f() + 1];
-}
-
-size_t PeerService::f() const { return (peers.size() - 1) / 3; }
-
-size_t PeerService::position(ed25519::pubkey_t pub) {
-  size_t p = 0;
-  for (auto &&peer : peers) {
-    if (peer->pubkey == pub) {
-      return p;
-    }
-
-    p++;
+  std::shared_ptr<NetworkNode> PeerService::leader() {
+    // TODO
+    return peers[0];
   }
 
-  // temp
-  // TODO: pubkey can not be found among peers
-  throw std::system_error();
-}
+  std::shared_ptr<NetworkNode> PeerService::proxy_tail() {
+    // TODO
+    return peers[2 * f() + 1];
+  }
 
-void PeerService::run() {
-  // now order is static: lexicographical sort of public keys for peers
-  makeOrder();
-}
+  size_t PeerService::f() const { return (peers.size() - 1) / 3; }
 
-void PeerService::makeOrder() {
-  std::sort(peers.begin(), peers.end(), [](std::shared_ptr<NetworkNode> a,
-                                           std::shared_ptr<NetworkNode> b) {
-    return std::lexicographical_compare(a->pubkey.begin(), a->pubkey.end(),
-                                        b->pubkey.begin(), b->pubkey.end());
-  });
+  size_t PeerService::position(ed25519::pubkey_t pub) {
+    size_t p = 0;
+    for (auto &&peer : peers) {
+      if (peer->pubkey == pub) {
+        return p;
+      }
+
+      p++;
+    }
+
+    // temp
+    // TODO: pubkey can not be found among peers
+    throw std::system_error();
+  }
+
+  void PeerService::run() {
+    // now order is static: lexicographical sort of public keys for peers
+    makeOrder();
+
+    // here we may run UDP heartbeat service
+  }
+
+  void PeerService::makeOrder() {
+    std::sort(peers.begin(), peers.end(), [](std::shared_ptr<NetworkNode> a,
+                                             std::shared_ptr<NetworkNode> b) {
+      return std::lexicographical_compare(a->pubkey.begin(), a->pubkey.end(),
+                                          b->pubkey.begin(), b->pubkey.end());
+    });
+  }
 }

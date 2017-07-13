@@ -24,7 +24,7 @@
 #include <uvw/timer.hpp>
 
 namespace iroha {
-  struct NetworkNode : public ConsensusClient {
+  struct NetworkNode: ConsensusClient {
     NetworkNode(std::string ip_, uint16_t port_, ed25519::pubkey_t pub_);
 
     std::string ip;

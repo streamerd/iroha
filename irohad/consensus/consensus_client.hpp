@@ -30,10 +30,7 @@ namespace iroha {
 
   class ConsensusClient {
    public:
-    ConsensusClient(std::string ip, uint16_t port)
-        : stub_(Sumeragi::NewStub(
-              grpc::CreateChannel(ip + ":" + std::to_string(port),
-                                  grpc::InsecureChannelCredentials()))) {}
+    ConsensusClient(std::string ip, uint16_t port);
 
     Ack SendProposal(Proposal* proposal);
     Ack SendVote(Vote* vote);
@@ -41,6 +38,7 @@ namespace iroha {
     Ack SendAbort(Abort* abort);
 
    private:
+
     std::unique_ptr<Sumeragi::Stub> stub_;
   };
 }

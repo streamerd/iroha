@@ -4,4 +4,5 @@ target_link_libraries(test_network
         spdlog
         crypto
         peer
+        peer_state
         )

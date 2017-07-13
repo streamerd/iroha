@@ -29,7 +29,7 @@ namespace iroha {
     // probably in future we may use map for O(1) state -> handler lookup
     // or we may use simply boost::sml
     switch (state) {
-      case State::IDLE:
+      case State::IDLE: {
         // proposal handling logic
         console->debug("Proposal handled");
 
@@ -51,24 +51,26 @@ namespace iroha {
         }
 
         auto ack = this->peerService->proxy_tail()->SendVote(&vote);
-        if (ack.VOTE_RECEIVED)
+        if (ack.type() == ack.VOTE_RECEIVED) {
+          console->info("Sent my vote");
           state = State::VOTED;
-        else {
+        } else {
           // TODO
           console->error(
               "I sent my vote, but proxy tail did not respond with "
               "ACK.VOTE_RECEIVED");
         }
         break;
-
-      case State::VOTED:
+      }
+      case State::VOTED: {
         console->info("I already voted");
         break;
-
-      default:
+      }
+      default: {
         // I hope we never reach this code block
         console->critical("My state is neither IDLE nor VOTED");
         throw std::system_error();
+      }
     }
   }
 

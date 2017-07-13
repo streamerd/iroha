@@ -16,6 +16,7 @@
  */
 
 #include "consensus_client.hpp"
+#include <grpc++/create_channel.h>
 #include <spdlog/spdlog.h>
 namespace iroha {
 
@@ -79,5 +80,11 @@ namespace iroha {
       console->error("SendAbort RPC failed: {}", status.error_details());
       throw std::system_error();  // TODO: we need good exception design
     };
+  }
+
+  ConsensusClient::ConsensusClient(std::string ip, uint16_t port) {
+    auto channel = grpc::CreateChannel(ip + ":" + std::to_string(port),
+                                       grpc::InsecureChannelCredentials());
+    stub_ = consensus::Sumeragi::NewStub(channel);
   }
 }
