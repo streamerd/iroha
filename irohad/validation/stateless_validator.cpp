@@ -46,7 +46,7 @@ namespace iroha {
 
       // tx is not sent from future
       {
-        if (now.count() < transaction.created_ts) {
+        if (now.count() < transaction.created_ts + 300 && transaction.created_ts > now.count() - 1440*60000) {
           return false;
         }
       }
