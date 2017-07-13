@@ -6,7 +6,6 @@ add_library(ametsuchi
     impl/mutable_storage_impl.cpp
 
     impl/postgres_wsv_query.cpp
-    impl/postgres_command_executor.cpp
     )
 
 target_link_libraries(ametsuchi
