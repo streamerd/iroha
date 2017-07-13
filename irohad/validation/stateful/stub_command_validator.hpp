@@ -19,8 +19,8 @@
 #define IROHA_STUB_COMMAND_VALIDATOR_HPP
 
 #include <validation/stateful/command_validator.hpp>
-#include <dao/dao.hpp>
-#include <ametsuchi/wsv_query.hpp>
+#include <model/model.hpp>
+#include <ametsuchi/temporary_wsv.hpp>
 #include <handler_map/handler_map.hpp>
 
 namespace iroha {
@@ -28,15 +28,15 @@ namespace iroha {
     class CommandValidatorStub : public CommandValidator {
      public:
 
-      CommandValidatorStub(ametsuchi::WsvQuery &wsv);
+      CommandValidatorStub(ametsuchi::TemporaryWsv &wsv);
 
-      bool validate(const dao::Command &command);
+      bool validate(const model::Command &command);
 
-      bool validateAddPeer(const dao::AddPeer &addPeer);
+      bool validateAddPeer(const model::AddPeer &addPeer);
 
      private:
-      ametsuchi::WsvQuery &wsv;
-      HandlerMap<dao::Command, bool> handler;
+      ametsuchi::TemporaryWsv &wsv;
+      HandlerMap<model::Command, bool> handler;
 
     };
   } // namespace validation

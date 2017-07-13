@@ -21,16 +21,16 @@
 namespace iroha {
   namespace validation {
 
-    bool ChainValidatorStub::validate(rxcpp::observable<dao::Block>& blocks,
+    bool ChainValidatorStub::validate(rxcpp::observable<model::Block>& blocks,
                                       ametsuchi::MutableStorage& storage) {
       auto block_validator = BlockValidatorStub(storage);
       auto apply_block = [](const auto& block, auto& executor, auto& query,
                             auto& top_block) {
         for (const auto& tx : block.transactions) {
           for (const auto& command : tx.commands) {
-            if (!executor.execute(*command)) {
+            /*if (!executor.execute(*command)) {
               return false;
-            }
+            }*/
           }
         }
         return true;

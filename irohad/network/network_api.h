@@ -16,7 +16,7 @@ limitations under the License.
 #ifndef IROHA_NETWORK_H
 #define IROHA_NETWORK_H
 
-#include "dao/dao.hpp"
+#include "model/model.hpp"
 #include "rxcpp/rx-observable.hpp"
 
 namespace iroha {
@@ -32,7 +32,7 @@ namespace iroha {
        * @return observable with Proposals.
        * (List of Proposals)
        */
-      virtual rxcpp::observable<dao::Proposal> on_proposal() = 0;
+      virtual rxcpp::observable<model::Proposal> on_proposal() = 0;
 
       /**
        * Event is triggered when commit block arrives.
@@ -41,27 +41,14 @@ namespace iroha {
        * But there are scenarios when consensus provide many blocks, e.g.
        * on peer startup - peer will get all actual blocks.
        */
-      virtual rxcpp::observable<rxcpp::observable<dao::Block>> on_commit() = 0;
-    };
-
-    /**
-     * Interface for propagating transaction in a network
-     */
-    class TransactionPropagator {
-     public:
-      /**
-       * Method spreads transaction to other members of a network
-       * @param tx - transaction for propagation
-       */
-      virtual void propagate_transaction(const dao::Transaction &tx) = 0;
+      virtual rxcpp::observable<rxcpp::observable<model::Block>> on_commit() = 0;
     };
 
     /**
      * Public API interface for communication between current peer and other
      * peers in a network
      */
-    class PeerCommunicationService : public TransactionPropagator,
-                                     public ConsensusListener {
+    class PeerCommunicationService : public ConsensusListener {
     };
   }
 }

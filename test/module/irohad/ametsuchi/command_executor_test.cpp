@@ -21,7 +21,7 @@
 
 using iroha::ametsuchi::StorageStub;
 using iroha::ametsuchi::CommandExecutorStub;
-using namespace iroha::dao;
+using namespace iroha::model;
 
 TEST(CommandExecutorTest, SampleTest) {
   StorageStub ametsuchi;

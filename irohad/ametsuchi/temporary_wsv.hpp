@@ -18,11 +18,11 @@
 #ifndef IROHA_TEMPORARYWSV_HPP
 #define IROHA_TEMPORARYWSV_HPP
 
-#include <ametsuchi/command_executor.hpp>
+#include <ametsuchi/wsv_command.hpp>
 #include <ametsuchi/wsv_query.hpp>
-#include <dao/block.hpp>
-#include <dao/transaction.hpp>
 #include <functional>
+#include <model/block.hpp>
+#include <model/transaction.hpp>
 
 namespace iroha {
 
@@ -30,7 +30,7 @@ namespace iroha {
 
     /**
      * Temporary world state view
-     * Allows to query the temporal world state view
+     * Allows to query the temporary world state view
      */
     class TemporaryWsv : public WsvQuery {
      public:
@@ -49,9 +49,9 @@ namespace iroha {
        * otherwise.
        * @return True if transaction was successfully applied, false otherwise
        */
-      virtual bool apply(const dao::Transaction &transaction,
-                         std::function<bool(const dao::Transaction &,
-                                            CommandExecutor &, WsvQuery &)>
+      virtual bool apply(const model::Transaction &transaction,
+                         std::function<bool(const model::Transaction &,
+                                            WsvCommand &, WsvQuery &)>
                              function) = 0;
     };
 

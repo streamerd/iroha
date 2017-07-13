@@ -19,12 +19,11 @@
 #define IROHA_WSV_QUERY_HPP
 
 #include <common/types.hpp>
-#include <dao/dao.hpp>
+#include <model/model.hpp>
 #include <string>
 #include <vector>
 
 namespace iroha {
-
   namespace ametsuchi {
 
     /**
@@ -34,10 +33,47 @@ namespace iroha {
      public:
       virtual ~WsvQuery() = default;
 
+      /**
+       * Get account by user master key
+       * @param master_key
+       * @return
+       */
+      virtual model::Account getAccount(
+          const ed25519::pubkey_t &master_key) = 0;
+
+      /**
+       * Get signatories of account by user master key
+       * @param master_key
+       * @return
+       */
+      virtual std::vector<ed25519::pubkey_t> getSignatories(
+          const ed25519::pubkey_t &master_key) = 0;
+
+      /**
+       * Get asset by its name
+       * @param asset_id
+       * @return
+       */
+      virtual model::Asset getAsset(const std::string &asset_id) = 0;
+
+      /**
+       * Get wallet of user
+       * @param master_key
+       * @param asset_id
+       * @return
+       */
+      virtual model::Wallet getWallet(const ed25519::pubkey_t &master_key,
+                                      const std::string &asset_id) = 0;
+
+      /**
+       * Get peer by given IP address
+       * @param address
+       * @return
+       */
+      virtual model::Peer getPeer(const std::string &address) = 0;
     };
 
   }  // namespace ametsuchi
-
 }  // namespace iroha
 
 #endif  // IROHA_WSV_QUERY_HPP
