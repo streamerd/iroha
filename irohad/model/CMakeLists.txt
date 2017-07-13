@@ -1,6 +1,7 @@
 add_library(model
     model_crypto_provider_impl.cpp
     model_hash_provider_impl.cpp
+    impl/stateful_command_validation.cpp
     )
 
 target_link_libraries(model
