@@ -22,14 +22,10 @@
 #include <consensus.pb.h>
 
 #include <uvw/emitter.hpp>
+#include <consensus/messages.hpp>
 
 namespace iroha {
 
-  using Ack = consensus::Ack;
-  using Abort = consensus::Abort;
-  using Vote = consensus::Vote;
-  using Commit = consensus::Commit;
-  using Proposal = consensus::Proposal;
   using ServerContext = grpc::ServerContext;
   using Status = grpc::Status;
 

@@ -24,11 +24,22 @@ namespace iroha {
 
   class Leader final: public Validator {
    public:
+    Leader();
+    ~Leader();
 
     Role self() override;
 
     void on_proposal(Proposal* proposal) override;
+    void on_commit(Commit* commit) override;
 
+   private:
+    enum class State : uint8_t {
+      UNDEFINED = 0,
+      IDLE = 1,
+      SENT_PROPOSAL = 2
+    };
+
+    State state_;
   };
 }
 

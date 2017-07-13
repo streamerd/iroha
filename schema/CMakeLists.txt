@@ -36,8 +36,10 @@ compile_proto_to_grpc_cpp(consensus.proto)
 #
 
 add_library(consensus_grpc
-        primitive.pb.cc
-        primitive.pb.h
+        consensus.grpc.pb.cc
+        consensus.grpc.pb.h
+        consensus.pb.cc
+        consensus.pb.h
         )
 target_link_libraries(consensus_grpc
         protobuf

@@ -21,6 +21,7 @@
 #include <consensus.pb.h>
 
 namespace iroha {
+  using Transaction = consensus::Transaction; // for debug
   using Ack = consensus::Ack;
   using Abort = consensus::Abort;
   using Vote = consensus::Vote;

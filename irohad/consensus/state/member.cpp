@@ -34,4 +34,16 @@ namespace iroha {
   void Member::on_proposal(Proposal *proposal) {
     console->debug("Proposal handled");
   }
+
+  std::string Member::ledgerToString() {
+    std::string s = "[\n";
+    auto size = ledger.size();
+    for (auto i = 0u; i < size; i++) {
+      s += "  ";
+      s += ledger[i];
+      if (i != size - 1) s += ",\n";
+    }
+    s += "\n]\n";
+    return s;
+  }
 }

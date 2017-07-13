@@ -23,6 +23,7 @@
 #include <consensus/messages.hpp>
 #include <peer_service/PeerService.hpp>
 #include <grpc++/grpc++.h>
+#include <ordering/OrderingService.hpp>
 
 namespace iroha {
 
@@ -44,13 +45,16 @@ namespace iroha {
 
     ed25519::keypair_t keypair;
     std::shared_ptr<PeerService> peerService;
+    std::shared_ptr<OrderingService> orderingService;
 
     /**
      * imitation of ledger, for debug
      */
     uint64_t height;
-    std::vector<int> ledger;
+    std::vector<std::string> ledger;
 
+    // for debug
+    std::string ledgerToString();
   };
 }
 #endif  // IROHA_FOLLOWER_HPP

@@ -13,3 +13,9 @@
 # limitations under the License.
 
 add_subdirectory(connection)
+
+# todo
+#AddTest(consensus_test consensus_test.cpp)
+#target_link_libraries(consensus_test
+#
+#        )

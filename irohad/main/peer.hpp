@@ -21,11 +21,13 @@
 #include <grpc++/grpc++.h>
 #include <spdlog/spdlog.h>
 #include <common/types.hpp>
-#include <consensus/state/member.hpp>
-#include <peer_service/PeerService.hpp>
-#include "consensus/consensus_service.hpp"
 #include <consensus/messages.hpp>
+#include <consensus/state/leader.hpp>
+#include <consensus/state/member.hpp>
+#include <consensus/state/proxy_tail.hpp>
+#include <peer_service/PeerService.hpp>
 #include <uvw.hpp>
+#include "consensus/consensus_service.hpp"
 
 // Note (@warchant) LOOK AT test_network in test/scenario
 
@@ -40,7 +42,19 @@ namespace iroha {
       // set debug logging level
       console_->set_level(spdlog::level::debug);
 
-      state_ = std::make_shared<Member>();
+      // bad solution: we calculate our position (and role) here at peer
+      // creation
+      auto pos = ps->position(keypair.pubkey);
+      if (pos == 0) {
+        state_ = std::make_shared<Leader>();
+      } else if (pos == 2 * ps->f() + 1) {
+        state_ = std::make_shared<ProxyTail>();
+      } else if (pos > 0 && pos < 2 * ps->f() + 1) {
+        state_ = std::make_shared<Validator>();
+      } else {
+        state_ = std::make_shared<Member>();
+      }
+
       state_->keypair = std::move(keypair);
       state_->peerService = std::move(ps);
 
@@ -53,6 +67,12 @@ namespace iroha {
     void run() {
       // run peer service
       state_->peerService->run();
+      // timeout is 5 seconds
+      state_->orderingService->start(uvw::TimerHandle::Time{5});
+
+      // simulate client
+      // creates separate thread which pushes transaction in queue
+      state_->orderingService->simulate();
 
       // temp solution
       grpc::ServerBuilder builder;
@@ -69,7 +89,7 @@ namespace iroha {
 
    private:
     void bind_callbacks() {
-      /* // temp solution
+      // temp solution
       server_.on<uvw::ErrorEvent>([c{console_}](const uvw::ErrorEvent& e,
                                                 auto& s) {
         c->error("{}", e.what());
@@ -80,21 +100,28 @@ namespace iroha {
 
       std::shared_ptr<Member> state{state_};
 
-      server_.on<Proposal*>([c{console_}, state{state}](const Proposal* p, auto& s) {
-        c->debug("Proposal received");
-        state->on_proposal(p);
-      });
+      server_.on<Proposal*>(
+          [ c{console_}, state{state} ](const Proposal* p, auto& s) {
+            c->debug("Proposal received");
+            state->on_proposal(p);
+          });
 
-      server_.on<Vote*>([c{console_}, state{state}](const Vote* v, auto& s) {
+      server_.on<Vote*>([ c{console_}, state{state} ](const Vote* v, auto& s) {
         c->debug("Vote received");
         state->on_vote(v);
       });
 
-      server_.on<Commit*>([c{console_}, state{state}](const Commit* c, auto& s) {
-        c->debug("Commit received");
-        state->on_commit(c);
-      });
-       */
+      server_.on<Commit*>(
+          [ c{console_}, state{state} ](const Commit* c, auto& s) {
+            c->debug("Commit received");
+            state->on_commit(c);
+          });
+
+      server_.on<Abort*>(
+          [ c{console_}, state{state} ](const Abort* c, auto& s) {
+            c->debug("Abort received");
+            state->on_abort(c);
+          });
     }
 
     std::string listen_on;
@@ -102,7 +129,6 @@ namespace iroha {
     ConsensusService server_;
 
     std::shared_ptr<Member> state_;
-
     std::shared_ptr<spdlog::logger> console_;
   };
 }

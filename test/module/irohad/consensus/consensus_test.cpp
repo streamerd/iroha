@@ -15,21 +15,5 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_ORDERING_SERVICE_STUB_HPP
-#define IROHA_ORDERING_SERVICE_STUB_HPP
+#include <gtest/gtest.h>
 
-#include <ordering/ordering_service.hpp>
-
-namespace iroha {
-  namespace ordering {
-    class OrderingServiceStub : public OrderingService {
-     public:
-      void propagate_transaction(const model::Transaction &transaction) override;
-      rxcpp::observable<model::Proposal> on_proposal() override;
-     private:
-      rxcpp::subjects::subject<model::Proposal> proposals_;
-    };
-  }//namespace ordering
-}// namespace iroha
-
-#endif //IROHA_ORDERING_SERVICE_STUB_HPP

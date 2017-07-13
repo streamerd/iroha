@@ -7,6 +7,11 @@ message Signature {
     bytes signature = 2;
 }
 
+// for tests
+message Transaction {
+    bytes test = 1;
+}
+
 
 ///////////////////////////////////////////
 /// ALGORITHM

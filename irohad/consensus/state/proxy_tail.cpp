@@ -27,7 +27,6 @@ namespace iroha {
 
   void ProxyTail::on_vote(Vote *vote) {
     console->debug("Vote handled");
-
   }
 
   Role ProxyTail::self() { return Role::PROXY_TAIL; }
