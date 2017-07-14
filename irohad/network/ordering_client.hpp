@@ -15,23 +15,28 @@
  * limitations under the License.
  */
 
-#include <ordering/ordering_service_stub.hpp>
+#ifndef IROHA_ORDERINGCLIENT_HPP
+#define IROHA_ORDERINGCLIENT_HPP
 
-namespace iroha {
-  namespace ordering {
+namespace network {
+  class OrderingClient : GRPCClient<request,response> {
 
-    using model::Transaction;
-    using model::Proposal;
-
-    void OrderingServiceStub::propagate_transaction(
-        const model::Transaction &transaction) {
-      std::vector<Transaction> transactions{transaction};
-      Proposal proposal(transactions);
-      proposals_.get_subscriber().on_next(proposal);
+    response XX send(request){
+      // ret = send(ip)
+      // Block
+      return ret;
     }
 
-    rxcpp::observable<model::Proposal> OrderingServiceStub::on_proposal() {
-      return proposals_.get_observable();
+    void send(request) {
+      threadpool.post(observe, [](response){
+
+      });
     }
-  }  // namespace ordering
-}  // namespace iroha
+
+    response observe(callback) {
+
+    }
+  };
+} // network
+
+#endif //IROHA_ORDERINGCLIENT_HPP

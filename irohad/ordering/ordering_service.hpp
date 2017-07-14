@@ -18,31 +18,39 @@
 #ifndef IROHA_ORDERING_SERVICE_HPP
 #define IROHA_ORDERING_SERVICE_HPP
 
-#include <model/transaction.hpp>
-#include <model/proposal.hpp>
-#include <rxcpp/rx-observable.hpp>
+#include <queue>
 
-namespace iroha {
-  namespace ordering {
-    /**
-     * Ordering service interface for peer communication service
-     */
-    class OrderingService {
-     public:
+#include <block.pb.h>
 
-      /**
-       * Propagate a signed transaction for further processing
-       * @param transaction
-       */
-      virtual void propagate_transaction(const model::Transaction &transaction) = 0;
+namespace ordering_service {
 
-      /**
-       * Return observable of all proposals in the consensus
-       * @return
-       */
-      virtual rxcpp::observable<model::Proposal> on_proposal() = 0;
-    };
-  }//namespace ordering
-}// namespace iroha
+  using Transaction = iroha::protocol::Transaction;
+  using Block = iroha::protocol::Block;
 
-#endif //IROHA_ORDERING_SERVICE_HPP
+  struct TransactionComparator
+      : public std::binary_function<Transaction, Transaction, bool> {
+    bool operator()(const Transaction& lhs, const Transaction& rhs) const {
+      return lhs.header().created_time() < rhs.header().created_time();
+    }
+  };
+
+  /**
+   * append to ordering queue
+   */
+  void append(Transaction&);
+
+  /**
+   * on_commit, start ordering
+   */
+  void on_commit(Block&);
+
+  namespace detail {
+
+    void initialize(const Block&);
+    Block makeBlock();
+
+    static std::priority_queue<Transaction,std::vector<Transaction>,TransactionComparator> que_;
+  }
+}  // namespace ordering
+
+#endif  // IROHA_ORDERING_SERVICE_HPP

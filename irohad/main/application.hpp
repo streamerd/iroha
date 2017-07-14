@@ -21,8 +21,6 @@
 #include <network/network_api.h>
 #include <consensus/connection/service.hpp>
 #include <consensus/consensus_service_stub.hpp>
-#include <network/peer_communication_stub.hpp>
-#include <ordering/ordering_service_stub.hpp>
 #include <torii/processor/query_processor_stub.hpp>
 #include <torii/processor/transaction_processor_stub.hpp>
 #include <torii/torii_stub.hpp>

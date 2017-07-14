@@ -27,7 +27,6 @@ target_link_libraries(irohad
   server_runner
   model
   ametsuchi
-  networking
   ordering_service
   consensus_service
   chain_validator
