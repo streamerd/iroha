@@ -15,6 +15,19 @@
  * limitations under the License.
  */
 
-struct Context{
+#ifndef IROHA_MESSAGES_HPP
+#define IROHA_MESSAGES_HPP
 
-};
+#include <consensus.pb.h>
+
+namespace iroha {
+  using Transaction = consensus::Transaction; // for debug
+  using Ack = consensus::Ack;
+  using Abort = consensus::Abort;
+  using Vote = consensus::Vote;
+  using Commit = consensus::Commit;
+  using Proposal = consensus::Proposal;
+  using Signature = consensus::Signature;
+}
+
+#endif //IROHA_MESSAGES_HPP

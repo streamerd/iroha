@@ -435,6 +435,10 @@ set_target_properties(gflags PROPERTIES
     )
 add_dependencies(gflags gflags_gflags)
 
+
+
+
+
 ##########################
 #        rx c++          #
 ##########################
@@ -457,3 +461,28 @@ set_target_properties(rxcpp PROPERTIES
     )
 
 add_dependencies(rxcpp reactive_extensions_rxcpp)
+
+
+
+
+#########################################
+#        state machine library          #
+#########################################
+
+ExternalProject_Add(boost_experimental_sml
+        GIT_REPOSITORY "https://github.com/boost-experimental/sml"
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ""
+        INSTALL_COMMAND "" # remove install step
+        UPDATE_COMMAND "" # remove update step
+        TEST_COMMAND "" # remove test step
+        )
+ExternalProject_Get_Property(boost_experimental_sml source_dir binary_dir)
+set(SML_INCLUDE_DIRS ${source_dir}/include)
+file(MAKE_DIRECTORY ${SML_INCLUDE_DIRS})
+add_library(sml INTERFACE IMPORTED)
+set_target_properties(sml PROPERTIES
+        INTERFACE_INCLUDE_DIRECTORIES ${SML_INCLUDE_DIRS}
+        )
+
+add_dependencies(sml boost_experimental_sml)

@@ -4,7 +4,8 @@ function(StrictMode target)
   set_target_properties(${target} PROPERTIES
     CXX_STANDARD 14
     CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
+    CXX_EXTENSIONS ON
+          #CXX_EXTENSIONS OFF
   )
   # Enable more warnings and turn them into compile errors.
   if((CMAKE_CXX_COMPILER_ID STREQUAL "GNU") OR

@@ -15,8 +15,11 @@
 add_subdirectory(ametsuchi)
 add_subdirectory(common)
 add_subdirectory(consensus)
-add_subdirectory(main)
+add_subdirectory(ordering)
 add_subdirectory(peer_service)
 add_subdirectory(validation)
 add_subdirectory(torii)
-add_subdirectory(model)
+add_subdirectory(network)
+
+# should be last
+add_subdirectory(main)

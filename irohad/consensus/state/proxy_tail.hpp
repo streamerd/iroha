@@ -15,23 +15,26 @@
  * limitations under the License.
  */
 
-#include <consensus/consensus_service_stub.hpp>
+#ifndef IROHA_PROXY_TAIL_HPP
+#define IROHA_PROXY_TAIL_HPP
 
+#include "validator.hpp"
 namespace iroha {
-  namespace consensus {
 
-    using model::Transaction;
-    using model::Proposal;
-    using model::Block;
+  class ProxyTail final : public Validator {
+   public:
+    Role self() override;
+    virtual void on_vote(Vote *vote) override;
 
-    rxcpp::observable<rxcpp::observable<model::Block>>
-    ConsensusServiceStub::on_commit() {
-      return commits_.get_observable();
-    }
+   private:
+    // maps voter's pubkey -> Vote
+    // we need a component VoteCounter or Teller (literal translation - the one
+    // who counts votes)
+    // this component will store votes of validators for one round
+    // this component should add vote for O(1), get winner for O(1)
+    // simple std::map is O(n) solution
+    std::map<ed25519::pubkey_t, Vote *> votes;
+  };
+}
 
-    void ConsensusServiceStub::vote_block(model::Block &block) {
-      commits_.get_subscriber().on_next(rxcpp::observable<>::from(block));
-    }
-
-  }  // namespace consensus
-}  // namespace iroha
+#endif  // IROHA_PROXY_TAIL_HPP

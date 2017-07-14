@@ -15,27 +15,31 @@
  * limitations under the License.
  */
 
-#include <torii/processor/query_processor_stub.hpp>
+#ifndef IROHA_LEADER_HPP
+#define IROHA_LEADER_HPP
+
+#include "validator.hpp"
 
 namespace iroha {
-  namespace torii {
-    using rxcpp::subscriber;
-    using std::shared_ptr;
-    using model::Query;
-    using model::QueryResponse;
-    using model::Client;
 
-    QueryProcessorStub::QueryProcessorStub(ametsuchi::WsvQuery &wsv,
-                                           ametsuchi::BlockQuery &block) :
-        wsv_(wsv), block_(block) {
+  class Leader final: public Validator {
+   public:
+    Leader();
 
-    }
+    Role self() override;
 
-    void QueryProcessorStub::query_handle(model::Client client,
-                                          const model::Query &query) {
+    void on_proposal(Proposal* proposal) override;
+    void on_commit(Commit* commit) override;
 
-    }
+   private:
+    enum class State : uint8_t {
+      UNDEFINED = 0,
+      IDLE = 1,
+      SENT_PROPOSAL = 2
+    };
 
+    State state_;
+  };
+}
 
-  }  // namespace torii
-}  // namespace iroha
+#endif //IROHA_LEADER_HPP

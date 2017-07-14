@@ -15,27 +15,15 @@
  * limitations under the License.
  */
 
-#include <torii/processor/query_processor_stub.hpp>
+#include "proxy_tail.hpp"
+
+static auto console = spdlog::stdout_color_st("proxy tail");
 
 namespace iroha {
-  namespace torii {
-    using rxcpp::subscriber;
-    using std::shared_ptr;
-    using model::Query;
-    using model::QueryResponse;
-    using model::Client;
 
-    QueryProcessorStub::QueryProcessorStub(ametsuchi::WsvQuery &wsv,
-                                           ametsuchi::BlockQuery &block) :
-        wsv_(wsv), block_(block) {
+  void ProxyTail::on_vote(Vote *vote) {
+    console->info("Vote handled");
+  }
 
-    }
-
-    void QueryProcessorStub::query_handle(model::Client client,
-                                          const model::Query &query) {
-
-    }
-
-
-  }  // namespace torii
-}  // namespace iroha
+  Role ProxyTail::self() { return Role::PROXY_TAIL; }
+}

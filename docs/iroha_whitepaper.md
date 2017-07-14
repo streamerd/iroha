@@ -10,7 +10,7 @@ Iroha aims to be a simple and modularized distributed ledger platform.
 
 ### 1.1. Relationship to Fabric and Sawtooth Lake
 
-It is our vision that in the future Hyperledger will consist less of disjointed projects and more of coherent libraries of components that can be selected and installed in order to run a Hyperledger network. Towards this end, it is the goal of Iroha to eventually provide the following encapsulated C++ components that other projects (particularly in Hyperledger) can use:
+It is our vision that in the future Hyperledger will consist less of disjointed projects and more of coherent libraries of components that can be selected and installed in order to run a Hyperledger peerService. Towards this end, it is the goal of Iroha to eventually provide the following encapsulated C++ components that other projects (particularly in Hyperledger) can use:
 
 * Sumeragi consensus library
 * Ed25519 digital signature library
@@ -33,7 +33,7 @@ Having a solid distributed ledger system is not useful if there are no applicati
 
 ***Development status: currently all peers are validating peers***
 
-Generally, 3*f*+1 nodes are needed to tolerate *f* Byzantine nodes in the network (albeit some consensus algorithms have higher node requirements). The number of *f* that a system should be made to tolerate should be determined by the system maintainer, based on the requirements for expected use cases.
+Generally, 3*f*+1 nodes are needed to tolerate *f* Byzantine nodes in the peerService (albeit some consensus algorithms have higher node requirements). The number of *f* that a system should be made to tolerate should be determined by the system maintainer, based on the requirements for expected use cases.
 
 The following node types are considered:
 
@@ -45,7 +45,7 @@ The following node types are considered:
 
 ***Development status: add/remove peer functions are currently in development. ETA: before end of February***
 
-Membership is provided in a decentralized way, on ledger. By default 2*f*+1 signatures are needed to confirm adding or removing nodes to the network.
+Membership is provided in a decentralized way, on ledger. By default 2*f*+1 signatures are needed to confirm adding or removing nodes to the peerService.
 
 In future work, it is planned to add finer granularity permissions, similar to unix style permissions an membership groups.
 
@@ -92,11 +92,11 @@ Additionally, the following two transaction types take as input (i.e., "wrap") o
 * Multisignature
 * Interledger (i.e., cross-chain)
 
-#### 2.6.1 Consensus events and processing order
+#### 2.6.1 Peer events and processing order
 
 When broadcast, transactions are wrapped as consensus events.
 
-Consensus events, when received from the event queue, are processed in the following priority order:
+Peer events, when received from the event queue, are processed in the following priority order:
 
  1. Commit events having 2*f*+1 signatures
  2. Events ordered by the leader
@@ -110,9 +110,9 @@ Transactions are stored in a Merkle tree with each transaction being a leaf of t
 
 ![alt tag](iroha_merkle_tree.png)
 
-### 2.8. Consensus
+### 2.8. Peer
 
-Byzantine fault tolerant systems are engineered to tolerate *f* numbers of Byzantine faulty nodes in a network. Iroha introduces a Byzantine Fault Tolerant consensus algorithm called Sumeragi. It is heavily inspired by the B-Chain algorithm:
+Byzantine fault tolerant systems are engineered to tolerate *f* numbers of Byzantine faulty nodes in a peerService. Iroha introduces a Byzantine Fault Tolerant consensus algorithm called Sumeragi. It is heavily inspired by the B-Chain algorithm:
 
 Duan, S., Meling, H., Peisert, S., & Zhang, H. (2014). *Bchain: Byzantine replication with high throughput and embedded reconfiguration*. In International Conference on Principles of Distributed Systems (pp. 91-106). Springer.
 
@@ -134,7 +134,7 @@ The case of a failure in the proxy tail is shown the following figure:
 
 ![alt tag](sumeragi_tx_flow_tail_failure.png)
 
-Consensus in Sumeragi is performed on individual transactions and on the global state resulting from the application of the transaction. When a validating peer receives a transaction over the network, it performs the following steps in order:
+Peer in Sumeragi is performed on individual transactions and on the global state resulting from the application of the transaction. When a validating peer receives a transaction over the peerService, it performs the following steps in order:
 
 * validate the signature (or signatures, in the case of multisignature transactions) of the transaction
 * validate the contents of the transaction, where applicable (e.g., for transfer transactions, is the balance non-negative)
@@ -161,7 +161,7 @@ The hijiri reputation system is based on rounds. At each round, validating peers
 * computational test
 * data consistency test
 
-Which peers validate each other are based on the pairwise distance between hashes (e.g., ```sort(abs(hash && 0x0000ffff - publicKey && 0x0000ffff))```). The hashes are computed based on the public keys of the peers that are concatenated with the round number and then SHA-3 hashed. Rounds occur whenever the Merkle root is less than TODO:XXX. Results are shared in a separate Merkle tree, maintained independently of the transactions (so the systems can run in parallel).
+Which peers validate each other are based on the pairwise distance between hashes (e.g., ```makeOrder(abs(hash && 0x0000ffff - publicKey && 0x0000ffff))```). The hashes are computed based on the public keys of the peers that are concatenated with the round number and then SHA-3 hashed. Rounds occur whenever the Merkle root is less than TODO:XXX. Results are shared in a separate Merkle tree, maintained independently of the transactions (so the systems can run in parallel).
 
 
 ## Appendix

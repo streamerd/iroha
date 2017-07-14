@@ -83,8 +83,6 @@ namespace iroha {
     }
   };
 
-
-
   template <size_t size>
   using hash_t = blob_t<size>;
 

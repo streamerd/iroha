@@ -11,3 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+# todo
+#AddTest(consensus_test consensus_test.cpp)
+#target_link_libraries(consensus_test
+#
+#        )
+
+AddTest(grpc_test grpc_test.cpp)
+target_link_libraries(grpc_test consensus_client consensus_service grpc++)

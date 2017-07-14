@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_library(consensus_connection
-    client.cpp
-    service.cpp
-)
-target_link_libraries(consensus_connection
-    endpoint
-    schema
-)
+#add_subdirectory(connection)
+
+add_library(ordering_service
+        OrderingService.cpp
+        OrderingService.hpp
+        )
+target_link_libraries(ordering_service
+        uvw
+        spdlog
+        consensus_grpc
+        )

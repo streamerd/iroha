@@ -11,20 +11,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-add_subdirectory(processor)
 
-add_library(command_client
-  command_client.cpp
+# Peer Connection Test
+add_executable(consensus_connection_test
+  consensus_connection_test.cpp
 )
-target_link_libraries(command_client
-  thread_pool
+target_link_libraries(consensus_connection_test
+  server_runner
+  consensus_connection
+  schema
   endpoint
+  gtest
 )
-
-add_library(command_service
-  command_service_handler.cpp
-)
-target_link_libraries(command_service
-  endpoint
-  stateless_validator
+add_test(
+  NAME consensus_connection_test
+  COMMAND $<TARGET_FILE:consensus_connection_test>
 )

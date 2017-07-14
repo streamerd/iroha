@@ -21,6 +21,7 @@
 #include <rxcpp/rx.hpp>
 #include <model/transaction.hpp>
 #include <model/client.hpp>
+#include <validation/stateless/validator.hpp>
 
 namespace iroha {
   namespace torii {
@@ -30,13 +31,18 @@ namespace iroha {
      * for processing transaction in the system
      */
     class TransactionHandler {
+        const validation::StatelessValidator &validator_;
+        model::ModelCryptoProvider &crptoProvider_;
      public:
+
+        TransactionHandler(const validation::StatelessValidator &validator,
+                                             model::ModelCryptoProvider &provider);
 
       /**
        * Add transaction to the system for processing
        * @param transaction - transaction for processing
        */
-      virtual void handle(model::Transaction &transaction) = 0;
+      void handle(model::Transaction &transaction);
 
     };
   }  // namespace torii

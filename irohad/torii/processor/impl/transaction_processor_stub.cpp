@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#include <torii/processor/transaction_processor_stub.hpp>
+#include <torii/processor/transaction_processor_stub.cpp>
 
 namespace iroha {
   namespace torii {

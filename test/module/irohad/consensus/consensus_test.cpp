@@ -15,27 +15,5 @@
  * limitations under the License.
  */
 
-#include <torii/processor/query_processor_stub.hpp>
+#include <gtest/gtest.h>
 
-namespace iroha {
-  namespace torii {
-    using rxcpp::subscriber;
-    using std::shared_ptr;
-    using model::Query;
-    using model::QueryResponse;
-    using model::Client;
-
-    QueryProcessorStub::QueryProcessorStub(ametsuchi::WsvQuery &wsv,
-                                           ametsuchi::BlockQuery &block) :
-        wsv_(wsv), block_(block) {
-
-    }
-
-    void QueryProcessorStub::query_handle(model::Client client,
-                                          const model::Query &query) {
-
-    }
-
-
-  }  // namespace torii
-}  // namespace iroha

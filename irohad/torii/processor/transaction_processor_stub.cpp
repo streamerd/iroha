@@ -25,17 +25,13 @@
 
 namespace iroha {
   namespace torii {
-    class TransactionHandler {
-     public:
-      TransactionHandler(const validation::StatelessValidator &validator,
-                               model::ModelCryptoProvider &provider);
+      TransactionHandler::TransactionHandler(const validation::StatelessValidator &validator,
+                               model::ModelCryptoProvider &provider):
+          validator_(validator),
+          crptoProvider_(provider){}
 
-      void handle(model::Transaction &transaction) override;
+      void TransactionHandler::handle(model::Transaction &transaction){}
 
-     private:
-      const validation::StatelessValidator &validator_;
-      model::ModelCryptoProvider &crptoProvider_;
-    };
   }  // namespace torii
 }  // namespace iroha
 

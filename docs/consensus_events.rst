@@ -3,7 +3,7 @@
 .. highlight:: rst
 
 ==================================
-Consensus events
+Peer events
 ==================================
 
 This site covers Iroha's usage & API documentation. For basic info on what

@@ -1,4 +1,4 @@
-# How to run network of N iroha nodes?
+# How to run peerService of N iroha nodes?
 
 1. Make sure you have the latest `iroha-docker` image:
 
@@ -42,5 +42,5 @@
 
    ​
 
-In the end, you have a network of N nodes, you can communicate with them via host IPs. Each node from this moment runs iroha as if you use it without docker.
+In the end, you have a peerService of N nodes, you can communicate with them via host IPs. Each node from this moment runs iroha as if you use it without docker.
 

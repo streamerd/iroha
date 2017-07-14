@@ -15,27 +15,32 @@
  * limitations under the License.
  */
 
-#include <torii/processor/query_processor_stub.hpp>
+#ifndef IROHA_CONSENSUS_CLIENT_HPP
+#define IROHA_CONSENSUS_CLIENT_HPP
+
+#include <consensus.grpc.pb.h>
+#include <consensus.pb.h>
+#include "messages.hpp"
 
 namespace iroha {
-  namespace torii {
-    using rxcpp::subscriber;
-    using std::shared_ptr;
-    using model::Query;
-    using model::QueryResponse;
-    using model::Client;
-
-    QueryProcessorStub::QueryProcessorStub(ametsuchi::WsvQuery &wsv,
-                                           ametsuchi::BlockQuery &block) :
-        wsv_(wsv), block_(block) {
-
-    }
-
-    void QueryProcessorStub::query_handle(model::Client client,
-                                          const model::Query &query) {
-
-    }
 
 
-  }  // namespace torii
-}  // namespace iroha
+  using grpc::Channel;
+  using consensus::Sumeragi;
+
+  class ConsensusClient {
+   public:
+    ConsensusClient(std::string ip, uint16_t port);
+
+    Ack SendProposal(Proposal* proposal);
+    Ack SendVote(Vote* vote);
+    Ack SendCommit(Commit* commit);
+    Ack SendAbort(Abort* abort);
+
+   private:
+
+    std::unique_ptr<Sumeragi::Stub> stub_;
+  };
+}
+
+#endif  // IROHA_CONSENSUS_CLIENT_HPP

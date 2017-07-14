@@ -1,0 +1,77 @@
+syntax = "proto3";
+package iroha.consensus;
+
+
+message Signature {
+    bytes pubkey    = 1;
+    bytes signature = 2;
+}
+
+// for tests
+message Transaction {
+    bytes test = 1;
+}
+
+
+///////////////////////////////////////////
+/// ALGORITHM
+
+// phase 1
+// send proposal and leader's vote to 2f+1 validating peers
+message Proposal {
+    // array of transactions
+    repeated bytes transactions = 1;
+    Vote vote = 2;
+}
+
+// phase 2
+// all validating peers receive proposal and sent their vote to 2f+1th peer, which
+// is called proxy tail
+message Vote {
+    // sha3_256
+    bytes next_gmroot = 1;
+    int64 next_height = 2;
+    Signature sig = 3;
+}
+
+// phase 3
+message Commit {
+    // committed array of transactions
+    repeated bytes transactions = 1;
+    int64 commit_height = 2;
+    bytes commit_gmroot = 3;
+    repeated Signature sigs = 4;
+}
+
+
+message Ack {
+    enum Type {
+        UNDEFINED = 0;
+        PROPOSAL_RECEIVED = 1;
+        VOTE_RECEIVED = 2;
+        COMMIT_RECEIVED = 3;
+        ABORT_RECEIVED = 4;
+    }
+
+    Type type = 1;
+}
+
+
+message Abort {
+    enum Type {
+        UNDEFINED = 0;
+        SYSTEM_FAIL = 1; // when number of failed nodes > f
+        COMMIT_NOT_ENOUGH_SIGNATURES = 2; // when proxy tail can not collect 2f+1 votes for the same state
+    }
+
+    Type type = 1;
+}
+
+///////////////////////////////////////////
+
+service Sumeragi {
+    rpc SendProposal(Proposal) returns (Ack) {}
+    rpc SendVote(Vote) returns (Ack) {}
+    rpc SendCommit(Commit) returns (Ack) {}
+    rpc SendAbort(Abort) returns (Ack) {}
+}

@@ -14,29 +14,48 @@
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-add_library(server_runner server_runner.cpp)
-target_link_libraries(server_runner
-  command_service
-  logger
-  endpoint
-  schema
-)
+#add_library(server_runner server_runner.cpp)
+#target_link_libraries(server_runner
+#    logger
+#    endpoint
+#    schema
+#    )
+#
+#add_executable(iroha-main iroha-main.cpp application.cpp)
+#target_link_libraries(iroha-main
+#    server_runner
+#    model
+#    ametsuchi
+#    networking
+#    ordering_service
+#    consensus_service
+#    chain_validator
+#    stateful_validator
+#    hash
+#    stateless_validator
+#    client_processor
+#    torii
+#    )
 
-add_library(irohad application.cpp)
+
+add_executable(irohad
+        iroha-main.cpp
+        )
+
 target_link_libraries(irohad
-  server_runner
-  model
-  ametsuchi
-  consensus_service
-  chain_validator
-  hash
-  stateless_validator
-  client_processor
-  torii
-  crypto
-)
+        uvw
+        )
 
-add_executable(iroha-main iroha-main.cpp)
-target_link_libraries(iroha-main
-  irohad
-)
+add_library(peer
+        peer.cpp
+        peer.hpp
+        )
+
+target_link_libraries(peer
+        uvw
+        spdlog
+        sml
+        consensus_grpc
+        peer_state
+        ordering_service
+        )

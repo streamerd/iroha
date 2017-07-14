@@ -64,7 +64,7 @@ services:
         ipv4_address: 192.168.9.4
 
 
-# network for single peer
+# peerService for single peer
 networks:
   peernet:
     driver: bridge

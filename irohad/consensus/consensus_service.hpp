@@ -15,34 +15,28 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_CONSENSUS_SERVICE_HPP
-#define IROHA_CONSENSUS_SERVICE_HPP
+#ifndef IROHA_CONSENSUS_GRPC_HPP
+#define IROHA_CONSENSUS_GRPC_HPP
 
-#include <model/proposal.hpp>
-#include <model/block.hpp>
-#include <rxcpp/rx-observable.hpp>
+#include <consensus.grpc.pb.h>
+#include <consensus.pb.h>
+
+#include <uvw/emitter.hpp>
+#include <consensus/messages.hpp>
 
 namespace iroha {
-  namespace consensus {
-    /**
-     * Consensus interface for peer communication service
-     */
-    class ConsensusService {
-     public:
 
-      /**
-       * Vote for a block formed from proposal
-       * @param block
-       */
-      virtual void vote_block(model::Block &block) = 0;
+  using ServerContext = grpc::ServerContext;
+  using Status = grpc::Status;
 
-      /**
-       * Return observable of all commits from the consensus
-       * @return
-       */
-      virtual rxcpp::observable<rxcpp::observable<model::Block>> on_commit() = 0;
-    };
-  } // namespace consensus
-} // namespace iroha
+  class ConsensusService : public consensus::Sumeragi::Service,
+                           public uvw::Emitter<ConsensusService> {
+   public:
+    Status SendProposal(ServerContext* context, const Proposal* request, Ack* reply) override;
+    Status SendVote(ServerContext* context, const Vote* request, Ack* reply) override;
+    Status SendCommit(ServerContext* context, const Commit* request, Ack* reply) override;
+    Status SendAbort(ServerContext* context, const Abort* request, Ack* reply) override;
+  };
+}
 
-#endif //IROHA_CONSENSUS_SERVICE_HPP
+#endif  // IROHA_CONSENSUS_GRPC_HPP

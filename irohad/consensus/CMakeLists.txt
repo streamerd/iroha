@@ -12,24 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(connection)
-add_library(sumeragi STATIC
-  sumeragi.cpp
-  )
-target_link_libraries(sumeragi
-  schema
-  endpoint
-  crypto
-  sumeragi_connection
-  thread_pool
-  timer
-  logger
-  rxcpp
-  )
+
+add_subdirectory(state)
+
 
 add_library(consensus_service
-    consensus_service_stub.cpp
-    )
+        consensus_service.cpp
+        consensus_service.hpp
+        )
 target_link_libraries(consensus_service
-    rxcpp
-    )
+        consensus_grpc
+        uvw
+)
+
+
+add_library(consensus_client
+        consensus_client.cpp
+        consensus_client.hpp
+        )
+target_link_libraries(consensus_client
+        consensus_grpc
+        spdlog
+        )
+
+
