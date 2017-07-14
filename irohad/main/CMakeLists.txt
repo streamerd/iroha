@@ -42,6 +42,9 @@ add_executable(irohad
         iroha-main.cpp
         )
 
+target_link_libraries(irohad
+        uvw
+        )
 
 add_library(peer
         peer.cpp

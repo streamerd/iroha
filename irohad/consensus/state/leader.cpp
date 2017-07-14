@@ -30,14 +30,14 @@ namespace iroha {
         for (auto &peer : peerService->peers) {
           // no need in thread creation, std::async uses system-wide threads
           auto future =
-              std::async(std::launch::async, [&console, &peer, &proposal]() {
+              std::async(std::launch::async, [ &peer, &proposal]() {
 
                 auto ack = peer->SendProposal(proposal);
                 if (ack.type() == ack.PROPOSAL_RECEIVED) {
-                  console->info("{} acknowledged", peer->pubkey.to_hexstring());
+                  ::console->info("{} acknowledged", peer->pubkey.to_hexstring());
                 } else {
                   // TODO: view change
-                  console->info("{} did not respond, view change",
+                  ::console->info("{} did not respond, view change",
                                 peer->pubkey.to_hexstring());
                 }
               });

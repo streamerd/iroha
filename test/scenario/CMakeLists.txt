@@ -5,4 +5,5 @@ target_link_libraries(test_network
         crypto
         peer
         peer_state
+        consensus_service
         )

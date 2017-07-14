@@ -33,19 +33,8 @@ namespace iroha {
 
     void QueryProcessorStub::query_handle(model::Client client,
                                           const model::Query &query) {
-      auto handle = handler_.find(query).value_or([](auto &) {
-        std::cout << "[Q] Handler not found" << std::endl;
-        return;
-      });
-      handle(query);
-      return;
-    }
 
-    rxcpp::observable<shared_ptr<QueryResponse>>
-    QueryProcessorStub::query_notifier() {
-      return subject_.get_observable();
     }
-
 
 
   }  // namespace torii

@@ -43,14 +43,14 @@ namespace iroha {
         });
 
     auto &t = *this;
-    timer_->on<uvw::TimerEvent>([&console, &t](const uvw::TimerEvent &e,
+    timer_->on<uvw::TimerEvent>([ &t](const uvw::TimerEvent &e,
                                                uvw::TimerHandle &handle) {
       // TODO
       if (!t.queue_->empty()) {
-        console->info("{} transactions in ordering service", t.queue_->size());
+        ::console->info("{} transactions in ordering service", t.queue_->size());
         t.create_proposal();
       } else {
-        console->info("No transactions in ordering service");
+        ::console->info("No transactions in ordering service");
       }
     });
   }
