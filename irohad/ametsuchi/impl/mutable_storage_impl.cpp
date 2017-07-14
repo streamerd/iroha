@@ -60,7 +60,7 @@ namespace iroha {
       }
     }
 
-    model::Account MutableStorageImpl::getAccount(
+    nonstd::optional<model::Account> MutableStorageImpl::getAccount(
         const std::string &account_id) {
       return wsv_->getAccount(account_id);
     }
@@ -70,16 +70,16 @@ namespace iroha {
       return wsv_->getSignatories(account_id);
     }
 
-    model::Asset MutableStorageImpl::getAsset(const std::string &asset_id) {
+    nonstd::optional<model::Asset> MutableStorageImpl::getAsset(const std::string &asset_id) {
       return wsv_->getAsset(asset_id);
     }
 
-    model::AccountAsset MutableStorageImpl::getAccountAsset(
+    nonstd::optional<model::AccountAsset> MutableStorageImpl::getAccountAsset(
         const std::string &account_id, const std::string &asset_id) {
       return wsv_->getAccountAsset(account_id, asset_id);
     }
 
-    model::Peer MutableStorageImpl::getPeer(const std::string &address) {
+    nonstd::optional<model::Peer> MutableStorageImpl::getPeer(const std::string &address) {
       return wsv_->getPeer(address);
     }
   }  // namespace ametsuchi

@@ -47,7 +47,7 @@ namespace iroha {
 
     TemporaryWsvImpl::~TemporaryWsvImpl() { transaction_->exec("ROLLBACK;"); }
 
-    model::Account TemporaryWsvImpl::getAccount(const std::string &account_id) {
+    nonstd::optional<model::Account> TemporaryWsvImpl::getAccount(const std::string &account_id) {
       return wsv_->getAccount(account_id);
     }
 
@@ -56,16 +56,16 @@ namespace iroha {
       return wsv_->getSignatories(account_id);
     }
 
-    model::Asset TemporaryWsvImpl::getAsset(const std::string &asset_id) {
+    nonstd::optional<model::Asset> TemporaryWsvImpl::getAsset(const std::string &asset_id) {
       return wsv_->getAsset(asset_id);
     }
 
-    model::AccountAsset TemporaryWsvImpl::getAccountAsset(
+    nonstd::optional<model::AccountAsset> TemporaryWsvImpl::getAccountAsset(
         const std::string &account_id, const std::string &asset_id) {
       return wsv_->getAccountAsset(account_id, asset_id);
     }
 
-    model::Peer TemporaryWsvImpl::getPeer(const std::string &address) {
+    nonstd::optional<model::Peer> TemporaryWsvImpl::getPeer(const std::string &address) {
       return wsv_->getPeer(address);
     }
 

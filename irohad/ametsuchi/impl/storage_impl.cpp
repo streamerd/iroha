@@ -176,7 +176,7 @@ namespace iroha {
       });
     }
 
-    model::Account StorageImpl::getAccount(const std::string &account_id) {
+    nonstd::optional<model::Account> StorageImpl::getAccount(const std::string &account_id) {
       std::shared_lock<std::shared_timed_mutex> write(rw_lock_);
       return wsv_->getAccount(account_id);
     }
@@ -187,18 +187,18 @@ namespace iroha {
       return wsv_->getSignatories(account_id);
     }
 
-    model::Asset StorageImpl::getAsset(const std::string &asset_id) {
+    nonstd::optional<model::Asset> StorageImpl::getAsset(const std::string &asset_id) {
       std::shared_lock<std::shared_timed_mutex> write(rw_lock_);
       return wsv_->getAsset(asset_id);
     }
 
-    model::AccountAsset StorageImpl::getAccountAsset(
+    nonstd::optional<model::AccountAsset> StorageImpl::getAccountAsset(
         const std::string &account_id, const std::string &asset_id) {
       std::shared_lock<std::shared_timed_mutex> write(rw_lock_);
       return wsv_->getAccountAsset(account_id, asset_id);
     }
 
-    model::Peer StorageImpl::getPeer(const std::string &address) {
+    nonstd::optional<model::Peer> StorageImpl::getPeer(const std::string &address) {
       std::shared_lock<std::shared_timed_mutex> write(rw_lock_);
       return wsv_->getPeer(address);
     }
