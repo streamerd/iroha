@@ -16,31 +16,38 @@
  */
 
 #include "consensus_service.hpp"
-iroha::Status iroha::ConsensusService::SendProposal(iroha::ServerContext *context,
-                                                    iroha::Proposal *request,
-                                                    iroha::Ack *reply) {
-  publish(request);
-  reply->set_type(Ack::PROPOSAL_RECEIVED);
-  return iroha::Status::OK;
-}
-iroha::Status iroha::ConsensusService::SendVote(iroha::ServerContext *context,
-                                                iroha::Vote *request,
-                                                iroha::Ack *reply) {
-  publish(request);
-  reply->set_type(Ack::VOTE_RECEIVED);
-  return iroha::Status::OK;
-}
-iroha::Status iroha::ConsensusService::SendCommit(iroha::ServerContext *context,
-                                                  iroha::Commit *request,
-                                                  iroha::Ack *reply) {
-  publish(request);
-  reply->set_type(Ack::COMMIT_RECEIVED);
-  return iroha::Status::OK;
-}
-iroha::Status iroha::ConsensusService::SendAbort(iroha::ServerContext *context,
-                                                 iroha::Abort *request,
-                                                 iroha::Ack *reply) {
-  publish(request);
-  reply->set_type(Ack::ABORT_RECEIVED);
-  return iroha::Status::OK;
+
+namespace iroha {
+
+  Status ConsensusService::SendProposal(ServerContext *context,
+                                                      const Proposal *request,
+                                                      Ack *reply) {
+    publish(request);
+    reply->set_type(Ack::PROPOSAL_RECEIVED);
+    return Status::OK;
+  }
+
+  Status ConsensusService::SendVote(ServerContext *context,
+                                                  const Vote *request,
+                                                  Ack *reply) {
+    publish(request);
+    reply->set_type(Ack::VOTE_RECEIVED);
+    return Status::OK;
+  }
+
+  Status ConsensusService::SendCommit(ServerContext *context,
+                                                    const Commit *request,
+                                                    Ack *reply) {
+    publish(request);
+    reply->set_type(Ack::COMMIT_RECEIVED);
+    return Status::OK;
+  }
+
+  Status ConsensusService::SendAbort(ServerContext *context,
+                                                   const Abort *request,
+                                                   Ack *reply) {
+    publish(request);
+    reply->set_type(Ack::ABORT_RECEIVED);
+    return Status::OK;
+  }
 }
