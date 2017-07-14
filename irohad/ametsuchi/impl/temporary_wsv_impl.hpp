@@ -39,7 +39,8 @@ namespace iroha {
       nonstd::optional<model::Asset> getAsset(const std::string &asset_id) override;
       nonstd::optional<model::AccountAsset> getAccountAsset(const std::string &account_id,
                                           const std::string &asset_id) override;
-      nonstd::optional<model::Peer> getPeer(const std::string &address) override;
+      std::vector<model::Peer> getPeers() override;
+      nonstd::optional<model::Peer> getPeer(const ed25519::pubkey_t &pubkey) override;
       ~TemporaryWsvImpl() override;
 
      private:

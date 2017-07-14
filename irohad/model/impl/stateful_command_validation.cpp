@@ -67,7 +67,7 @@ namespace iroha {
 
     bool AddPeer::validate(ametsuchi::WsvQuery &queries,
                            const Account &creator) {
-      if (queries.getPeer(address))
+      if (queries.getPeer(peer_key))
         // Such peer already exist
         return false;
 
