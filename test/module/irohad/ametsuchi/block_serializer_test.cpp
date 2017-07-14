@@ -22,6 +22,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/prettywriter.h>
 #include <model/commands/add_peer.hpp>
+#include <model/commands/add_asset_quantity.hpp>
 
 iroha::model::Signature create_signature();
 iroha::model::Transaction create_transaction();
@@ -37,7 +38,7 @@ iroha::model::Signature create_signature() {
 
 iroha::model::Transaction create_transaction() {
   iroha::model::Transaction tx{};
-  memset(tx.creator.data(), 0x123, 32);
+  tx.creator_account_id = "123";
 
   tx.tx_counter = 0;
   tx.created_ts = 0;
@@ -46,11 +47,17 @@ iroha::model::Transaction create_transaction() {
   tx.signatures.push_back(create_signature());
 
   //  tx.commands
-  iroha::model::AddPeer add_peer;
-  add_peer.address = "Innopolis";
-  add_peer.account_id = "123";
 
+  // Add peer
+  iroha::model::AddPeer add_peer;
+  add_peer.address = "localhost";
+  std::fill(add_peer.peer_key.begin(), add_peer.peer_key.end(), 0x123);
   tx.commands.push_back(std::make_shared<iroha::model::AddPeer>(add_peer));
+
+  iroha::model::AddAssetQuantity add_asset_qty;
+  add_asset_qty.account_id = "123";
+  add_asset_qty.asset_id = "123";
+  add_asset_qty.amount = std::decimal::make_decimal64(10LL, -2);
 
   return tx;
 }

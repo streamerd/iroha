@@ -39,8 +39,7 @@ class BlockSerializer{
  private:
   template<typename Base, typename T>
   inline bool instanceof(const T *ptr) {
-//    return dynamic_cast<const Base*>(ptr) != nullptr;
-    return typeid(Base()) == typeid(*ptr);
+    return typeid(Base) == typeid(*ptr);
   }
 };
 

@@ -24,7 +24,7 @@ namespace iroha {
         std::unique_ptr<pqxx::nontransaction> &transaction)
         : transaction_(transaction) {}
 
-    model::Account PostgresWsvQuery::getAccount(const std::string &account_id) {
+    nonstd::optional<model::Account> PostgresWsvQuery::getAccount(const std::string &account_id) {
       model::Account account;
       pqxx::result result;
       try {
@@ -46,20 +46,20 @@ namespace iroha {
       return result;
     }
 
-    model::Asset PostgresWsvQuery::getAsset(const std::string &asset_id) {
+    nonstd::optional<model::Asset> PostgresWsvQuery::getAsset(const std::string &asset_id) {
       model::Asset result;
       result.name = "";
       return result;
     }
 
-    model::AccountAsset PostgresWsvQuery::getAccountAsset(
+    nonstd::optional<model::AccountAsset> PostgresWsvQuery::getAccountAsset(
         const std::string &account_id, const std::string &asset_id) {
       model::AccountAsset result;
       result.account_id = "";
       return result;
     }
 
-    model::Peer PostgresWsvQuery::getPeer(const std::string &address) {
+    nonstd::optional<model::Peer> PostgresWsvQuery::getPeer(const std::string &address) {
       model::Peer result;
       result.address = "";
       return result;

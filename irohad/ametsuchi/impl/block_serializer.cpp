@@ -90,8 +90,8 @@ namespace iroha {
       writer.String("created_ts");
       writer.Uint64(transaction.created_ts);
 
-      writer.String("creator");
-      writer.String(transaction.creator.to_string().c_str());
+      writer.String("creator_account_id");
+      writer.String(transaction.creator_account_id.c_str());
 
       writer.String("tx_counter");
       writer.Uint64(transaction.tx_counter);
@@ -108,12 +108,36 @@ namespace iroha {
 
     void BlockSerializer::serialize(PrettyWriter<StringBuffer>& writer,
                                     model::Command& command) {
-      if (instanceof<model::AddAssetQuantity>(&command)){
-        std::cout << "Error";
-      }
       if (instanceof<model::AddPeer>(&command)){
-//        auto& add_peer = dynamic_cast<model::AddPeer&>(command);
-        std::cout << "Not error";
+        auto add_peer = static_cast<model::AddPeer&>(command);
+        writer.StartObject();
+
+        writer.String("command_type");
+        writer.String("AddPeer");
+
+        writer.String("address");
+        writer.String(add_peer.address.c_str());
+
+        writer.String("peer_key");
+        writer.String(add_peer.peer_key.to_string().c_str());
+
+        writer.EndObject();
+      }
+      if (instanceof<model::AddAssetQuantity>(&command)){
+        auto add_asset_quantity = static_cast<model::AddAssetQuantity&>(command);
+        writer.StartObject();
+
+        writer.String("command_type");
+        writer.String("AddAssetQuantity");
+
+        writer.String("account_id");
+        writer.String(add_asset_quantity.account_id.c_str());
+
+        writer.String("asset_id");
+        writer.String(add_asset_quantity.asset_id.c_str());
+
+
+        writer.String("amount");
       }
     }
   }
