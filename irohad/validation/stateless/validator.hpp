@@ -16,6 +16,7 @@ limitations under the License.
 #ifndef IROHA_VALIDATION_STATELESS_VALIDATOR_HPP
 #define IROHA_VALIDATION_STATELESS_VALIDATOR_HPP
 
+
 #include <model/transaction.hpp>
 
 namespace iroha {

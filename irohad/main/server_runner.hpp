@@ -16,6 +16,7 @@ limitations under the License.
 
 #include <grpc++/grpc++.h>
 #include <grpc++/server_builder.h>
+#include <logger/logger.hpp>
 #include <torii/command_service_handler.hpp>
 
 #ifndef MAIN_SERVER_RUNNER_HPP

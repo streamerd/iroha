@@ -4,6 +4,7 @@ add_executable(self_state_test
         )
 target_link_libraries(self_state_test
         peer_service
+        logger
         gtest
         )
 add_test(
@@ -18,6 +19,7 @@ add_executable(monitor_test
         )
 target_link_libraries(monitor_test
         peer_service
+        logger
         gtest
         )
 add_test(

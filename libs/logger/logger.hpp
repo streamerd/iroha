@@ -23,6 +23,17 @@ limitations under the License.
 
 namespace logger {
 
+
+enum class level{
+    debug,
+    info,
+    warning,
+    error
+};
+
+// To hide spdlog
+void setGlobalLogLevel(const level& l);
+
 struct Logger {
     std::shared_ptr<spdlog::logger> console;
 
@@ -73,7 +84,5 @@ struct Logger {
 };
 
 }  // namespace logger
-
-#include "logger.cpp"
 
 #endif

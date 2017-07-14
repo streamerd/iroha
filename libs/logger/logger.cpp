@@ -16,3 +16,29 @@ limitations under the License.
 
 // This file is used to link dependencies library
 #include "logger.hpp"
+
+namespace logger {
+
+    // To hide spdlog
+    void setGlobalLogLevel(const level &l) {
+        switch (l) {
+            case level::debug: {
+                spdlog::set_level(spdlog::level::debug);
+                break;
+            }
+            case level::info: {
+                spdlog::set_level(spdlog::level::info);
+                break;
+            }
+            case level::warning: {
+                spdlog::set_level(spdlog::level::warn);
+                break;
+            }
+            case level::error: {
+                spdlog::set_level(spdlog::level::err);
+                break;
+            }
+        }
+    }
+
+}

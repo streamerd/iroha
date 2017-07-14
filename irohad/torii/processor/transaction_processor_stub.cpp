@@ -28,9 +28,13 @@ namespace iroha {
       TransactionHandler::TransactionHandler(const validation::StatelessValidator &validator,
                                model::ModelCryptoProvider &provider):
           validator_(validator),
-          crptoProvider_(provider){}
+          crptoProvider_(provider){
 
-      void TransactionHandler::handle(model::Transaction &transaction){}
+      }
+
+      void TransactionHandler::handle(model::Transaction &transaction){
+        
+      }
 
   }  // namespace torii
 }  // namespace iroha
