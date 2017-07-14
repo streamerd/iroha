@@ -18,7 +18,6 @@
 #ifndef IROHA_TRANSACTION_PROCESSOR_STUB_HPP
 #define IROHA_TRANSACTION_PROCESSOR_STUB_HPP
 
-#include <network/network_api.h>
 #include <model/model_crypto_provider.hpp>
 #include <model/transaction_response.hpp>
 #include <torii/processor/transaction_processor.hpp>
@@ -26,18 +25,16 @@
 
 namespace iroha {
   namespace torii {
-    class TransactionProcessorStub : public TransactionProcessor {
+    class TransactionHandler {
      public:
-      TransactionProcessorStub(const validation::StatelessValidator &validator,
+      TransactionHandler(const validation::StatelessValidator &validator,
                                model::ModelCryptoProvider &provider);
 
-      void transaction_handle(model::Client client, model::Transaction &transaction) override;
+      void handle(model::Transaction &transaction) override;
 
      private:
       const validation::StatelessValidator &validator_;
       model::ModelCryptoProvider &crptoProvider_;
-
-      rxcpp::observable<model::TransactionResponse> notifier_;
     };
   }  // namespace torii
 }  // namespace iroha

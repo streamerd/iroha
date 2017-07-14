@@ -26,19 +26,17 @@ namespace iroha {
   namespace torii {
 
     /**
-     * Transaction processor is interface with start point
+     * Transaction handler is interface with start point
      * for processing transaction in the system
      */
-    class TransactionProcessor {
+    class TransactionHandler {
      public:
 
       /**
        * Add transaction to the system for processing
-       * @param client - transaction owner
        * @param transaction - transaction for processing
        */
-      virtual void transaction_handle(model::Client client,
-                                      model::Transaction &transaction) = 0;
+      virtual void handle(model::Transaction &transaction) = 0;
 
     };
   }  // namespace torii
