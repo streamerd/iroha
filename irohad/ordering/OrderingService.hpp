@@ -23,7 +23,7 @@
 #include <queue>
 #include <uvw.hpp>
 
-namespace iroha {
+namespace ordering {
 
   class OrderingService : public uvw::Emitter<OrderingService> {
    public:
@@ -34,6 +34,7 @@ namespace iroha {
 
     void simulate_one();
 
+    void append(const iroha::Transaction& tx);
    private:
     void bind_timer();
 
@@ -44,7 +45,7 @@ namespace iroha {
     // TODO:  should be changed to MPSC lock-free bounded queue
     // (multiple producers single consumer, does not use locks, bounded by
     // "block size")
-    std::shared_ptr<std::queue<Transaction>> queue_;
+    std::shared_ptr<std::queue<iroha::Transaction>> queue_;
 
     std::shared_ptr<uvw::Loop> loop_;
   };
