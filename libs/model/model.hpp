@@ -23,7 +23,6 @@
 #include <model/transaction_response.hpp>
 #include <model/asset.hpp>
 #include <model/account.hpp>
-#include <model/wallet.hpp>
 #include <model/peer.hpp>
 #include <model/client.hpp>
 #include <model/peer.hpp>
@@ -36,8 +35,6 @@
 #include <model/commands/add_signatory.hpp>
 #include <model/commands/create_account.hpp>
 #include <model/commands/create_asset.hpp>
-#include <model/commands/create_wallet.hpp>
-#include <model/commands/issue_asset.hpp>
 #include <model/commands/set_permissions.hpp>
 #include <model/commands/set_quorum.hpp>
 #include <model/commands/transfer_asset.hpp>
@@ -47,7 +44,6 @@
 #include <model/queries/get_account.hpp>
 #include <model/queries/get_signatories.hpp>
 #include <model/queries/get_transactions.hpp>
-#include <model/queries/get_wallets.hpp>
 
 // query response
 #include <model/query_response.hpp>
@@ -55,7 +51,6 @@
 #include <model/queries/responses/error_response.hpp>
 #include <model/queries/responses/signatories_response.hpp>
 #include <model/queries/responses/transactions_response.hpp>
-#include <model/queries/responses/wallets_response.hpp>
 
 // transaction response
 #include <model/tx_responses/stateless_response.hpp>

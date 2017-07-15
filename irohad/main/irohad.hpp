@@ -51,7 +51,7 @@ namespace iroha {
 
     ConsensusService server_;
 
-    std::shared_ptr<OrderingService> orderingService;
+    std::shared_ptr<ordering::OrderingService> orderingService;
     std::shared_ptr<Member> state_;
     std::shared_ptr<spdlog::logger> console_;
 

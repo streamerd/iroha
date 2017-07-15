@@ -89,7 +89,7 @@ namespace iroha {
     // set debug logging level
     console_->set_level(spdlog::level::debug);
 
-    orderingService = std::make_shared<OrderingService>(loop);
+    orderingService = std::make_shared<ordering::OrderingService>(loop);
 
     // bad solution: we calculate our position (and role) here at peer
     // creation
