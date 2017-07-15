@@ -16,9 +16,10 @@
  */
 
 #include <ametsuchi/block_serializer.hpp>
-#include <model/commands/add_peer.hpp>
-#include <model/commands/add_asset_quantity.hpp>
 #include <iostream>
+#include <model/commands/add_asset_quantity.hpp>
+#include <model/commands/add_peer.hpp>
+#include <sstream>
 
 namespace iroha {
   namespace ametsuchi {
@@ -98,7 +99,7 @@ namespace iroha {
 
       writer.String("commands");
       writer.StartArray();
-      for (auto command: transaction.commands){
+      for (auto command : transaction.commands) {
         serialize(writer, *command);
       }
       writer.EndArray();
@@ -108,7 +109,7 @@ namespace iroha {
 
     void BlockSerializer::serialize(PrettyWriter<StringBuffer>& writer,
                                     model::Command& command) {
-      if (instanceof<model::AddPeer>(&command)){
+      if (instanceof <model::AddPeer>(&command)) {
         auto add_peer = static_cast<model::AddPeer&>(command);
         writer.StartObject();
 
@@ -123,8 +124,9 @@ namespace iroha {
 
         writer.EndObject();
       }
-      if (instanceof<model::AddAssetQuantity>(&command)){
-        auto add_asset_quantity = static_cast<model::AddAssetQuantity&>(command);
+      if (instanceof <model::AddAssetQuantity>(&command)) {
+        auto add_asset_quantity =
+            static_cast<model::AddAssetQuantity&>(command);
         writer.StartObject();
 
         writer.String("command_type");
@@ -136,8 +138,12 @@ namespace iroha {
         writer.String("asset_id");
         writer.String(add_asset_quantity.asset_id.c_str());
 
-
         writer.String("amount");
+
+        writer.Double(
+            std::decimal::decimal64_to_double(add_asset_quantity.amount));
+
+        writer.EndObject();
       }
     }
   }

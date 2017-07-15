@@ -57,7 +57,8 @@ iroha::model::Transaction create_transaction() {
   iroha::model::AddAssetQuantity add_asset_qty;
   add_asset_qty.account_id = "123";
   add_asset_qty.asset_id = "123";
-  add_asset_qty.amount = std::decimal::make_decimal64(10LL, -2);
+  add_asset_qty.amount = std::decimal::make_decimal64(1010LL, -2);
+  tx.commands.push_back(std::make_shared<iroha::model::AddAssetQuantity>(add_asset_qty));
 
   return tx;
 }
