@@ -64,4 +64,3 @@ target_link_libraries(irohad
         logger
         consensus_service
         )
-
