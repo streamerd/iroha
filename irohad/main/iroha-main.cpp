@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
     peer_service->peers.push_back(std::move(nn));
   }
 */
+  peer_service->peers.push_back(std::make_shared<iroha::NetworkNode>("127.0.0.1",16826,keypair.pubkey));
 
   iroha::Irohad irohad(keypair,"0.0.0.0",16826,peer_service);
   irohad.run();
