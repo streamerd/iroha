@@ -16,7 +16,7 @@
  */
 
 #include <crypto/crypto.hpp>
-#include <main/peer.hpp>
+#include <main/irohad.hpp>
 #include <memory>
 #include <uvw/loop.hpp>
 
@@ -52,8 +52,8 @@ class Network {
         peer_service->peers.push_back(std::move(nn));
       }
 
-      std::shared_ptr<Peer> peer(
-          new Peer(keypairs[i], host, port, peer_service));
+      std::shared_ptr<Irohad> peer(
+          new Irohad(keypairs[i], host, port, peer_service));
 
       // run every peer in a separate thread
       auto thread = std::thread([peer{peer}]() { peer->run(); });
@@ -65,7 +65,7 @@ class Network {
     }
   }
 
-  std::vector<std::shared_ptr<Peer>> peers;
+  std::vector<std::shared_ptr<Irohad>> peers;
   std::vector<std::thread> threads;
 };
 

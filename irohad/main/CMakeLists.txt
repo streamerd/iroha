@@ -37,19 +37,9 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 #    torii
 #    )
 
-
-add_executable(irohad
-        iroha-main.cpp
-        )
-
-target_link_libraries(irohad
-        uvw
-        spdlog
-        )
-
 add_library(peer
-        peer.cpp
-        peer.hpp
+        irohad.cpp
+        irohad.hpp
         )
 
 target_link_libraries(peer
@@ -60,3 +50,18 @@ target_link_libraries(peer
         peer_state
         ordering_service
         )
+
+
+add_executable(irohad
+        iroha-main.cpp
+        )
+
+target_link_libraries(irohad
+        uvw
+        spdlog
+        peer
+        crypto
+        logger
+        consensus_service
+        )
+

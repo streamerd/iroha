@@ -17,7 +17,8 @@ limitations under the License.
 #include <uvw.hpp>
 #include <string>
 #include <logger/logger.hpp>
-#include <main/application.hpp>
+#include <main/irohad.hpp>
+#include <crypto/crypto.hpp>
 
 int main(int argc, char *argv[]) {
   auto loop = uvw::Loop::getDefault();
@@ -43,7 +44,21 @@ int main(int argc, char *argv[]) {
   log.info(R"(         = 分散台帳Application いろは =         )");
   log.info(R"( ---------o=========================o---------)");
 
-  auto irohad = Irohad();
+  auto peer_service =
+    std::make_shared<iroha::PeerService>();
+  auto keypair = iroha::create_keypair(iroha::create_seed());
+
+/* ToDo configable(like sumeragi.json) , or use option
+  for (auto j = 0u; j < NPEERS; j++) {
+    auto pk = keypairs[j].pubkey;
+    std::shared_ptr<NetworkNode> nn =
+      std::make_shared<NetworkNode>(host, port, pk);
+
+    peer_service->peers.push_back(std::move(nn));
+  }
+*/
+
+  iroha::Irohad irohad(keypair,"0.0.0.0",16826,peer_service);
   irohad.run();
   return 0;
 }

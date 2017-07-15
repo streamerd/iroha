@@ -19,7 +19,9 @@
 #define IROHA_CONTEXT_HPP_HPP
 
 struct Context{
-
+    std::shared_ptr<PeerService>  peerService;
+    std::string                   ametsuchiDbPath;
+    ed25519::keypair_t            keypair;
 };
 
 #endif //IROHA_CONTEXT_HPP_HPP
