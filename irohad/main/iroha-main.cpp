@@ -25,12 +25,11 @@ int main(int argc, char *argv[]) {
 
   loop->run();
 
-
   logger::setGlobalLogLevel(logger::level::debug);
   auto log = logger::Logger("main");
   log.debug("  print debug level log!");
   log.info("   print info level log!");
-  log.warning("print waring level log!");
+  log.warning("print warning level log!");
   log.error("  print error level log!");
 
   log.info(R"()");
@@ -48,7 +47,7 @@ int main(int argc, char *argv[]) {
     std::make_shared<iroha::PeerService>();
   auto keypair = iroha::create_keypair(iroha::create_seed());
 
-/* ToDo configable(like sumeragi.json) , or use option
+/* ToDo configurable(like sumeragi.json) , or use option
   for (auto j = 0u; j < NPEERS; j++) {
     auto pk = keypairs[j].pubkey;
     std::shared_ptr<NetworkNode> nn =
