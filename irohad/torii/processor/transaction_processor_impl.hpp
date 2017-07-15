@@ -18,11 +18,10 @@
 #ifndef IROHA_TRANSACTION_PROCESSOR_STUB_HPP
 #define IROHA_TRANSACTION_PROCESSOR_STUB_HPP
 
-#include <network/network_api.h>
 #include <model/model_crypto_provider.hpp>
 #include <torii/processor/transaction_processor.hpp>
 #include <validation/stateless/validator.hpp>
-#include <ordering/ordering_service.hpp>
+#include <ordering/OrderingService.hpp>
 
 namespace iroha {
   namespace torii {
@@ -35,27 +34,20 @@ namespace iroha {
        * @param validator - perform stateless validation
        * @param crypto_provider - sign income transactions
        */
-      TransactionProcessorImpl(network::PeerCommunicationService &pcs,
-                               ordering::OrderingService &os,
+      TransactionProcessorImpl(ordering::OrderingService &os,
                                const validation::StatelessValidator &validator);
 
-      void transaction_handle(model::Client client,
+      void handle(model::Client& client,
                               model::Transaction &transaction) override;
 
-      rxcpp::observable<std::shared_ptr<model::TransactionResponse>>
-      transaction_notifier() override;
 
      private:
       // connections
-      network::PeerCommunicationService &pcs_;
       ordering::OrderingService &os_;
 
       // processing
       const validation::StatelessValidator &validator_;
 
-      // internal
-      rxcpp::subjects::subject<std::shared_ptr<model::TransactionResponse>>
-          notifier_;
     };
   }  // namespace torii
 }  // namespace iroha

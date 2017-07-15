@@ -24,19 +24,17 @@ namespace iroha {
     using validation::StatelessValidator;
     using model::TransactionResponse;
     using model::ModelCryptoProvider;
-    using network::PeerCommunicationService;
     using ordering::OrderingService;
 
     TransactionProcessorImpl::TransactionProcessorImpl(
-        PeerCommunicationService &pcs,
         OrderingService &os,
         const StatelessValidator &validator)
-        : pcs_(pcs),
-          os_(os),
-          validator_(validator) {
+        : os_(os),
+          validator_(validator),
+          torii::TransactionProcessor(validator){
     }
 
-    void TransactionProcessorImpl::transaction_handle(model::Client client,
+    void TransactionProcessorImpl::handle(model::Client &client,
                                                       model::Transaction &transaction) {
       model::StatelessResponse response;
       response.client = client;
@@ -45,17 +43,10 @@ namespace iroha {
 
       if (validator_.validate(transaction)) {
         response.passed = true;
-        os_.propagate_transaction(transaction);
+        // ToDo in now, model::transaction -> iroha::transaction
+        //os_.append(transaction);
       }
 
-      notifier_.get_subscriber().on_next(
-          std::make_shared<model::StatelessResponse>(response));
     }
-
-    rxcpp::observable<std::shared_ptr<model::TransactionResponse>>
-    TransactionProcessorImpl::transaction_notifier() {
-      return notifier_.get_observable();
-    }
-
   }  // namespace torii
 }  // namespace iroha

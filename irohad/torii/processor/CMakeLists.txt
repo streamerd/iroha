@@ -4,6 +4,8 @@ add_library(processors
     )
 
 target_link_libraries(processors PUBLIC
+    logger
     model
     rxcpp
+    uvw
     )

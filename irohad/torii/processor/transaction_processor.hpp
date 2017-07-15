@@ -30,26 +30,18 @@ namespace iroha {
      * Transaction handler is interface with start point
      * for processing transaction in the system
      */
-    class TransactionHandler {
+    class TransactionProcessor {
         const validation::StatelessValidator &validator_;
-        model::ModelCryptoProvider &crptoProvider_;
      public:
 
-        TransactionHandler(const validation::StatelessValidator &validator,
-                                             model::ModelCryptoProvider &provider);
+        TransactionProcessor(const validation::StatelessValidator &validator);
 
       /**
        * Add transaction to the system for processing
        * @param transaction - transaction for processing
        */
-      void handle(model::Transaction &transaction);
+      virtual void handle(model::Client& client,model::Transaction &transaction);
 
-      /**
-       * Subscribers will be notified with transaction status
-       * @return observable for subscribing
-       */
-      virtual rxcpp::observable<std::shared_ptr<model::TransactionResponse>>
-      transaction_notifier() = 0;
 
     };
   }  // namespace torii
