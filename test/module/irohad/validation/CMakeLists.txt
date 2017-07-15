@@ -7,4 +7,6 @@ target_link_libraries(stateless_transaction_validator_test
         stateless_validator
         hash
         crypto
+        schema
+        model
         )
