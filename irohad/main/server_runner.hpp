@@ -28,7 +28,7 @@ public:
   ~ServerRunner();
   void run();
   void shutdown();
-  bool waitForServersReady();
+  void waitForServersReady();
 
 private:
   std::unique_ptr<grpc::Server> serverInstance_;
