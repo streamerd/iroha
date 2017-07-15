@@ -35,9 +35,11 @@ namespace iroha {
     }
 
     TemporaryWsvImpl::TemporaryWsvImpl(
+        std::unique_ptr<pqxx::lazyconnection> connection,
         std::unique_ptr<pqxx::nontransaction> transaction,
         std::unique_ptr<WsvQuery> wsv, std::unique_ptr<WsvCommand> executor)
-        : transaction_(std::move(transaction)),
+        : connection_(std::move(connection)),
+          transaction_(std::move(transaction)),
           wsv_(std::move(wsv)),
           executor_(std::move(executor)) {
       transaction_->exec("BEGIN;");
@@ -45,7 +47,8 @@ namespace iroha {
 
     TemporaryWsvImpl::~TemporaryWsvImpl() { transaction_->exec("ROLLBACK;"); }
 
-    nonstd::optional<model::Account> TemporaryWsvImpl::getAccount(const std::string &account_id) {
+    nonstd::optional<model::Account> TemporaryWsvImpl::getAccount(
+        const std::string &account_id) {
       return wsv_->getAccount(account_id);
     }
 
@@ -54,7 +57,8 @@ namespace iroha {
       return wsv_->getSignatories(account_id);
     }
 
-    nonstd::optional<model::Asset> TemporaryWsvImpl::getAsset(const std::string &asset_id) {
+    nonstd::optional<model::Asset> TemporaryWsvImpl::getAsset(
+        const std::string &asset_id) {
       return wsv_->getAsset(asset_id);
     }
 
@@ -63,8 +67,8 @@ namespace iroha {
       return wsv_->getAccountAsset(account_id, asset_id);
     }
 
-    nonstd::optional<model::Peer> TemporaryWsvImpl::getPeer(const std::string &address) {
-      return wsv_->getPeer(address);
+    std::vector<model::Peer> TemporaryWsvImpl::getPeers() {
+      return wsv_->getPeers();
     }
 
   }  // namespace ametsuchi

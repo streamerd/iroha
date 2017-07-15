@@ -16,9 +16,11 @@
  */
 
 #include <gtest/gtest.h>
-#include <ametsuchi/storage.hpp>
+#include <ametsuchi/impl/storage_impl.hpp>
 #include <common/types.hpp>
 #include <cpp_redis/cpp_redis>
+#include <model/commands/create_account.hpp>
+#include <model/commands/create_domain.hpp>
 #include <pqxx/pqxx>
 
 namespace iroha {
@@ -31,21 +33,16 @@ namespace iroha {
       }
       virtual void TearDown() {
         const auto drop =
-            "DROP TABLE IF EXISTS domain_has_account;\n"
             "DROP TABLE IF EXISTS account_has_asset;\n"
-            "DROP TABLE IF EXISTS account_has_wallet;\n"
-            "DROP TABLE IF EXISTS wallet;\n"
+            "DROP TABLE IF EXISTS account_has_signatory;\n"
+            "DROP TABLE IF EXISTS peer;\n"
+            "DROP TABLE IF EXISTS account;\n"
             "DROP TABLE IF EXISTS exchange;\n"
             "DROP TABLE IF EXISTS asset;\n"
             "DROP TABLE IF EXISTS domain;\n"
-            "DROP TABLE IF EXISTS peer;\n"
-            "DROP TABLE IF EXISTS signatory;\n"
-            "DROP TABLE IF EXISTS account;\n"
-            "DROP SEQUENCE IF EXISTS peer_peer_id_seq;";
+            "DROP TABLE IF EXISTS signatory;";
 
-        pqxx::connection connection("host=" + pghost_ + " port=" +
-                                    std::to_string(pgport_) + " user=" + user_ +
-                                    " password=" + password_);
+        pqxx::connection connection(pgopt_);
         pqxx::work txn(connection);
         txn.exec(drop);
         txn.commit();
@@ -57,13 +54,11 @@ namespace iroha {
         client.sync_commit();
         client.disconnect();
 
-        remove_all(block_store_path);
+        //        remove_all(block_store_path);
       }
 
-      std::string pghost_ = "localhost";
-      size_t pgport_ = 5432;
-      std::string user_ = "postgres";
-      std::string password_ = "";
+      std::string pgopt_ =
+          "host=localhost port=5432 user=postgres password=mysecretpassword";
 
       std::string redishost_ = "localhost";
       size_t redisport_ = 6379;
@@ -72,11 +67,31 @@ namespace iroha {
     };
 
     TEST_F(AmetsuchiTest, SampleTest) {
-      auto ametsuchi_ = Storage::create();
-      auto blob = std::vector<uint8_t>{0, 1, 2};
-      ametsuchi_->insert_block(1, blob);
-      auto block = ametsuchi_->get_block(1);
-      ASSERT_EQ(block, blob);
+      auto storage =
+          StorageImpl::create(block_store_path, redishost_, redisport_, pgopt_);
+      ASSERT_TRUE(storage);
+      auto wsv = storage->createTemporaryWsv();
+      model::Transaction txn;
+      model::CreateDomain createDomain;
+      createDomain.domain_name = "ru";
+      model::CreateAccount createAccount;
+      createAccount.account_name = "username";
+      createAccount.domain_id = "ru";
+      txn.commands.push_back(
+          std::make_shared<model::CreateDomain>(createDomain));
+      txn.commands.push_back(
+          std::make_shared<model::CreateAccount>(createAccount));
+      wsv->apply(txn, [](auto &tx, auto &executor, auto &query) {
+        EXPECT_TRUE(tx.commands.at(0)->execute(query, executor));
+        EXPECT_TRUE(tx.commands.at(1)->execute(query, executor));
+        return true;
+      });
+      auto account = wsv->getAccount("username@ru");
+      ASSERT_TRUE(account);
+      ASSERT_EQ(account->account_id, "username@ru");
+      ASSERT_EQ(account->domain_name, "ru");
+      ASSERT_EQ(account->master_key, createAccount.pubkey);
+      ASSERT_TRUE(wsv);
     }
 
   }  // namespace ametsuchi

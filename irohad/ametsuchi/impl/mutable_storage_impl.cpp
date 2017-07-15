@@ -26,16 +26,25 @@ namespace iroha {
                            const model::Block &)>
             function) {
       // TODO replace last arg with previous block
-      return function(block, *executor_, *this, {});
+      transaction_->exec("SAVEPOINT savepoint_;");
+      auto result = function(block, *executor_, *this, {});
+      if (result) {
+        transaction_->exec("RELEASE SAVEPOINT savepoint_;");
+      } else {
+        transaction_->exec("ROLLBACK TO SAVEPOINT savepoint_;");
+      }
+      return result;
     }
 
     MutableStorageImpl::MutableStorageImpl(
         std::unique_ptr<FlatFile> &block_store,
         std::unique_ptr<cpp_redis::redis_client> index,
+        std::unique_ptr<pqxx::lazyconnection> connection,
         std::unique_ptr<pqxx::nontransaction> transaction,
         std::unique_ptr<WsvQuery> wsv, std::unique_ptr<WsvCommand> executor)
         : block_store_(block_store),
           index_(std::move(index)),
+          connection_(std::move(connection)),
           transaction_(std::move(transaction)),
           wsv_(std::move(wsv)),
           executor_(std::move(executor)),
@@ -61,7 +70,8 @@ namespace iroha {
       return wsv_->getSignatories(account_id);
     }
 
-    nonstd::optional<model::Asset> MutableStorageImpl::getAsset(const std::string &asset_id) {
+    nonstd::optional<model::Asset> MutableStorageImpl::getAsset(
+        const std::string &asset_id) {
       return wsv_->getAsset(asset_id);
     }
 
@@ -70,8 +80,8 @@ namespace iroha {
       return wsv_->getAccountAsset(account_id, asset_id);
     }
 
-    nonstd::optional<model::Peer> MutableStorageImpl::getPeer(const std::string &address) {
-      return wsv_->getPeer(address);
+    std::vector<model::Peer> MutableStorageImpl::getPeers() {
+      return wsv_->getPeers();
     }
   }  // namespace ametsuchi
 }  // namespace iroha

@@ -20,49 +20,159 @@
 namespace iroha {
   namespace ametsuchi {
 
-    PostgresWsvQuery::PostgresWsvQuery(
-        std::unique_ptr<pqxx::nontransaction> &transaction)
+    using std::string;
+
+    using nonstd::optional;
+    using nonstd::nullopt;
+    using model::Account;
+    using model::Asset;
+    using model::AccountAsset;
+    using model::Peer;
+
+    PostgresWsvQuery::PostgresWsvQuery(pqxx::nontransaction &transaction)
         : transaction_(transaction) {}
 
-    nonstd::optional<model::Account> PostgresWsvQuery::getAccount(const std::string &account_id) {
-      model::Account account;
+    optional<Account> PostgresWsvQuery::getAccount(const string &account_id) {
       pqxx::result result;
       try {
-//        result = transaction_->exec();
+        result = transaction_.exec(
+            "SELECT \n"
+            "  *\n"
+            "FROM \n"
+            "  account\n"
+            "WHERE \n"
+            "  account.account_id = " +
+            transaction_.quote(account_id) + ";");
       } catch (const std::exception &e) {
         // TODO log
-        return account;
+        return nullopt;
       }
-      if (result.size() != 1){
-        return account;
+      if (result.size() != 1) {
+        return nullopt;
       }
-
+      Account account;
+      auto row = result.at(0);
+      row.at("account_id") >> account.account_id;
+      row.at("domain_id") >> account.domain_name;
+      pqxx::binarystring master_key(row.at("master_key"));
+      std::copy(master_key.begin(), master_key.end(),
+                account.master_key.begin());
+      row.at("quorum") >> account.quorum;
+      //      row.at("status") >> ?
+      //      row.at("transaction_count") >> ?
+      std::string permissions;
+      row.at("permissions") >> permissions;
+      account.permissions.add_signatory = permissions.at(0) - '0';
+      account.permissions.can_transfer = permissions.at(1) - '0';
+      account.permissions.create_accounts = permissions.at(2) - '0';
+      account.permissions.create_assets = permissions.at(3) - '0';
+      account.permissions.create_domains = permissions.at(4) - '0';
+      account.permissions.issue_assets = permissions.at(5) - '0';
+      account.permissions.read_all_accounts = permissions.at(6) - '0';
+      account.permissions.remove_signatory = permissions.at(7) - '0';
+      account.permissions.set_permissions = permissions.at(8) - '0';
+      account.permissions.set_quorum = permissions.at(9) - '0';
       return account;
     }
 
     std::vector<ed25519::pubkey_t> PostgresWsvQuery::getSignatories(
-        const std::string &account_id) {
-      std::vector<ed25519::pubkey_t> result;
-      return result;
+        const string &account_id) {
+      pqxx::result result;
+      try {
+        result = transaction_.exec(
+            "SELECT \n"
+            "  account_has_signatory.public_key\n"
+            "FROM \n"
+            "  account_has_signatory\n"
+            "WHERE \n"
+            "  account_has_signatory.account_id = " +
+            transaction_.quote(account_id) + ";");
+      } catch (const std::exception &e) {
+        // TODO log
+        return {};
+      }
+      std::vector<ed25519::pubkey_t> signatories;
+      for (const auto &row : result) {
+        pqxx::binarystring public_key_str(row.at("public_key"));
+        ed25519::pubkey_t pubkey;
+        std::copy(public_key_str.begin(), public_key_str.end(), pubkey.begin());
+        signatories.push_back(pubkey);
+      }
+      return signatories;
     }
 
-    nonstd::optional<model::Asset> PostgresWsvQuery::getAsset(const std::string &asset_id) {
-      model::Asset result;
-      result.name = "";
-      return result;
+    optional<Asset> PostgresWsvQuery::getAsset(const string &asset_id) {
+      pqxx::result result;
+      try {
+        result = transaction_.exec(
+            "SELECT \n"
+            "  * \n"
+            "FROM \n"
+            "  asset\n"
+            "WHERE \n"
+            "  asset.asset_id = " +
+            transaction_.quote(asset_id) + ";");
+      } catch (const std::exception &e) {
+        // TODO log
+        return nullopt;
+      }
+      if (result.size() != 1) {
+        return nullopt;
+      }
+      Asset asset;
+      auto row = result.at(0);
+      row.at("asset_id") >> asset.asset_id;
+      row.at("domain_id") >> asset.domain_id;
+      int32_t precision;
+      row.at("precision") >> precision;
+      asset.precision = precision;
+      //      row.at("data") >> ?
+      return asset;
     }
 
-    nonstd::optional<model::AccountAsset> PostgresWsvQuery::getAccountAsset(
+    optional<AccountAsset> PostgresWsvQuery::getAccountAsset(
         const std::string &account_id, const std::string &asset_id) {
-      model::AccountAsset result;
-      result.account_id = "";
-      return result;
+      pqxx::result result;
+      try {
+        result = transaction_.exec(
+            "SELECT \n"
+            "  * \n"
+            "FROM \n"
+            "  account_has_asset\n"
+            "WHERE \n"
+            "  account_has_asset.account_id = " +
+            transaction_.quote(account_id) +
+            " AND \n"
+            "  account_has_asset.asset_id = " +
+            transaction_.quote(asset_id) + ";");
+      } catch (const std::exception &e) {
+        return nullopt;
+      }
+      if (result.size() != 1) {
+        return nullopt;
+      }
+      model::AccountAsset asset;
+      auto row = result.at(0);
+      row.at("account_id") >> asset.account_id;
+      row.at("asset_id") >> asset.asset_id;
+      row.at("amount") >> asset.balance;
+      //      row.at("permissions") >> ?
+      return asset;
     }
 
-    nonstd::optional<model::Peer> PostgresWsvQuery::getPeer(const std::string &address) {
-      model::Peer result;
-      result.address = "";
-      return result;
+    std::vector<Peer> PostgresWsvQuery::getPeers() {
+      pqxx::result result;
+      try {
+        transaction_.exec(
+            "SELECT \n"
+            "  * \n"
+            "FROM \n"
+            "  peer;");
+      } catch (const std::exception &e) {
+        return {};
+      }
+      std::vector<Peer> peers;
+      return peers;
     }
   }  // namespace ametsuchi
 }  // namespace iroha

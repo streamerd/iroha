@@ -18,24 +18,26 @@
 #ifndef IROHA_POSTGRES_WSV_QUERY_HPP
 #define IROHA_POSTGRES_WSV_QUERY_HPP
 
-#include "ametsuchi/wsv_query.hpp"
 #include <pqxx/nontransaction>
+#include "ametsuchi/wsv_query.hpp"
 
 namespace iroha {
   namespace ametsuchi {
     class PostgresWsvQuery : public WsvQuery {
      public:
-      PostgresWsvQuery(std::unique_ptr<pqxx::nontransaction> &transaction);
-      nonstd::optional<model::Account> getAccount(const std::string &account_id) override;
+      PostgresWsvQuery(pqxx::nontransaction &transaction);
+      nonstd::optional<model::Account> getAccount(
+          const std::string &account_id) override;
       std::vector<ed25519::pubkey_t> getSignatories(
           const std::string &account_id) override;
-      nonstd::optional<model::Asset> getAsset(const std::string &asset_id) override;
-      nonstd::optional<model::AccountAsset> getAccountAsset(const std::string &account_id,
-                                          const std::string &asset_id) override;
-      nonstd::optional<model::Peer> getPeer(const std::string &address) override;
+      nonstd::optional<model::Asset> getAsset(
+          const std::string &asset_id) override;
+      nonstd::optional<model::AccountAsset> getAccountAsset(
+          const std::string &account_id, const std::string &asset_id) override;
+      std::vector<model::Peer> getPeers() override;
 
      private:
-      std::unique_ptr<pqxx::nontransaction> &transaction_;
+      pqxx::nontransaction &transaction_;
     };
   }  // namespace ametsuchi
 }  // namespace iroha

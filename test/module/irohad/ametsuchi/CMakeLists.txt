@@ -2,14 +2,11 @@ set(CMAKE_BUILD_TYPE Debug)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/test_bin)
 
-addtest(
-        block_serializer_test block_serializer_test.cpp
-)
+addtest(block_serializer_test block_serializer_test.cpp)
 target_link_libraries(block_serializer_test
-        gtest
-        model
-        ametsuchi
-        )
+    model
+    ametsuchi
+    )
 #addtest(command_executor_test command_executor_test.cpp)
 #target_link_libraries(command_executor_test
 #    ametsuchi
@@ -38,7 +35,8 @@ target_link_libraries(block_serializer_test
 #        wsv
 #    )
 #
-#addtest(ametsuchi_test ametsuchi_test.cpp)
-#target_link_libraries(ametsuchi_test
-#    storage
-#    )
+addtest(ametsuchi_test ametsuchi_test.cpp)
+target_link_libraries(ametsuchi_test
+    ametsuchi
+    model
+    )
