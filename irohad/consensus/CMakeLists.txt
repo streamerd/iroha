@@ -19,10 +19,11 @@ add_subdirectory(state)
 add_library(consensus_service
         consensus_service.cpp
         consensus_service.hpp
+        consensus_service.cpp
+        consensus_service.hpp
         )
 target_link_libraries(consensus_service
         consensus_grpc
-        uvw
 )
 
 

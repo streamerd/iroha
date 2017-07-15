@@ -23,27 +23,16 @@ namespace iroha {
 
   Role Member::self() { return Role::MEMBER; }
 
-  void Member::on_commit(iroha::Commit *commit) {
+  void Member::on_commit(const Commit *commit) {
     console->info("Commit handled");
   }
 
-  void Member::on_vote(Vote *vote) { console->info("Vote handled"); }
+  void Member::on_vote(const Vote *vote) { console->info("Vote handled"); }
 
-  void Member::on_abort(Abort *abort) { console->info("Abort handled"); }
+  void Member::on_abort(const Abort *abort) { console->info("Abort handled"); }
 
-  void Member::on_proposal(Proposal *proposal) {
+  void Member::on_proposal(const Proposal *proposal) {
     console->info("Proposal handled");
   }
 
-  std::string Member::ledgerToString() {
-    std::string s = "[\n";
-    auto size = ledger.size();
-    for (auto i = 0u; i < size; i++) {
-      s += "  ";
-      s += ledger[i];
-      if (i != size - 1) s += ",\n";
-    }
-    s += "\n]\n";
-    return s;
-  }
 }

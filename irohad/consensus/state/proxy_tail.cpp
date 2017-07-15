@@ -21,7 +21,7 @@ static auto console = spdlog::stdout_color_st("proxy tail");
 
 namespace iroha {
 
-  void ProxyTail::on_vote(Vote *vote) {
+  void ProxyTail::on_vote(const Vote *vote) {
     console->info("Vote handled");
   }
 

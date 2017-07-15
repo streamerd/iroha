@@ -32,13 +32,8 @@ TEST(GRPC, ConsensusStubsConnection) {
   std::thread([&proposal_received]() {
     iroha::ConsensusService stub;
 
-    stub.once<const iroha::consensus::Proposal*>([&proposal_received](auto &p, auto &s) {
-      printf("recv\n");
-      proposal_received = true;
-    });
-
     grpc::ServerBuilder builder;
-    builder.AddListeningPort("0.0.0.0:65530", grpc::InsecureServerCredentials());
+    builder.AddListeningPort("127.0.0.1:65530", grpc::InsecureServerCredentials());
     builder.RegisterService(&stub);
     auto server(builder.BuildAndStart());
 
@@ -47,7 +42,7 @@ TEST(GRPC, ConsensusStubsConnection) {
 
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
-  iroha::ConsensusClient client("0.0.0.0", 65530);
+  iroha::ConsensusClient client("127.0.0.1", 65530);
 
   iroha::Proposal proposal;
   client.SendProposal(&proposal);

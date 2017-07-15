@@ -7,11 +7,6 @@ message Signature {
     bytes signature = 2;
 }
 
-// for tests
-message Transaction {
-    bytes test = 1;
-}
-
 
 ///////////////////////////////////////////
 /// ALGORITHM
@@ -32,6 +27,7 @@ message Vote {
     bytes next_gmroot = 1;
     int64 next_height = 2;
     Signature sig = 3;
+    int64 timestamp = 4;
 }
 
 // phase 3
@@ -44,17 +40,6 @@ message Commit {
 }
 
 
-message Ack {
-    enum Type {
-        UNDEFINED = 0;
-        PROPOSAL_RECEIVED = 1;
-        VOTE_RECEIVED = 2;
-        COMMIT_RECEIVED = 3;
-        ABORT_RECEIVED = 4;
-    }
-
-    Type type = 1;
-}
 
 
 message Abort {
@@ -67,11 +52,34 @@ message Abort {
     Type type = 1;
 }
 
+message Ack {
+    enum Type {
+        UNDEFINED = 0; // default value is 0, so we protect ourself from mistakes
+        ACK = 1; // acknowledgement for any msg
+        ERROR = 2; // error (any reason)
+    }
+}
+
+message Null {}
+
+// peer service specific message:
+message Heartbeat {
+    bytes gmroot = 1; // highest known global merkle root
+    int64 height = 2; // highest known ledger height
+}
+
 ///////////////////////////////////////////
 
 service Sumeragi {
-    rpc SendProposal(Proposal) returns (Ack) {}
-    rpc SendVote(Vote) returns (Ack) {}
-    rpc SendCommit(Commit) returns (Ack) {}
-    rpc SendAbort(Abort) returns (Ack) {}
+    rpc OnProposal(Proposal) returns (Null) {}
+    rpc OnVote(Vote) returns (Null) {}
+    rpc OnCommit(Commit) returns (Null) {}
+    rpc OnAbort(Abort) returns (Null) {}
+}
+
+service PeerService {
+    // any peer is able to request heartbeat from any other peer
+    // it should send its own state: <merkle_root, height>
+    // answer is peer's <merkle_root, height>
+    rpc RequestHeartbeat (Heartbeat) returns (Heartbeat) {}
 }

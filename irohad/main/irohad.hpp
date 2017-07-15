@@ -30,7 +30,6 @@
 #include <uvw.hpp>
 #include "consensus/consensus_service.hpp"
 
-// Note (@warchant) LOOK AT test_network in test/scenario
 
 namespace iroha {
 

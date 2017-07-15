@@ -18,36 +18,35 @@
 #include "consensus_service.hpp"
 
 namespace iroha {
-
-  Status ConsensusService::SendProposal(ServerContext *context,
-                                                      const Proposal *request,
-                                                      Ack *reply) {
-    publish(request);
-    reply->set_type(Ack::PROPOSAL_RECEIVED);
+  Status ConsensusService::OnProposal(ServerContext *context,
+                                      const Proposal *request, Null *reply) {
+    // TODO: verify request data
+    // consensus_->on_proposal(request);
     return Status::OK;
   }
 
-  Status ConsensusService::SendVote(ServerContext *context,
-                                                  const Vote *request,
-                                                  Ack *reply) {
-    publish(request);
-    reply->set_type(Ack::VOTE_RECEIVED);
+  Status ConsensusService::OnVote(ServerContext *context, const Vote *request,
+                                  Null *reply) {
+    // TODO: verify request data
+    // consensus_->on_vote(request);
     return Status::OK;
   }
 
-  Status ConsensusService::SendCommit(ServerContext *context,
-                                                    const Commit *request,
-                                                    Ack *reply) {
-    publish(request);
-    reply->set_type(Ack::COMMIT_RECEIVED);
+  Status ConsensusService::OnCommit(ServerContext *context,
+                                    const Commit *request, Null *reply) {
+    // TODO: verify request data
+    // consensus_->on_commit(request);
     return Status::OK;
   }
 
-  Status ConsensusService::SendAbort(ServerContext *context,
-                                                   const Abort *request,
-                                                   Ack *reply) {
-    publish(request);
-    reply->set_type(Ack::ABORT_RECEIVED);
+  Status ConsensusService::OnAbort(ServerContext *context, const Abort *request,
+                                   Null *reply) {
+    // TODO: verify request data
+    // consensus_->on_abort(request);
     return Status::OK;
+  }
+
+  ConsensusService::ConsensusService() {
+    // TODO  initialize consensus object. Should it be initialized from peer service?
   }
 }

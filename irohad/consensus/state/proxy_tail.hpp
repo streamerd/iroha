@@ -24,16 +24,7 @@ namespace iroha {
   class ProxyTail final : public Validator {
    public:
     Role self() override;
-    virtual void on_vote(Vote *vote) override;
-
-   private:
-    // maps voter's pubkey -> Vote
-    // we need a component VoteCounter or Teller (literal translation - the one
-    // who counts votes)
-    // this component will store votes of validators for one round
-    // this component should add vote for O(1), get winner for O(1)
-    // simple std::map is O(n) solution
-    std::map<ed25519::pubkey_t, Vote *> votes;
+    virtual void on_vote(const Vote *vote) override;
   };
 }
 

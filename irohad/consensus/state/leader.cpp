@@ -21,27 +21,12 @@
 static auto console = spdlog::stdout_color_mt("leader");
 
 namespace iroha {
-  void Leader::on_proposal(Proposal *proposal) {
+  void Leader::on_proposal(const Proposal *proposal) {
     console->info("Proposal handled");
 
     switch (state_) {
       case State::IDLE: {
-        // multicast proposal to first 2f+1 peers
-        for (auto &peer : peerService->peers) {
-          // no need in thread creation, std::async uses system-wide threads
-          auto future =
-              std::async(std::launch::async, [ &peer, &proposal]() {
-
-                auto ack = peer->SendProposal(proposal);
-                if (ack.type() == ack.PROPOSAL_RECEIVED) {
-                  ::console->info("{} acknowledged", peer->pubkey.to_hexstring());
-                } else {
-                  // TODO: view change
-                  ::console->info("{} did not respond, view change",
-                                peer->pubkey.to_hexstring());
-                }
-              });
-        }
+        // multicast a proposal
 
         this->state_ = State::SENT_PROPOSAL;
 
@@ -61,7 +46,7 @@ namespace iroha {
 
   Role Leader::self() { return Role::LEADER; }
 
-  void Leader::on_commit(Commit *commit) {
+  void Leader::on_commit(const Commit *commit) {
     console->info("Commit handled");
 
     {
@@ -75,3 +60,4 @@ namespace iroha {
 
   Leader::Leader() { this->state_ = State::IDLE; }
 }
+

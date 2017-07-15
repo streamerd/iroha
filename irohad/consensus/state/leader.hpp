@@ -22,24 +22,15 @@
 
 namespace iroha {
 
-  class Leader final: public Validator {
+  class Leader final : public Validator {
    public:
     Leader();
 
     Role self() override;
 
-    void on_proposal(Proposal* proposal) override;
-    void on_commit(Commit* commit) override;
-
-   private:
-    enum class State : uint8_t {
-      UNDEFINED = 0,
-      IDLE = 1,
-      SENT_PROPOSAL = 2
-    };
-
-    State state_;
+    void on_proposal(const Proposal* proposal) override;
+    void on_commit(const Commit* commit) override;
   };
 }
 
-#endif //IROHA_LEADER_HPP
+#endif  // IROHA_LEADER_HPP

@@ -21,28 +21,11 @@
 #include "member.hpp"
 
 namespace iroha {
-
-
-
-
-  class Validator : public Member{
+  class Validator : public Member {
    public:
-
     Validator();
-
     virtual Role self() override;
-
-    virtual void on_proposal(Proposal* proposal) override;
-
-   private:
-    enum class State : uint8_t {
-      UNDEFINED = 0,
-      IDLE = 1, // waiting for a proposal
-      VOTED = 2 // waiting for a commit
-    };
-
-    State state;
-
+    virtual void on_proposal(const Proposal* proposal) override;
   };
 }
 

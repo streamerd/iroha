@@ -18,11 +18,8 @@
 #ifndef IROHA_FOLLOWER_HPP
 #define IROHA_FOLLOWER_HPP
 
-#include <spdlog/spdlog.h>
 #include <common/types.hpp>
 #include <consensus/messages.hpp>
-#include <peer_service/PeerService.hpp>
-#include <grpc++/grpc++.h>
 
 namespace iroha {
 
@@ -37,22 +34,10 @@ namespace iroha {
   class Member {
    public:
     virtual Role self();
-    virtual void on_proposal(Proposal *proposal);
-    virtual void on_commit(Commit *commit);
-    virtual void on_vote(Vote *vote);
-    virtual void on_abort(Abort *abort);
-
-    ed25519::keypair_t keypair;
-    std::shared_ptr<PeerService> peerService;
-
-    /**
-     * imitation of ledger, for debug
-     */
-    uint64_t height;
-    std::vector<std::string> ledger;
-
-    // for debug
-    std::string ledgerToString();
+    virtual void on_proposal(const Proposal *proposal);
+    virtual void on_commit(const Commit *commit);
+    virtual void on_vote(const Vote *vote);
+    virtual void on_abort(const Abort *abort);
   };
 }
 #endif  // IROHA_FOLLOWER_HPP

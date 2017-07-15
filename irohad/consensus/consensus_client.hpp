@@ -20,6 +20,7 @@
 
 #include <consensus.grpc.pb.h>
 #include <consensus.pb.h>
+#include <logger/logger.hpp>
 #include "messages.hpp"
 
 namespace iroha {
@@ -32,13 +33,14 @@ namespace iroha {
    public:
     ConsensusClient(std::string ip, uint16_t port);
 
-    Ack SendProposal(Proposal* proposal);
-    Ack SendVote(Vote* vote);
-    Ack SendCommit(Commit* commit);
-    Ack SendAbort(Abort* abort);
+    void SendProposal(Proposal* proposal);
+    void SendVote(Vote* vote);
+    void SendCommit(Commit* commit);
+    void SendAbort(Abort* abort);
 
    private:
 
+    logger::Logger log;
     std::unique_ptr<Sumeragi::Stub> stub_;
   };
 }

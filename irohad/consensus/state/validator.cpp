@@ -21,7 +21,7 @@ static auto console = spdlog::stdout_color_st("validator");
 
 namespace iroha {
 
-  void Validator::on_proposal(Proposal *proposal) {
+  void Validator::on_proposal(const Proposal *proposal) {
     // TODO
 
     // I don't like if-else/switch statements for states, can we do something
@@ -30,37 +30,7 @@ namespace iroha {
     // or we may use simply boost::sml
     switch (state) {
       case State::IDLE: {
-        // proposal handling logic
-        console->info("Proposal handled");
 
-        // dummy stateful validation
-        Vote vote;
-        {
-          vote.set_next_height(height + 1);
-          vote.set_next_gmroot(std::string(hash256_t::size(), 'a'));
-
-          Signature sig;
-          std::string pub = this->keypair.pubkey.to_string();
-          sig.set_signature(std::string(ed25519::sig_t::size(), 's'));
-
-          vote.set_allocated_sig(&sig);
-
-          // we spend 500 +- 100 ms to validate
-          std::this_thread::sleep_for(
-              std::chrono::milliseconds(400 + rand() % 200));
-        }
-
-        auto ack = this->peerService->proxy_tail()->SendVote(&vote);
-        if (ack.type() == ack.VOTE_RECEIVED) {
-          console->info("Sent my vote");
-          state = State::VOTED;
-        } else {
-          // TODO
-          console->error(
-              "I sent my vote, but proxy tail did not respond with "
-              "ACK.VOTE_RECEIVED");
-        }
-        break;
       }
       case State::VOTED: {
         console->info("I already voted");

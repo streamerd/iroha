@@ -23,10 +23,7 @@ namespace iroha {
     state_->peerService->run();
 
     // temp solution
-    grpc::ServerBuilder builder;
-    builder.AddListeningPort(listen_on, grpc::InsecureServerCredentials());
-    builder.RegisterService(&server_);
-    auto server(builder.BuildAndStart());
+
     // end
 
     console_->info("Current order: {}", state_->peerService->orderToString());

@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_CONSENSUS_GRPC_HPP
-#define IROHA_CONSENSUS_GRPC_HPP
+#ifndef IROHA_CONSENSUS_SERVICE_IMPL_HPP
+#define IROHA_CONSENSUS_SERVICE_IMPL_HPP
 
 #include <consensus.grpc.pb.h>
-#include <consensus.pb.h>
-
-#include <uvw/emitter.hpp>
 #include <consensus/messages.hpp>
 
 namespace iroha {
@@ -29,14 +26,19 @@ namespace iroha {
   using ServerContext = grpc::ServerContext;
   using Status = grpc::Status;
 
-  class ConsensusService : public consensus::Sumeragi::Service,
-                           public uvw::Emitter<ConsensusService> {
+  class ConsensusService final : public consensus::Sumeragi::Service {
    public:
-    Status SendProposal(ServerContext* context, const Proposal* request, Ack* reply) override;
-    Status SendVote(ServerContext* context, const Vote* request, Ack* reply) override;
-    Status SendCommit(ServerContext* context, const Commit* request, Ack* reply) override;
-    Status SendAbort(ServerContext* context, const Abort* request, Ack* reply) override;
+    ConsensusService();
+
+    Status OnProposal(ServerContext *context, const Proposal *request,
+                      Null *reply) override;
+    Status OnVote(ServerContext *context, const Vote *request,
+                  Null *reply) override;
+    Status OnCommit(ServerContext *context, const Commit *request,
+                    Null *reply) override;
+    Status OnAbort(ServerContext *context, const Abort *request,
+                   Null *reply) override;
   };
 }
 
-#endif  // IROHA_CONSENSUS_GRPC_HPP
+#endif  // IROHA_CONSENSUS_SERVICE_IMPL_HPP
