@@ -13,27 +13,26 @@ compile_proto_to_grpc_cpp(consensus.proto)
 #add_dependencies(endpointproto_h blockproto_h)
 
 
-#add_library(schema
-#    block.pb.cc
-#    commands.pb.cc
-#    primitive.pb.cc
-#)
-#target_link_libraries(schema
-#    protobuf
-#)
-#
-#
-#add_library(endpoint
-#    endpoint.pb.cc
-#    endpoint.grpc.pb.cc
-#)
-#target_link_libraries(endpoint
-#    protobuf
-#    grpc
-#    grpc++
-#    grpc++_reflection
-#)
-#
+add_library(schema
+    block.pb.cc
+    commands.pb.cc
+    primitive.pb.cc
+)
+target_link_libraries(schema
+    protobuf
+)
+
+add_library(endpoint
+    endpoint.pb.cc
+    endpoint.grpc.pb.cc
+)
+target_link_libraries(endpoint
+    protobuf
+    grpc
+    grpc++
+    grpc++_reflection
+)
+
 
 add_library(consensus_grpc
         consensus.grpc.pb.cc
