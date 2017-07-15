@@ -25,6 +25,7 @@ limitations under the License.
 class ServerRunner {
 public:
   ServerRunner(const std::string &ip, int port);
+  ~ServerRunner();
   void run();
   void shutdown();
   bool waitForServersReady();
