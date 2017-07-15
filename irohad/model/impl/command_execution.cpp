@@ -36,7 +36,7 @@ namespace iroha {
       auto accountAsset = queries.getAccountAsset(account_id, asset_id);
       // Such accountAsset not found
       if (!accountAsset) return false;
-      accountAsset.value().balance += amount;
+//      accountAsset.value().balance += amount;
       return commands.upsertAccountAsset(accountAsset.value());
     }
 
@@ -144,12 +144,12 @@ namespace iroha {
         dest_AccountAssert = AccountAsset();
         dest_AccountAssert.asset_id = asset_id;
         dest_AccountAssert.account_id = dest_account_id;
-        dest_AccountAssert.balance = amount;
+//        dest_AccountAssert.balance = amount;
       } else {
         // Account already has such asset
         dest_AccountAssert = dest_account_assert.value();
-        dest_AccountAssert.balance += amount;
-        src_account_assert.value().balance -= amount;
+//        dest_AccountAssert.balance += amount;
+//        src_account_assert.value().balance -= amount;
       }
 
       return commands.upsertAccountAsset(dest_AccountAssert) &&

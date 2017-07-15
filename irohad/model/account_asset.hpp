@@ -16,7 +16,6 @@ limitations under the License.
 #ifndef IROHA_ACCOUNT_ASSET_HPP
 #define IROHA_ACCOUNT_ASSET_HPP
 
-#include <decimal/decimal>
 #include <string>
 
 namespace iroha {
@@ -38,7 +37,7 @@ namespace iroha {
       /**
        * Current balance
        */
-      std::decimal::decimal64 balance;
+      uint64_t balance;
     };
   }
 }
