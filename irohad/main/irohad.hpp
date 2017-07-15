@@ -34,9 +34,9 @@
 
 namespace iroha {
 
-  class Peer {
+  class Irohad {
    public:
-    Peer(ed25519::keypair_t keypair, std::string ip, uint16_t port,
+      Irohad(ed25519::keypair_t keypair, std::string ip, uint16_t port,
          std::shared_ptr<PeerService> ps, std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault());
 
     /**

@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-#include "peer.hpp"
+#include "irohad.hpp"
 
 namespace iroha {
-  void Peer::run() {
+  void Irohad::run() {
     // run peer service
     state_->peerService->run();
 
@@ -35,7 +35,7 @@ namespace iroha {
     loop_->run();
   }
 
-  void Peer::bind_callbacks() {
+  void Irohad::bind_callbacks() {
     // temp solution
     server_.on<uvw::ErrorEvent>([c{console_}](const uvw::ErrorEvent& e,
                                               auto& s) {
@@ -81,7 +81,7 @@ namespace iroha {
     });
   }
 
-  Peer::Peer(ed25519::keypair_t keypair, std::string ip, uint16_t port,
+  Irohad::Irohad(ed25519::keypair_t keypair, std::string ip, uint16_t port,
              std::shared_ptr<PeerService> ps, std::shared_ptr<uvw::Loop> loop) {
     loop_ = loop;
     listen_on = ip + ":" + std::to_string(port);
