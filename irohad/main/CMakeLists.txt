@@ -44,6 +44,7 @@ add_executable(irohad
 
 target_link_libraries(irohad
         uvw
+        spdlog
         )
 
 add_library(peer

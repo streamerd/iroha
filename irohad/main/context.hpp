@@ -14,19 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#ifndef IROHA_APPLICATION_HPP
-#define IROHA_APPLICATION_HPP
 
-#include <main/context.hpp>
+#ifndef IROHA_CONTEXT_HPP_HPP
+#define IROHA_CONTEXT_HPP_HPP
 
-class Irohad{
-  public:
-    std::shared_ptr<Context> context;
-
-    Irohad();
-
-    void run();
+struct Context{
 
 };
 
-#endif //IROHA_APPLICATION_HPP
+#endif //IROHA_CONTEXT_HPP_HPP
