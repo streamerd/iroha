@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-add_subdirectory(processor)
+#add_subdirectory(processor)
 
 # Torii Test
 add_executable(torii_async_test
@@ -23,6 +23,7 @@ target_link_libraries(torii_async_test
   command_service
   command_client
   server_runner
+  command_service
   gtest
 )
 add_test(

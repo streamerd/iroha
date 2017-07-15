@@ -30,8 +30,7 @@ namespace iroha {
         OrderingService &os,
         const StatelessValidator &validator)
         : os_(os),
-          validator_(validator),
-          torii::TransactionProcessor(validator){
+          validator_(validator){
     }
 
     void TransactionProcessorImpl::handle(model::Client &client,

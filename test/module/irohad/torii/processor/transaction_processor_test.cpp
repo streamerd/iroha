@@ -34,23 +34,10 @@ class StatelessValidationMock : public validation::StatelessValidator {
 };
 
 /**
- * Mock for peer communication service
- */
-class PcsMock : public network::PeerCommunicationService {
- public:
-  MOCK_METHOD0(on_proposal, rxcpp::observable<model::Proposal>());
-  MOCK_METHOD0(on_commit,
-               rxcpp::observable<rxcpp::observable<model::Block>>());
-};
-
-/**
  * Mock for ordering service
  */
 class OsMock : public ordering::OrderingService {
  public:
-  MOCK_METHOD1(propagate_transaction, void(
-      const model::Transaction &transaction));
-  MOCK_METHOD0(on_proposal, rxcpp::observable<model::Proposal>());
 };
 
 /**
@@ -59,22 +46,16 @@ class OsMock : public ordering::OrderingService {
 TEST(TransactionProcessorTest,
      TransactionProcessorWhereInvokeValidTransaction) {
 
-  PcsMock pcs;
-
   OsMock os;
-  EXPECT_CALL(os, propagate_transaction(_)).Times(1);
 
   StatelessValidationMock validation;
   EXPECT_CALL(validation, validate(_)).WillRepeatedly(Return(true));
 
-  iroha::torii::TransactionProcessorImpl tp(pcs, os, validation);
+  iroha::torii::TransactionProcessorImpl tp(os, validation);
   model::Transaction tx;
-  // TODO subscribe with testable subscriber
-  tp.transaction_notifier().subscribe([](auto response) {
-    auto resp = static_cast<model::StatelessResponse &>(*response);
-    ASSERT_EQ(resp.passed, true);
-  });
-  tp.transaction_handle(model::Client(), tx);
+  model::Client client;
+  //ToDo add check ordering service's test
+  tp.handle(client, tx);
 }
 
 /**
@@ -83,20 +64,14 @@ TEST(TransactionProcessorTest,
 TEST(TransactionProcessorTest,
      TransactionProcessorWhereInvokeInvalidTransaction) {
 
-  PcsMock pcs;
-
   OsMock os;
-  EXPECT_CALL(os, propagate_transaction(_)).Times(0);
 
   StatelessValidationMock validation;
   EXPECT_CALL(validation, validate(_)).WillRepeatedly(Return(false));
 
-  iroha::torii::TransactionProcessorImpl tp(pcs, os, validation);
+  iroha::torii::TransactionProcessorImpl tp(os, validation);
   model::Transaction tx;
-  // TODO subscribe with testable subscriber
-  tp.transaction_notifier().subscribe([](auto response) {
-    auto resp = static_cast<model::StatelessResponse &>(*response);
-    ASSERT_EQ(resp.passed, false);
-  });
-  tp.transaction_handle(model::Client(), tx);
+  model::Client client;
+  //ToDo add check ordering service's test
+  tp.handle(client, tx);
 }
