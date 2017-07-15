@@ -31,12 +31,12 @@ using namespace rapidjson;
 
 class BlockSerializer{
  public:
+  std::vector<uint8_t > serialize(model::Block block);
+ private:
   void serialize(PrettyWriter<StringBuffer>& writer, model::Block block);
   void serialize(PrettyWriter<StringBuffer>& writer, model::Signature signature);
   void serialize(PrettyWriter<StringBuffer>& writer, model::Transaction transaction);
   void serialize(PrettyWriter<StringBuffer>& writer, model::Command& command);
-
- private:
   template<typename Base, typename T>
   inline bool instanceof(const T *ptr) {
     return typeid(Base) == typeid(*ptr);
