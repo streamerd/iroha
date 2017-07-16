@@ -15,29 +15,14 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_CONSENSUS_CLIENT_HPP
-#define IROHA_CONSENSUS_CLIENT_HPP
+#ifndef IROHA_LOOKUP3_H
+#define IROHA_LOOKUP3_H
 
-#include <consensus.grpc.pb.h>
-#include <consensus.pb.h>
-#include <logger/logger.hpp>
-#include "messages.hpp"
+#include <stdint.h> // for uint32_t
+#include <stddef.h> // for size_t
 
-namespace consensus {
+/// TODO there are more functions, but we use only this
 
+uint32_t hashlittle( const void *key, size_t length, uint32_t initval);
 
-  using grpc::Channel;
-  using consensus::Sumeragi;
-
-  class ConsensusClient {
-   public:
-    ConsensusClient(std::string ip, uint16_t port);
-
-   private:
-
-    logger::Logger log;
-    std::unique_ptr<Sumeragi::Stub> stub_;
-  };
-}
-
-#endif  // IROHA_CONSENSUS_CLIENT_HPP
+#endif //IROHA_LOOKUP3_H

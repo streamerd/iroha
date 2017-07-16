@@ -18,72 +18,9 @@
 #include "consensus_client.hpp"
 #include <grpc++/create_channel.h>
 
-namespace iroha {
+namespace consensus {
 
-  void ConsensusClient::SendProposal(Proposal *proposal) {
-    grpc::ClientContext context;
-    grpc::Status status;
-    Null ack;
 
-    status = stub_->OnProposal(&context, *proposal, &ack);
-
-    if (status.ok()) {
-      // status ok;
-      // TODO
-    } else {
-      log.error("SendProposal RPC failed. details={}, message={}",
-                     status.error_details(), status.error_message());
-      throw std::system_error();  // TODO: we need good exception design
-    }
-  }
-
-  void ConsensusClient::SendVote(Vote *vote) {
-    grpc::ClientContext context;
-    grpc::Status status;
-    Null ack;
-
-    status = stub_->OnVote(&context, *vote, &ack);
-
-    if (status.ok()) {
-      // status ok
-      // TODO
-    } else {
-      log.error("SendVote RPC failed: {}", status.error_details());
-      throw std::system_error();  // TODO: we need good exception design
-    }
-  }
-
-  void ConsensusClient::SendCommit(Commit *commit) {
-    grpc::ClientContext context;
-    grpc::Status status;
-    Null ack;
-
-    status = stub_->OnCommit(&context, *commit, &ack);
-
-    if (status.ok()) {
-      // status ok
-      // TODO
-    } else {
-      log.error("SendCommit RPC failed: {}", status.error_details());
-      throw std::system_error();  // TODO: we need good exception design
-    }
-  }
-
-  void ConsensusClient::SendAbort(Abort *abort) {
-    grpc::ClientContext context;
-    grpc::Status status;
-    Null ack;
-
-    status = stub_->OnAbort(&context, *abort, &ack);
-
-    if (status.ok()) {
-      // status ok
-      // TODO
-    } else {
-      log.error("SendAbort RPC failed: {}", status.error_details());
-      throw std::system_error();  // TODO: we need good exception design
-    };
-  }
 
   ConsensusClient::ConsensusClient(std::string ip, uint16_t port)
       : log("consensus_client|" + ip + ":" + std::to_string(port)) {

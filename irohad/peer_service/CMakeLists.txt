@@ -28,10 +28,14 @@
 #)
 
 add_library(peer_service
-        PeerService.cpp
-        PeerService.hpp
+        node.hpp
+        service.cpp
+        service.hpp
+        connection_to.cpp
+        connection_to.hpp
         )
 target_link_libraries(peer_service
         uvw
-        consensus_client
+        peer_service_grpc
+        lookup3
         )

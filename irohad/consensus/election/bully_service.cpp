@@ -15,29 +15,20 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_CONSENSUS_CLIENT_HPP
-#define IROHA_CONSENSUS_CLIENT_HPP
-
-#include <consensus.grpc.pb.h>
-#include <consensus.pb.h>
-#include <logger/logger.hpp>
-#include "messages.hpp"
+#include "Bully.hpp"
 
 namespace consensus {
+  namespace election {
 
+    Status Bully::Victory(ServerContext *context, const Coordinator *request,
+                          Void *response) {
+      auto peer = context->peer();
+      return Status::OK;
+    }
 
-  using grpc::Channel;
-  using consensus::Sumeragi;
-
-  class ConsensusClient {
-   public:
-    ConsensusClient(std::string ip, uint16_t port);
-
-   private:
-
-    logger::Logger log;
-    std::unique_ptr<Sumeragi::Stub> stub_;
-  };
+    Status Bully::Elect(ServerContext *context, const Election *request,
+                        Answer *response) {
+      return Status::OK;
+    }
+  }
 }
-
-#endif  // IROHA_CONSENSUS_CLIENT_HPP

@@ -14,7 +14,7 @@
 
 
 add_subdirectory(state)
-
+add_subdirectory(election)
 
 add_library(consensus_service
         consensus_service.cpp
@@ -24,6 +24,7 @@ add_library(consensus_service
         )
 target_link_libraries(consensus_service
         consensus_grpc
+        uvw
 )
 
 

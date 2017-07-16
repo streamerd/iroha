@@ -15,29 +15,7 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_CONSENSUS_CLIENT_HPP
-#define IROHA_CONSENSUS_CLIENT_HPP
+#ifndef IROHA_MESSAGES_HPP
+#define IROHA_MESSAGES_HPP
 
-#include <consensus.grpc.pb.h>
-#include <consensus.pb.h>
-#include <logger/logger.hpp>
-#include "messages.hpp"
-
-namespace consensus {
-
-
-  using grpc::Channel;
-  using consensus::Sumeragi;
-
-  class ConsensusClient {
-   public:
-    ConsensusClient(std::string ip, uint16_t port);
-
-   private:
-
-    logger::Logger log;
-    std::unique_ptr<Sumeragi::Stub> stub_;
-  };
-}
-
-#endif  // IROHA_CONSENSUS_CLIENT_HPP
+#endif //IROHA_MESSAGES_HPP

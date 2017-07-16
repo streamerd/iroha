@@ -20,13 +20,15 @@
 
 #include <consensus.grpc.pb.h>
 #include <consensus/messages.hpp>
+#include <uvw/emitter.hpp>
 
-namespace iroha {
+namespace consensus {
 
   using ServerContext = grpc::ServerContext;
   using Status = grpc::Status;
 
-  class ConsensusService final : public consensus::Sumeragi::Service {
+  class ConsensusService final : public uvw::Emitter<ConsensusService>,
+                                 public consensus::Sumeragi::Service {
    public:
     ConsensusService();
 

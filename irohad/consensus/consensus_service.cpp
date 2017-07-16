@@ -17,36 +17,34 @@
 
 #include "consensus_service.hpp"
 
-namespace iroha {
+namespace consensus {
   Status ConsensusService::OnProposal(ServerContext *context,
                                       const Proposal *request, Null *reply) {
     // TODO: verify request data
-    // consensus_->on_proposal(request);
+    this->publish(request);
     return Status::OK;
   }
 
   Status ConsensusService::OnVote(ServerContext *context, const Vote *request,
                                   Null *reply) {
     // TODO: verify request data
-    // consensus_->on_vote(request);
+    this->publish(request);
     return Status::OK;
   }
 
   Status ConsensusService::OnCommit(ServerContext *context,
                                     const Commit *request, Null *reply) {
     // TODO: verify request data
-    // consensus_->on_commit(request);
+    this->publish(request);
     return Status::OK;
   }
 
   Status ConsensusService::OnAbort(ServerContext *context, const Abort *request,
                                    Null *reply) {
     // TODO: verify request data
-    // consensus_->on_abort(request);
+    this->publish(request);
     return Status::OK;
   }
 
-  ConsensusService::ConsensusService() {
-    // TODO  initialize consensus object. Should it be initialized from peer service?
-  }
+  ConsensusService::ConsensusService() {}
 }
