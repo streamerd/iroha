@@ -58,8 +58,7 @@ namespace iroha {
        * @param asset_id
        * @return
        */
-      virtual nonstd::optional<model::Asset> getAsset(
-          const std::string &asset_id) = 0;
+      virtual nonstd::optional<model::Asset> getAsset(const std::string &asset_id) = 0;
 
       /**
        *
