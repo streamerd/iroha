@@ -21,6 +21,7 @@
 #include <array>
 #include <crypto/base64.hpp>
 #include <cstdio>
+#include <typeinfo>
 #include <string>
 
 /**
@@ -131,6 +132,12 @@ namespace iroha {
       return result;
     }
   };
+
+  // check the type of the derived class
+  template<typename Base, typename T>
+  inline bool instanceof(const T *ptr) {
+    return typeid(Base) == typeid(*ptr);
+  }
 
 }  // namespace iroha
 #endif  // IROHA_COMMON_HPP
