@@ -20,10 +20,12 @@
 
 #include <spdlog/spdlog.h>
 #include <consensus/messages.hpp>
+#include <block.pb.h>
 #include <queue>
 #include <uvw.hpp>
 
 namespace ordering {
+  using Transaction = iroha::protocol::Transaction;
 
   class OrderingService : public uvw::Emitter<OrderingService> {
    public:
@@ -34,7 +36,7 @@ namespace ordering {
 
     void simulate_one();
 
-    void append(const iroha::Transaction& tx);
+    void append(const Transaction& tx);
    private:
     void bind_timer();
 
@@ -45,7 +47,7 @@ namespace ordering {
     // TODO:  should be changed to MPSC lock-free bounded queue
     // (multiple producers single consumer, does not use locks, bounded by
     // "block size")
-    std::shared_ptr<std::queue<iroha::Transaction>> queue_;
+    std::shared_ptr<std::queue<Transaction>> queue_;
 
     std::shared_ptr<uvw::Loop> loop_;
   };

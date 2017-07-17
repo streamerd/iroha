@@ -17,6 +17,7 @@
 
 #include "leader.hpp"
 #include <future>
+#include <spdlog/spdlog.h>
 
 static auto console = spdlog::stdout_color_mt("leader");
 

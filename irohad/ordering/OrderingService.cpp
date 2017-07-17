@@ -27,7 +27,7 @@ namespace ordering {
 
     // while not empty AND TODO: the number of transactions inside < BLOCK_SIZE
     while (!queue_->empty()) {
-      iroha::Transaction tx = queue_->front();
+      Transaction tx = queue_->front();
       queue_->pop();
       proposal.add_transactions(tx.SerializeAsString());
     }
@@ -63,20 +63,20 @@ namespace ordering {
 
   void OrderingService::stop() { timer_->stop(); }
 
-  void OrderingService::append(const iroha::Transaction& tx){
+  void OrderingService::append(const Transaction& tx){
     queue_->push(tx);
   }
 
   // for debug
   void OrderingService::simulate_one() {
-    iroha::Transaction tx;
-    tx.set_test(std::to_string(rand()));
+    Transaction tx;
+    //tx.set_test(std::to_string(rand()));
     queue_->push(tx);
   }
 
   OrderingService::OrderingService(std::shared_ptr<uvw::Loop> loop)
       : loop_{loop} {
-    queue_ = std::make_shared<std::queue<iroha::Transaction>>();
+    queue_ = std::make_shared<std::queue<Transaction>>();
     bind_timer();
   }
 }

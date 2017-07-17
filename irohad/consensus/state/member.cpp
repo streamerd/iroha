@@ -16,6 +16,7 @@
  */
 
 #include "member.hpp"
+#include <spdlog/spdlog.h>
 
 static auto console = spdlog::stdout_color_st("member");
 

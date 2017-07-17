@@ -30,6 +30,7 @@ namespace iroha {
 
     void on_proposal(const Proposal* proposal) override;
     void on_commit(const Commit* commit) override;
+    State state_;
   };
 }
 
