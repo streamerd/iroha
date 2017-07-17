@@ -12,27 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 add_subdirectory(state)
 
-
 add_library(consensus_service
-        consensus_service.cpp
-        consensus_service.hpp
-        )
+    consensus_service.cpp
+    )
 target_link_libraries(consensus_service
-        consensus_grpc
-        uvw
-)
-
+    grpc++
+    uvw
+    )
 
 add_library(consensus_client
-        consensus_client.cpp
-        consensus_client.hpp
-        )
+    consensus_client.cpp
+    )
 target_link_libraries(consensus_client
-        consensus_grpc
-        spdlog
-        )
+    grpc++
+    spdlog
+    )
 
 

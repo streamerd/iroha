@@ -15,11 +15,10 @@
 #add_subdirectory(connection)
 
 add_library(ordering_service
-        OrderingService.cpp
-        OrderingService.hpp
-        )
+    OrderingService.cpp
+    )
 target_link_libraries(ordering_service
-        uvw
-        spdlog
-        consensus_grpc
-        )
+    uvw
+    spdlog
+    grpc++
+    )

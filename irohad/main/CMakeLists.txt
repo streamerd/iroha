@@ -17,7 +17,6 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 #add_library(server_runner server_runner.cpp)
 #target_link_libraries(server_runner
 #    logger
-#    endpoint
 #    schema
 #    )
 #
@@ -37,23 +36,21 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 #    torii
 #    )
 
-
 add_executable(irohad
-        iroha-main.cpp
-        )
-
+    iroha-main.cpp
+    )
+target_link_libraries(irohad
+    uvw
+    )
 
 add_library(peer
-        peer.cpp
-        peer.hpp
-        )
+    peer.cpp
+    )
 
 target_link_libraries(peer
-        uvw
-        spdlog
-        sml
-        consensus_grpc
-        peer_state
-        ordering_service
-        )
+    sml
+    peer_state
+    ordering_service
+    consensus_service
+    )
 
