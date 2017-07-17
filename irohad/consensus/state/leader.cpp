@@ -15,14 +15,12 @@
  * limitations under the License.
  */
 
-#include "leader.hpp"
+#include "consensus/state/leader.hpp"
 #include <future>
 
-static auto console = spdlog::stdout_color_mt("leader");
-
 namespace iroha {
-  void Leader::on_proposal(Proposal *proposal) {
-    console->info("Proposal handled");
+  void Leader::on_proposal(const Proposal *proposal) {
+    console_->info("Proposal handled");
 
     switch (state_) {
       case State::IDLE: {
@@ -30,14 +28,14 @@ namespace iroha {
         for (auto &peer : peerService->peers) {
           // no need in thread creation, std::async uses system-wide threads
           auto future =
-              std::async(std::launch::async, [&console, &peer, &proposal]() {
+              std::async(std::launch::async, [this, &peer, &proposal]() {
 
                 auto ack = peer->SendProposal(proposal);
                 if (ack.type() == ack.PROPOSAL_RECEIVED) {
-                  console->info("{} acknowledged", peer->pubkey.to_hexstring());
+                  console_->info("{} acknowledged", peer->pubkey.to_hexstring());
                 } else {
                   // TODO: view change
-                  console->info("{} did not respond, view change",
+                  console_->info("{} did not respond, view change",
                                 peer->pubkey.to_hexstring());
                 }
               });
@@ -49,11 +47,11 @@ namespace iroha {
       }
       case State::SENT_PROPOSAL: {
         // wait for commit
-        console->info("I am waiting for a commit, but I received a proposal");
+        console_->info("I am waiting for a commit, but I received a proposal");
         break;
       }
       default: {
-        console->error("Leader is at undefined state");
+        console_->error("Leader is at undefined state");
         break;
       }
     }
@@ -61,8 +59,8 @@ namespace iroha {
 
   Role Leader::self() { return Role::LEADER; }
 
-  void Leader::on_commit(Commit *commit) {
-    console->info("Commit handled");
+  void Leader::on_commit(const Commit *commit) {
+    console_->info("Commit handled");
 
     {
       // check if we received commit for last proposal
@@ -73,5 +71,11 @@ namespace iroha {
     state_ = State::IDLE;
   }
 
-  Leader::Leader() { this->state_ = State::IDLE; }
+  Leader::Leader() {
+    this->state_ = State::IDLE;
+    console_ = spdlog::get("leader");
+    if (!console_) {
+      console_ = spdlog::stdout_color_mt("leader");
+    }
+  }
 }

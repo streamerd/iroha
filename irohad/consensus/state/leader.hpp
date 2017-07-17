@@ -18,7 +18,7 @@
 #ifndef IROHA_LEADER_HPP
 #define IROHA_LEADER_HPP
 
-#include "validator.hpp"
+#include "consensus/state/validator.hpp"
 
 namespace iroha {
 
@@ -28,8 +28,8 @@ namespace iroha {
 
     Role self() override;
 
-    void on_proposal(Proposal* proposal) override;
-    void on_commit(Commit* commit) override;
+    void on_proposal(const Proposal* proposal) override;
+    void on_commit(const Commit* commit) override;
 
    private:
     enum class State : uint8_t {

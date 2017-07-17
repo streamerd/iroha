@@ -17,22 +17,20 @@
 
 #include "member.hpp"
 
-static auto console = spdlog::stdout_color_st("member");
-
 namespace iroha {
 
   Role Member::self() { return Role::MEMBER; }
 
-  void Member::on_commit(iroha::Commit *commit) {
-    console->info("Commit handled");
+  void Member::on_commit(const Commit *commit) {
+    console_->info("Commit handled");
   }
 
-  void Member::on_vote(Vote *vote) { console->info("Vote handled"); }
+  void Member::on_vote(const Vote *vote) { console_->info("Vote handled"); }
 
-  void Member::on_abort(Abort *abort) { console->info("Abort handled"); }
+  void Member::on_abort(const Abort *abort) { console_->info("Abort handled"); }
 
-  void Member::on_proposal(Proposal *proposal) {
-    console->info("Proposal handled");
+  void Member::on_proposal(const Proposal *proposal) {
+    console_->info("Proposal handled");
   }
 
   std::string Member::ledgerToString() {
@@ -45,5 +43,12 @@ namespace iroha {
     }
     s += "\n]\n";
     return s;
+  }
+
+  Member::Member() {
+    console_ = spdlog::get("member");
+    if (!console_) {
+      console_ = spdlog::stdout_color_st("member");
+    }
   }
 }

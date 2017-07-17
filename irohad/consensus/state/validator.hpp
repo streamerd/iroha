@@ -32,7 +32,7 @@ namespace iroha {
 
     virtual Role self() override;
 
-    virtual void on_proposal(Proposal* proposal) override;
+    virtual void on_proposal(const Proposal* proposal) override;
 
    private:
     enum class State : uint8_t {

@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#ifndef IROHA_CONSENSUS_GRPC_HPP
-#define IROHA_CONSENSUS_GRPC_HPP
+#ifndef IROHA_CONSENSUS_SERVICE_HPP
+#define IROHA_CONSENSUS_SERVICE_HPP
 
 #include <consensus.grpc.pb.h>
 #include <consensus.pb.h>
@@ -39,4 +39,4 @@ namespace iroha {
   };
 }
 
-#endif  // IROHA_CONSENSUS_GRPC_HPP
+#endif  // IROHA_CONSENSUS_SERVICE_HPP

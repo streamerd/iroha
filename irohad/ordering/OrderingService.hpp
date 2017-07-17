@@ -19,7 +19,7 @@
 #define IROHA_ORDERINGSERVICE_HPP
 
 #include <spdlog/spdlog.h>
-#include <consensus/messages.hpp>
+#include "consensus/messages.hpp"
 #include <queue>
 #include <uvw.hpp>
 
@@ -47,6 +47,8 @@ namespace iroha {
     std::shared_ptr<std::queue<Transaction>> queue_;
 
     std::shared_ptr<uvw::Loop> loop_;
+
+    std::shared_ptr<spdlog::logger> console_;
   };
 }
 
