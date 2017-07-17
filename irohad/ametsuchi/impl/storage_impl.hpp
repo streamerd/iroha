@@ -18,8 +18,9 @@
 #ifndef IROHA_STORAGE_IMPL_HPP
 #define IROHA_STORAGE_IMPL_HPP
 
-#include <ametsuchi/impl/flat_file/flat_file.hpp>
-#include <ametsuchi/storage.hpp>
+#include "ametsuchi/impl/flat_file/flat_file.hpp"
+#include "ametsuchi/storage.hpp"
+#include "ametsuchi/block_serializer.hpp"
 #include <cpp_redis/cpp_redis>
 #include <nonstd/optional.hpp>
 #include <pqxx/pqxx>
@@ -36,14 +37,8 @@ namespace iroha {
       std::unique_ptr<MutableStorage> createMutableStorage() override;
       void commit(std::unique_ptr<MutableStorage> mutableStorage) override;
 
-      rxcpp::observable<model::Transaction> get_account_transactions(
-          ed25519::pubkey_t pub_key) override;
-      rxcpp::observable<model::Transaction> get_asset_transactions(
-          std::string asset_full_name) override;
-      rxcpp::observable<model::Transaction> get_account_asset_transactions(
-          std::string account_id, std::string asset_id) override;
-      rxcpp::observable<model::Block> get_blocks_in_range(uint32_t from,
-                                                          uint32_t to) override;
+      rxcpp::observable<model::Transaction> getAccountTransactions(std::string account_id) override;
+      rxcpp::observable<model::Block> getBlocks(uint32_t from, uint32_t to) override;
 
       nonstd::optional<model::Account> getAccount(
           const std::string &account_id) override;
@@ -75,6 +70,8 @@ namespace iroha {
       std::unique_ptr<pqxx::lazyconnection> wsv_connection_;
       std::unique_ptr<pqxx::nontransaction> wsv_transaction_;
       std::unique_ptr<WsvQuery> wsv_;
+
+      BlockSerializer serializer_;
 
       // Allows multiple readers and a single writer
       std::shared_timed_mutex rw_lock_;
