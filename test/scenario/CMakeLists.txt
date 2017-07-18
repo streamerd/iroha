@@ -6,4 +6,5 @@ target_link_libraries(test_network
         peer
         peer_state
         consensus_service
+        lookup3
         )

@@ -19,5 +19,3 @@
 #
 #        )
 
-AddTest(grpc_test grpc_test.cpp)
-target_link_libraries(grpc_test consensus_client consensus_service grpc++)

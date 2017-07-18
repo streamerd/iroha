@@ -20,7 +20,7 @@
 
 #include <consensus.pb.h>
 
-namespace iroha {
+namespace consensus {
   using Null = consensus::Null;
   using Abort = consensus::Abort;
   using Vote = consensus::Vote;
@@ -29,4 +29,4 @@ namespace iroha {
   using Signature = consensus::Signature;
 }
 
-#endif //IROHA_MESSAGES_HPP
+#endif  // IROHA_MESSAGES_HPP

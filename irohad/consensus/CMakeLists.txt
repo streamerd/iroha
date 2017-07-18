@@ -14,7 +14,6 @@
 
 
 add_subdirectory(state)
-add_subdirectory(election)
 
 add_library(consensus_service
         consensus_service.cpp

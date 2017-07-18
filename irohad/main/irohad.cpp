@@ -19,7 +19,7 @@
 
 namespace iroha {
   void Irohad::run() {
-    // run peer service
+    // run_grpc peer service
     state_->peerService->run();
 
     // temp solution
@@ -94,7 +94,7 @@ namespace iroha {
     if (pos == 0) {
       state_ = std::make_shared<Leader>();
 
-      // run timer in ordering service
+      // run_grpc timer in ordering service
       this->orderingService->run();
 
       // simulate client

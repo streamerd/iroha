@@ -1,4 +1,4 @@
-# How to run peerService of N iroha nodes?
+# How to run_grpc peerService of N iroha nodes?
 
 1. Make sure you have the latest `iroha-docker` image:
 
@@ -17,7 +17,7 @@
 
    ```bash
    # beware of copy-pasting: change /tmp/sumeragi.json to location of this file in host OS
-   docker run \
+   docker run_grpc \
      -d \
      -p 1204:1204 \
      -it \

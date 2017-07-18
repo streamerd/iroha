@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) {
 /* ToDo configurable(like sumeragi.json) , or use option
   for (auto j = 0u; j < NPEERS; j++) {
     auto pk = keypairs[j].pubkey;
-    std::shared_ptr<NetworkNode> nn =
-      std::make_shared<NetworkNode>(host, port, pk);
+    std::shared_ptr<ConnectionTo> nn =
+      std::make_shared<ConnectionTo>(host, port, pk);
 
     peer_service->peers.push_back(std::move(nn));
   }

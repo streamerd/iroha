@@ -9,3 +9,13 @@
 #    ametsuchi
 #    )
 
+
+add_library(server
+        server.cpp
+        server.hpp
+        )
+
+target_link_libraries(server
+        uvw
+        consensus_services
+        )

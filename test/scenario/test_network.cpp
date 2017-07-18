@@ -55,7 +55,7 @@ class Network {
       std::shared_ptr<Irohad> peer(
           new Irohad(keypairs[i], host, port, peer_service));
 
-      // run every peer in a separate thread
+      // run_grpc every peer in a separate thread
       auto thread = std::thread([peer{peer}]() { peer->run(); });
 
       thread.detach();
