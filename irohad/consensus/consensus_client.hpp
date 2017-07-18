@@ -18,12 +18,12 @@
 #ifndef IROHA_CONSENSUS_CLIENT_HPP
 #define IROHA_CONSENSUS_CLIENT_HPP
 
-#include <consensus.grpc.pb.h>
-#include <consensus.pb.h>
-#include "messages.hpp"
+#include <spdlog/spdlog.h>
+#include "consensus.grpc.pb.h"
+#include "consensus.pb.h"
+#include "consensus/messages.hpp"
 
 namespace iroha {
-
 
   using grpc::Channel;
   using consensus::Sumeragi;
@@ -32,14 +32,14 @@ namespace iroha {
    public:
     ConsensusClient(std::string ip, uint16_t port);
 
-    Ack SendProposal(Proposal* proposal);
-    Ack SendVote(Vote* vote);
-    Ack SendCommit(Commit* commit);
-    Ack SendAbort(Abort* abort);
+    Ack SendProposal(const Proposal* proposal);
+    Ack SendVote(const Vote* vote);
+    Ack SendCommit(const Commit* commit);
+    Ack SendAbort(const Abort* abort);
 
    private:
-
     std::unique_ptr<Sumeragi::Stub> stub_;
+    std::shared_ptr<spdlog::logger> console_;
   };
 }
 

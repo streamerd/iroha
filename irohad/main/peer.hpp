@@ -20,15 +20,15 @@
 
 #include <grpc++/grpc++.h>
 #include <spdlog/spdlog.h>
-#include <common/types.hpp>
-#include <consensus/messages.hpp>
-#include <consensus/state/leader.hpp>
-#include <consensus/state/member.hpp>
-#include <consensus/state/proxy_tail.hpp>
-#include <ordering/OrderingService.hpp>
-#include <peer_service/PeerService.hpp>
 #include <uvw.hpp>
+#include "common/types.hpp"
 #include "consensus/consensus_service.hpp"
+#include "consensus/messages.hpp"
+#include "consensus/state/leader.hpp"
+#include "consensus/state/member.hpp"
+#include "consensus/state/proxy_tail.hpp"
+#include "ordering/OrderingService.hpp"
+#include "peer_service/PeerService.hpp"
 
 // Note (@warchant) LOOK AT test_network in test/scenario
 
@@ -37,7 +37,8 @@ namespace iroha {
   class Peer {
    public:
     Peer(ed25519::keypair_t keypair, std::string ip, uint16_t port,
-         std::shared_ptr<PeerService> ps, std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault());
+         std::shared_ptr<PeerService> ps,
+         std::shared_ptr<uvw::Loop> loop = uvw::Loop::getDefault());
 
     /**
      * Run event loop. Blocking operation.

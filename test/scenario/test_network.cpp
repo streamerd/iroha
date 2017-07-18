@@ -47,7 +47,7 @@ class Network {
       for (auto j = 0u; j < NPEERS; j++) {
         auto pk = keypairs[j].pubkey;
         std::shared_ptr<NetworkNode> nn =
-            std::make_shared<NetworkNode>(host, port, pk);
+            std::make_shared<NetworkNode>(host, (uint16_t)(10000u + j), pk);
 
         peer_service->peers.push_back(std::move(nn));
       }

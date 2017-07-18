@@ -20,9 +20,7 @@
 #include <spdlog/spdlog.h>
 namespace iroha {
 
-  static auto console = spdlog::stdout_color_st("consensus_client");
-
-  Ack ConsensusClient::SendProposal(Proposal *proposal) {
+  Ack ConsensusClient::SendProposal(const Proposal *proposal) {
     grpc::ClientContext context;
     grpc::Status status;
     Ack ack;
@@ -32,13 +30,13 @@ namespace iroha {
     if (status.ok()) {
       return ack;
     } else {
-      console->error("SendProposal RPC failed. details={}, message={}",
+      console_->error("SendProposal RPC failed. details={}, message={}",
                      status.error_details(), status.error_message());
       throw std::system_error();  // TODO: we need good exception design
     }
   }
 
-  Ack ConsensusClient::SendVote(Vote *vote) {
+  Ack ConsensusClient::SendVote(const Vote *vote) {
     grpc::ClientContext context;
     grpc::Status status;
     Ack ack;
@@ -48,12 +46,12 @@ namespace iroha {
     if (status.ok()) {
       return ack;
     } else {
-      console->error("SendVote RPC failed: {}", status.error_details());
+      console_->error("SendVote RPC failed: {}", status.error_details());
       throw std::system_error();  // TODO: we need good exception design
     }
   }
 
-  Ack ConsensusClient::SendCommit(Commit *commit) {
+  Ack ConsensusClient::SendCommit(const Commit *commit) {
     grpc::ClientContext context;
     grpc::Status status;
     Ack ack;
@@ -63,12 +61,12 @@ namespace iroha {
     if (status.ok()) {
       return ack;
     } else {
-      console->error("SendCommit RPC failed: {}", status.error_details());
+      console_->error("SendCommit RPC failed: {}", status.error_details());
       throw std::system_error();  // TODO: we need good exception design
     }
   }
 
-  Ack ConsensusClient::SendAbort(Abort *abort) {
+  Ack ConsensusClient::SendAbort(const Abort *abort) {
     grpc::ClientContext context;
     grpc::Status status;
     Ack ack;
@@ -78,7 +76,7 @@ namespace iroha {
     if (status.ok()) {
       return ack;
     } else {
-      console->error("SendAbort RPC failed: {}", status.error_details());
+      console_->error("SendAbort RPC failed: {}", status.error_details());
       throw std::system_error();  // TODO: we need good exception design
     };
   }
@@ -87,5 +85,9 @@ namespace iroha {
     auto channel = grpc::CreateChannel(ip + ":" + std::to_string(port),
                                        grpc::InsecureChannelCredentials());
     stub_ = consensus::Sumeragi::NewStub(channel);
+    console_ = spdlog::get("consensus_client");
+    if (!console_) {
+      console_ = spdlog::stdout_color_st("consensus_client");
+    }
   }
 }

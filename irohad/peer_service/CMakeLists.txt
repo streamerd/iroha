@@ -28,10 +28,9 @@
 #)
 
 add_library(peer_service
-        PeerService.cpp
-        PeerService.hpp
-        )
+    PeerService.cpp
+    )
 target_link_libraries(peer_service
-        uvw
-        consensus_client
-        )
+    uvw
+    consensus_client
+    )

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-#include "peer.hpp"
+#include "main/peer.hpp"
 
 namespace iroha {
   void Peer::run() {
@@ -47,27 +47,29 @@ namespace iroha {
 
     std::shared_ptr<Member> state{state_};
 
-    server_.on<Proposal*>(
-        [ console{console_}, state{state} ](Proposal * p, auto& s) {
+    server_.on<const Proposal*>(
+        [ console{console_}, state{state} ](const Proposal* p, auto& s) {
           console->debug("Proposal received");
           state->on_proposal(p);
         });
 
-    server_.on<Vote*>([ console{console_}, state{state} ](Vote * v, auto& s) {
-      console->debug("Vote received");
-      state->on_vote(v);
-    });
+    server_.on<const Vote*>(
+        [ console{console_}, state{state} ](const Vote* v, auto& s) {
+          console->debug("Vote received");
+          state->on_vote(v);
+        });
 
-    server_.on<Commit*>(
-        [ console{console_}, state{state} ](Commit * c, auto& s) {
+    server_.on<const Commit*>(
+        [ console{console_}, state{state} ](const Commit* c, auto& s) {
           console->debug("Commit received");
           state->on_commit(c);
         });
 
-    server_.on<Abort*>([ console{console_}, state{state} ](Abort * a, auto& s) {
-      console->debug("Abort received");
-      state->on_abort(a);
-    });
+    server_.on<const Abort*>(
+        [ console{console_}, state{state} ](const Abort* a, auto& s) {
+          console->debug("Abort received");
+          state->on_abort(a);
+        });
 
     orderingService->on<Proposal>(
         [ c{console_}, state{state} ](Proposal & p, auto& s) {
@@ -76,9 +78,8 @@ namespace iroha {
           state->on_proposal(&p);
         });
 
-    orderingService->on<uvw::ErrorEvent>([console{console_}](const auto &e, auto &s){
-      console->error("{}", e.what());
-    });
+    orderingService->on<uvw::ErrorEvent>([console{console_}](
+        const auto& e, auto& s) { console->error("{}", e.what()); });
   }
 
   Peer::Peer(ed25519::keypair_t keypair, std::string ip, uint16_t port,

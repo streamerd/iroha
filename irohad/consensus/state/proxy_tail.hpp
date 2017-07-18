@@ -23,8 +23,9 @@ namespace iroha {
 
   class ProxyTail final : public Validator {
    public:
+    ProxyTail();
     Role self() override;
-    virtual void on_vote(Vote *vote) override;
+    virtual void on_vote(const Vote *vote) override;
 
    private:
     // maps voter's pubkey -> Vote

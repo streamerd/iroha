@@ -1,4 +1,4 @@
-ADD_LIBRARY(stateful_validator STATIC
+add_library(stateful_validator
     impl/validator.cpp
     impl/stub_validator.cpp
     impl/stub_command_validator.cpp)

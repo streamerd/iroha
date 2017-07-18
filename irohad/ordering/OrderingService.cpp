@@ -15,10 +15,7 @@
  * limitations under the License.
  */
 
-#include "OrderingService.hpp"
-#include <spdlog/spdlog.h>
-
-auto console = spdlog::stdout_color_st("orderingService");
+#include "ordering/OrderingService.hpp"
 
 namespace iroha {
 
@@ -42,21 +39,20 @@ namespace iroha {
           throw "timer is dead";  // TODO
         });
 
-    auto &t = *this;
-    timer_->on<uvw::TimerEvent>([ &t](const uvw::TimerEvent &e,
-                                               uvw::TimerHandle &handle) {
+    timer_->on<uvw::TimerEvent>([this](const uvw::TimerEvent &e,
+                                              uvw::TimerHandle &handle) {
       // TODO
-      if (!t.queue_->empty()) {
-        ::console->info("{} transactions in ordering service", t.queue_->size());
-        t.create_proposal();
+      if (!queue_->empty()) {
+        console_->info("{} transactions in ordering service", queue_->size());
+        create_proposal();
       } else {
-        ::console->info("No transactions in ordering service");
+        console_->info("No transactions in ordering service");
       }
     });
   }
 
   void OrderingService::run() {
-    console->info("started");
+    console_->info("started");
     timer_->start(uvw::TimerHandle::Time{0},
                   uvw::TimerHandle::Time{5000});  // repeated timer
   }
@@ -73,6 +69,10 @@ namespace iroha {
   OrderingService::OrderingService(std::shared_ptr<uvw::Loop> loop)
       : loop_{loop} {
     queue_ = std::make_shared<std::queue<Transaction>>();
+    console_ = spdlog::get("orderingService");
+    if (!console_) {
+      console_ = spdlog::stdout_color_st("orderingService");
+    }
     bind_timer();
   }
 }

@@ -15,15 +15,18 @@
  * limitations under the License.
  */
 
-#include "proxy_tail.hpp"
-
-static auto console = spdlog::stdout_color_st("proxy tail");
+#include "consensus/state/proxy_tail.hpp"
 
 namespace iroha {
 
-  void ProxyTail::on_vote(Vote *vote) {
-    console->info("Vote handled");
-  }
+  void ProxyTail::on_vote(const Vote *vote) { console_->info("Vote handled"); }
 
   Role ProxyTail::self() { return Role::PROXY_TAIL; }
+
+  ProxyTail::ProxyTail() {
+    console_ = spdlog::get("proxy tail");
+    if (!console_) {
+      console_ = spdlog::stdout_color_st("proxy tail");
+    }
+  }
 }

@@ -15,37 +15,33 @@
  * limitations under the License.
  */
 
-#include "consensus_service.hpp"
+#include "consensus/consensus_service.hpp"
 
 namespace iroha {
 
   Status ConsensusService::SendProposal(ServerContext *context,
-                                                      const Proposal *request,
-                                                      Ack *reply) {
+                                        const Proposal *request, Ack *reply) {
     publish(request);
     reply->set_type(Ack::PROPOSAL_RECEIVED);
     return Status::OK;
   }
 
-  Status ConsensusService::SendVote(ServerContext *context,
-                                                  const Vote *request,
-                                                  Ack *reply) {
+  Status ConsensusService::SendVote(ServerContext *context, const Vote *request,
+                                    Ack *reply) {
     publish(request);
     reply->set_type(Ack::VOTE_RECEIVED);
     return Status::OK;
   }
 
   Status ConsensusService::SendCommit(ServerContext *context,
-                                                    const Commit *request,
-                                                    Ack *reply) {
+                                      const Commit *request, Ack *reply) {
     publish(request);
     reply->set_type(Ack::COMMIT_RECEIVED);
     return Status::OK;
   }
 
   Status ConsensusService::SendAbort(ServerContext *context,
-                                                   const Abort *request,
-                                                   Ack *reply) {
+                                     const Abort *request, Ack *reply) {
     publish(request);
     reply->set_type(Ack::ABORT_RECEIVED);
     return Status::OK;

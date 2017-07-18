@@ -15,13 +15,11 @@
  * limitations under the License.
  */
 
-#include "validator.hpp"
-
-static auto console = spdlog::stdout_color_st("validator");
+#include "consensus/state/validator.hpp"
 
 namespace iroha {
 
-  void Validator::on_proposal(Proposal *proposal) {
+  void Validator::on_proposal(const Proposal *proposal) {
     // TODO
 
     // I don't like if-else/switch statements for states, can we do something
@@ -31,7 +29,7 @@ namespace iroha {
     switch (state) {
       case State::IDLE: {
         // proposal handling logic
-        console->info("Proposal handled");
+        console_->info("Proposal handled");
 
         // dummy stateful validation
         Vote vote;
@@ -39,11 +37,9 @@ namespace iroha {
           vote.set_next_height(height + 1);
           vote.set_next_gmroot(std::string(hash256_t::size(), 'a'));
 
-          Signature sig;
+          auto sig = vote.mutable_sig();
           std::string pub = this->keypair.pubkey.to_string();
-          sig.set_signature(std::string(ed25519::sig_t::size(), 's'));
-
-          vote.set_allocated_sig(&sig);
+          sig->set_signature(std::string(ed25519::sig_t::size(), 's'));
 
           // we spend 500 +- 100 ms to validate
           std::this_thread::sleep_for(
@@ -52,23 +48,23 @@ namespace iroha {
 
         auto ack = this->peerService->proxy_tail()->SendVote(&vote);
         if (ack.type() == ack.VOTE_RECEIVED) {
-          console->info("Sent my vote");
+          console_->info("Sent my vote");
           state = State::VOTED;
         } else {
           // TODO
-          console->error(
+          console_->error(
               "I sent my vote, but proxy tail did not respond with "
               "ACK.VOTE_RECEIVED");
         }
         break;
       }
       case State::VOTED: {
-        console->info("I already voted");
+        console_->info("I already voted");
         break;
       }
       default: {
         // I hope we never reach this code block
-        console->critical("My state is neither IDLE nor VOTED");
+        console_->critical("My state is neither IDLE nor VOTED");
         throw std::system_error();
       }
     }
@@ -76,5 +72,11 @@ namespace iroha {
 
   Role Validator::self() { return Role::VALIDATOR; }
 
-  Validator::Validator() { state = State::IDLE; }
+  Validator::Validator() {
+    state = State::IDLE;
+    console_ = spdlog::get("validator");
+    if (!console_) {
+      console_ = spdlog::stdout_color_st("validator");
+    }
+  }
 }

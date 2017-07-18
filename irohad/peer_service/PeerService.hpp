@@ -58,6 +58,7 @@ namespace iroha {
       for (auto i = 0u; i < size; i++) {
         s += "  ";
         s += peers[i]->pubkey.to_hexstring();
+        s += " " + std::to_string(peers[i]->port);
         if (i != size - 1) s += ",\n";
       }
       s += "\n]\n";
