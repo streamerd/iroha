@@ -32,10 +32,10 @@ namespace iroha {
   class ConsensusService : public consensus::Sumeragi::Service,
                            public uvw::Emitter<ConsensusService> {
    public:
-    Status SendProposal(ServerContext* context, const Proposal* request, Ack* reply);
-    Status SendVote(ServerContext* context, const Vote* request, Ack* reply);
-    Status SendCommit(ServerContext* context, const Commit* request, Ack* reply);
-    Status SendAbort(ServerContext* context, const Abort* request, Ack* reply);
+    Status SendProposal(ServerContext* context, const Proposal* request, Ack* reply) override;
+    Status SendVote(ServerContext* context, const Vote* request, Ack* reply) override;
+    Status SendCommit(ServerContext* context, const Commit* request, Ack* reply) override;
+    Status SendAbort(ServerContext* context, const Abort* request, Ack* reply) override;
   };
 }
 
