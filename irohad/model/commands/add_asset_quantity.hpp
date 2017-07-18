@@ -43,7 +43,7 @@ namespace iroha {
       /**
        * Amount to add to account asset
        */
-      std::decimal::decimal64 amount;
+      std::string amount;
 
       bool validate(ametsuchi::WsvQuery& queries,
                     const Account& creator) override;

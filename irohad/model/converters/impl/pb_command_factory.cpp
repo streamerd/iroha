@@ -39,7 +39,7 @@ namespace iroha {
         model::AddAssetQuantity add_asset_quantity;
         add_asset_quantity.account_id = pb_add_asset_quantity.account_id();
         add_asset_quantity.asset_id = pb_add_asset_quantity.asset_id();
-        // todo set amount
+        add_asset_quantity.amount = pb_add_asset_quantity.amount();
         return add_asset_quantity;
       }
 
